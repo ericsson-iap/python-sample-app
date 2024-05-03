@@ -1,0 +1,10 @@
+#tosca_definitions_version: Metadata/Tosca.meta
+Description of an APP:
+    APPName: eric-oss-hello-world-python-app
+    APPVersion: 2.0.1-0
+    APPType: rApp
+APPComponent:
+    NameofComponent: eric-oss-hello-world-python-app
+    Version: 2.0.1-0
+    Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
+    ArtefactType: Microservice

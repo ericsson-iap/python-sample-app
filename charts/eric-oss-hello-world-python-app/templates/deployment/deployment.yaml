@@ -1,0 +1,187 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+      {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: {{ .Values.updateStrategy.type }}
+    {{- if and (eq .Values.updateStrategy.type "RollingUpdate") .Values.updateStrategy.rollingUpdate }}
+    rollingUpdate:
+{{- if .Values.updateStrategy.rollingUpdate.maxUnavailable }}
+      maxUnavailable: {{ .Values.updateStrategy.rollingUpdate.maxUnavailable }}
+{{- end }}
+{{- if .Values.updateStrategy.rollingUpdate.maxSurge }}
+      maxSurge: {{ .Values.updateStrategy.rollingUpdate.maxSurge }}
+{{- end }}
+    {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "eric-oss-hello-world-python-app.name" . }}
+        app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
+        app.kubernetes.io/version: {{ include "eric-oss-hello-world-python-app.version" . }}
+        helm.sh/chart: {{ template "eric-oss-hello-world-python-app.chart" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        prometheus.io/port: "{{ .Values.service.port }}"
+        prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
+        prometheus.io/path: "{{ .Values.prometheus.path }}"
+{{- include "eric-oss-hello-world-python-app.product-info" . | indent 8 }}
+    spec:
+      {{- if (index .Values "podPriority" "eric-oss-hello-world-python-app" "priorityClassName") }}
+      priorityClassName: {{ (index .Values "podPriority" "eric-oss-hello-world-python-app" "priorityClassName") }}
+      {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}
+            items:
+              - key: LOG_CTRL_FILE
+                path: logcontrol.json
+        - name: cacerts
+          secret:
+            secretName: {{ index .Values "platformSecretName" | quote }}
+            defaultMode: 420
+        - name: rapplogcerts
+          secret:
+            secretName: {{ index .Values "rAppLogCertsSecretName" | quote }}
+            defaultMode: 420
+        - name: logcacert
+          secret:
+            secretName: {{ index .Values "logCACertSecretName" | quote }}
+            defaultMode: 420
+      containers:
+        - name: eric-oss-hello-world-python-app
+          image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
+          imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+              - all
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/adp
+            - name: cacerts
+              mountPath: {{ index .Values "caCertMountPath" | quote }}
+              readOnly: true
+            - name: logcacert
+              mountPath: {{ index .Values "logCaFilePath" | quote }}
+              readOnly: true
+            - name: rapplogcerts
+              mountPath: {{ index .Values "rAppLogCertFilePath" | quote }}
+              readOnly: true
+          env:
+            - name: IAM_CLIENT_ID
+              value: {{ index .Values "clientId" | quote }}
+            - name: IAM_CLIENT_SECRET
+              value: {{ index .Values "clientSecret" | quote }}
+            - name: IAM_BASE_URL
+              value: {{ index .Values "iamBaseUrl" | quote }}
+            - name: CA_CERT_FILENAME
+              value:  {{ index .Values "caCertFileName" | quote }}
+            - name: CA_CERT_MOUNT_PATH
+              value: {{ index .Values "caCertMountPath" | quote }}
+            - name: LOG_ENDPOINT
+              value: {{ index .Values "logEndpoint" | quote }}
+            - name: APP_LOG_TLS_KEY
+              value: {{ index .Values "rAppLogTlsKeyFileName" | quote }}
+            - name: APP_LOG_TLS_CERT
+              value: {{ index .Values "rAppLogTlsCertFileName" | quote }}
+            - name: LOG_TLS_CA_CERT
+              value: {{ index .Values "logTlsCACertFileName" | quote }}
+            - name: SERVICE_NAME
+              value: {{ .Chart.Name }}
+            - name: CONTAINER_NAME
+              value: {{ .Chart.Name }}
+            - name: LOG_CA_CERT_FILE_PATH
+              value: {{ index .Values "logCaFilePath" | quote }}
+            - name: APP_LOG_CERT_FILE_PATH
+              value: {{ index .Values "rAppLogCertFilePath" | quote }}
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: TZ
+              value: {{ template "eric-oss-hello-world-python-app.timezone" . }}
+            - name: LOG_CTRL_FILE
+              value: "/etc/adp/logcontrol.json"
+            {{- include "eric-oss-hello-world-python-app.jaegerEnv" . | indent 12 }}
+          ports:
+            - name: http-metrics
+              containerPort: 8050
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /sample-app/python/health
+              port: 8050
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "initialDelaySeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "failureThreshold") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "periodSeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "livenessProbe" "timeoutSeconds") }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /sample-app/python/health
+              port: 8050
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "initialDelaySeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "failureThreshold") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "periodSeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "eric-oss-hello-world-python-app" "readinessProbe" "timeoutSeconds") }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources.helloWorld | nindent 12 }}
+      {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
+      imagePullSecrets:
+        - name: {{ template "eric-oss-hello-world-python-app.pullSecrets" . }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ include "eric-oss-hello-world-python-app.terminationGracePeriodSeconds" . }}
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- include "eric-oss-hello-world-python-app.tolerations" . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | indent 8 }}
+      {{- end }}
+      nodeSelector: {{ include "eric-oss-hello-world-python-app.nodeSelector" . | nindent 6 -}}

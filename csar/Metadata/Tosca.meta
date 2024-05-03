@@ -1,0 +1,5 @@
+TOSCA-Meta-File-Version: 1.0
+CSAR-Version: 1.0
+Created-By: Ericsson
+Entry-Definitions: Definitions/AppDescriptor.yaml
+Entry-OtherDefinitions: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml

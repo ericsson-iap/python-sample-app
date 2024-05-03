@@ -1,0 +1,10 @@
+productName: "eric-oss-hello-world-python-app"
+productNumber: "CXC 201 0000"
+images:
+  eric-oss-hello-world-python-app:
+    productName: "Python hello world sample app image"
+    productNumber: ""
+    registry: "armdocker.rnd.ericsson.se"
+    repoPath: "proj-eric-oss-drop"
+    name: "eric-oss-hello-world-python-app"
+    tag: "2.0.1-0"

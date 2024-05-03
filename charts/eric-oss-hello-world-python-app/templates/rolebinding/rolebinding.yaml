@@ -1,0 +1,27 @@
+{{- if .Values.global -}}
+  {{- if .Values.global.security -}}
+    {{- if .Values.global.security.policyBinding -}}
+      {{- if .Values.global.security.policyBinding.create -}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}-security-policy
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+      {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+    {{- include "eric-oss-hello-world-python-app.securityPolicy.annotations" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "eric-oss-hello-world-python-app.securityPolicy.reference" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "eric-oss-hello-world-python-app.name" . }}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
