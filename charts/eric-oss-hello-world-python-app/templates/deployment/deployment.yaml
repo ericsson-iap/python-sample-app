@@ -34,6 +34,7 @@ spec:
         app.kubernetes.io/version: {{ include "eric-oss-hello-world-python-app.version" . }}
         helm.sh/chart: {{ template "eric-oss-hello-world-python-app.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        service.cleartext/scraping: "true"
       annotations:
         prometheus.io/port: "{{ .Values.service.port }}"
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
