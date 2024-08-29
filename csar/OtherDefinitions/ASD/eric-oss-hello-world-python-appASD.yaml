@@ -2,9 +2,9 @@ asdId: 1
 asdSchemaVersion: 1.0.0
 asdProvider: Ericsson
 asdApplicationName: eric-oss-hello-world-python-app
-asdApplicationVersion: 2.1.0-0
+asdApplicationVersion: VERSION
 asdApplicationInfoName: Hello World Python Application
 asdInfoDescription: Hello World Python application for App Onboarding
 deploymentItems:
     deploymentItemId: 1
-    artifactId: OtherDefinitions/ASD/eric-oss-hello-world-python-app-2.1.0-0.tgz
+    artifactId: OtherDefinitions/ASD/eric-oss-hello-world-python-app-VERSION.tgz
