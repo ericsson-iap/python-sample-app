@@ -13,6 +13,14 @@ This is a simple Hello World Python App with the following three endpoints:
   the number of successful and failed invocations of
   the '/sample-app/python/hello' endpoint.
 
+## Disclaimer
+
+> ⚠️ **Important Disclaimer:**
+>
+> The instructions below are only applicable if you **already have full access** to the EIAP Ecosystem.
+>
+> If you do not have this access, **please do not proceed.**
+
 ## Build Docker Image
 
 Rename the `Dockerfile-template` file to `Dockerfile`.
@@ -233,7 +241,7 @@ Example of command result:
       "type": "IMAGE",
       "version": "--",
       "status": "COMPLETED",
-      "location": "/v2/armdocker.rnd.ericsson.se/dockerhub-ericsson-remote/busybox/manifests/latest"
+      "location": "<internal-resource-location>"
     },
     {
       "id": 11,
@@ -278,7 +286,7 @@ Example of command result:
       "type": "IMAGE",
       "version": "--",
       "status": "COMPLETED",
-      "location": "/v2/armdocker.rnd.ericsson.se/dockerhub-ericsson-remote/busybox/manifests/latest"
+      "location": "<internal-resource-location>"
     },
     {
       "id": 11,
