@@ -51,17 +51,13 @@ spec:
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
-        - name: cacerts
+        - name: platform-cacerts
           secret:
-            secretName: {{ index .Values "platformSecretName" | quote }}
+            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
             defaultMode: 420
-        - name: rapplogcerts
+        - name: app-certs
           secret:
-            secretName: {{ index .Values "rAppLogCertsSecretName" | quote }}
-            defaultMode: 420
-        - name: logcacert
-          secret:
-            secretName: {{ index .Values "logCACertSecretName" | quote }}
+            secretName: {{ index .Values "appSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -78,14 +74,11 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/adp
-            - name: cacerts
-              mountPath: {{ index .Values "caCertMountPath" | quote }}
+            - name: platform-cacerts
+              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
               readOnly: true
-            - name: logcacert
-              mountPath: {{ index .Values "logCaFilePath" | quote }}
-              readOnly: true
-            - name: rapplogcerts
-              mountPath: {{ index .Values "rAppLogCertFilePath" | quote }}
+            - name: app-certs
+              mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
               readOnly: true
           env:
             - name: IAM_CLIENT_ID
@@ -94,26 +87,22 @@ spec:
               value: {{ index .Values "clientSecret" | quote }}
             - name: IAM_BASE_URL
               value: {{ index .Values "iamBaseUrl" | quote }}
-            - name: CA_CERT_FILENAME
-              value:  {{ index .Values "caCertFileName" | quote }}
-            - name: CA_CERT_MOUNT_PATH
-              value: {{ index .Values "caCertMountPath" | quote }}
             - name: LOG_ENDPOINT
               value: {{ index .Values "logEndpoint" | quote }}
-            - name: APP_LOG_TLS_KEY
-              value: {{ index .Values "rAppLogTlsKeyFileName" | quote }}
-            - name: APP_LOG_TLS_CERT
-              value: {{ index .Values "rAppLogTlsCertFileName" | quote }}
-            - name: LOG_TLS_CA_CERT
-              value: {{ index .Values "logTlsCACertFileName" | quote }}
+            - name: CA_CERT_FILE_PATH
+              value: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
+            - name: CA_CERT_FILE_NAME
+              value:  {{ index .Values "platformCaCertFileName" | quote }}
+            - name: APP_KEY
+              value: {{ index .Values "appKeyFileName" | quote }}
+            - name: APP_CERT
+              value: {{ index .Values "appCertFileName" | quote }}
+            - name: APP_CERT_FILE_PATH
+              value: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
             - name: SERVICE_NAME
               value: {{ .Chart.Name }}
             - name: CONTAINER_NAME
               value: {{ .Chart.Name }}
-            - name: LOG_CA_CERT_FILE_PATH
-              value: {{ index .Values "logCaFilePath" | quote }}
-            - name: APP_LOG_CERT_FILE_PATH
-              value: {{ index .Values "rAppLogCertFilePath" | quote }}
             - name: NODE_NAME
               valueFrom:
                 fieldRef:

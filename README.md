@@ -3,9 +3,8 @@
 ## Disclaimer
 
 > ⚠️ **Important Disclaimer:**
->
-> The instructions below are only applicable if you **already have full access** to the EIAP Ecosystem.
->
+> The instructions below are only applicable if you
+> **already have full access** to the EIAP Ecosystem.
 > If you do not have this access, **please do not proceed.**
 
 ## Introduction
@@ -21,7 +20,6 @@ This is a simple Hello World Python App with the following three endpoints:
   the number of successful and failed invocations of
   the '/sample-app/python/hello' endpoint.
 
-
 ## Build Docker Image
 
 Rename the `Dockerfile-template` file to `Dockerfile`.
@@ -31,7 +29,7 @@ mv Dockerfile-template Dockerfile
 ```
 
 Replace `<PYTHON_IMAGE_NAME>` in the Dockerfile with a slim Python base image.
-Refer to: [Python on Docker™ Hub](https://hub.docker.com/_python)
+Refer to: [Python on Docker™ Hub](https://hub.docker.com/_/python)
 
 Run the following command to build the image.
 
@@ -56,7 +54,7 @@ curl -is localhost:8050/sample-app/python/hello
 
 Example Output:
 
-```python
+```http
 HTTP/1.1 200 OK
 Date: Thu, 17 Jun 2021 14:46:46 GMT
 Content-Length: 13
@@ -67,7 +65,7 @@ Hello World!!
 
 ## Build the CSAR package
 
-For this step, install the [App Package Tool](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-onboarding/app-package-tool).
+For this step, install the [App Package Tool](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-administration/tutorial-package-app).
 
 Once installed, the tool will be available as a Docker image
 named `armdocker.rnd.ericsson.se/proj-eric-oss-dev-test/releases/eric-oss-app-package-tool:latest`
@@ -143,357 +141,537 @@ ls ./csar-output
 
 ### Prerequisites for Onboarding
 
-The user with the required roles is authenticated and a JSession ID is
+The client with the required roles is authenticated and an access token is
 available for accessing the required platform APIs.
 
-For onboarding the Hello World App, the user logged into the system must
-have all following permissions:
+> Authenticating a user with JSession ID is deprecated, and will be removed
+> in EIC 1.2438. If you still need to authenticate with a JSession ID,
+> please follow:
+> [Onboarding the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=5&chapter=onboarding-the-app-with-jsessionid)
+> in the *Build, onboard and instantiate a 'Hello World App' in Go* tutorial.
 
-| Role                                                            | Role Description                                             |
-| --------------------------------------------------------------- | ------------------------------------------------------------ |
-| AppMgrAdmin                                                     | Access to App Manager onboarding and instantiating Apps.     |
-| Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.     |
-| UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps. |
+For *onboarding and instantiating* the Hello World App, the user logged into
+the system needs to be assigned all the following permissions:
 
-Use the following command to generate a valid Jsession ID:
+| Role                                                            | Role Description                                                              |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| AppMgr_Application_Administrator                                | Administrator access to App Administration onboarding and instantiating Apps. |
+| AppMgr_Application_Operator                                     | Operator access to App Administration onboarding and instantiating Apps.      |
+| Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.                      |
+| UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps.                  |
 
-> Contact your platform administrator for the CA certificate
-required in the commands below.
+Use the following command to generate a valid access token:
+
+> Contact your platform administrator for the required CA certificate.
 
 ```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_GAS_HOST>/auth/v1/login' \
---header 'X-Login: <USERNAME>' \
---header 'X-password: <PASSWORD>'
+curl --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
+https://<eic-host>/auth/realms/master/protocol/openid-connect/token \
+--header 'content-type: application/x-www-form-urlencoded' \
+--data "grant_type=client_credentials&client_id=<IAM_CLIENT_ID>&client_secret=<IAM_CLIENT_SECRET>"
 ```
 
-This command returns a JSession ID which is used in the commands in the
-following steps. See the following example of JSession ID:
+This command returns an access token, which is used in the commands in the
+following steps. See the following example of a response containing the
+access token:
 
-```c02c353a-77b8-4fae-989a-9beadf4f604c```
-
-| Key                | Description                                                                |
-|--------------------|----------------------------------------------------------------------------|
-| EIC_GAS_HOST       | GUI Aggregator Service (GAS) is the EIC OSS Portal Hostname                |
-| UserName           | User Name created in the IAM                                               |
-| Password           | Password credential created in the IAM                                     |
+```bash
+  "access_token": "eyJhbGciOiJSUze168rQBwD4....",
+  "expires_in": 300,
+  "refresh_expires_in": 0,
+  "token_type": "Bearer",
+  "not-before-policy": 0,
+  "scope": "profile"
+```
 
 ### Steps for Onboarding
 
-Onboard the **Hello World CSAR App Package** using [App Onboarding](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-onboarding/developer-guide-use-cases).
+> Onboarding with App Onboarding API V1 is deprecated,
+> and will be removed from EIC after 2024 Q4. If you still need to
+> onboard with App Onboarding API V1, please follow:
+> [Onboarding the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=5&chapter=onboarding-the-app-with-jsessionid)
+> in the *Build, onboard and instantiate a 'Hello World App' in Go*
+> tutorial.
+
+Onboard the **Hello World CSAR App Package** using [App Administration](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-administration/developer-guide-manage?chapter=onboard).
 
 To start the onboarding of the Hello World CSAR app,
-run the following command in a bash window.
+run the following command in a command line tool.
 
 ```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_GAS_HOST>/app-manager/onboarding/v1/apps' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-onboarding/v2/app-packages' \
+--header 'Authorization: Bearer <access-token>' \
 --header 'accept: application/json' \
---form 'file=@"<PATH_TO_CSAR>/helloworldAppPackage.csar"' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>'
+--form 'file=@"<PATH_TO_CSAR>/helloworldAppPackage.csar"'
 ```
 
 Example of command result:
 
 ```json
 {
-  "id": 8,
-  "name": "helloworldAppPackage.csar",
-  "username": "Unknown",
-  "version": "1.1.1",
-  "size": "100MB",
-  "vendor": "Unknown",
-  "type": "APP",
-  "onboardedDate": "2022-08-19T11:33:03.955+00:00",
-  "status": "UPLOADED",
-  "mode": "DISABLED"
+  "fileName": "helloworldAppPackage.csar",
+  "onboardingJob": {
+    "id": "a2f0a43d-730a-4991-8481-746c3e76556e",
+    "href": "app-onboarding/v2/onboarding-jobs/a2f0a43d-730a-4991-8481-746c3e76556e"
+  }
 }
 ```
 
-The id, shown in the command result, is `APP_ONBOARDING_ID`
-(8 in the example). Use the `APP_ONBOARDING_ID` to get the status of
-the onboarding process in the following commands:
+An onboarding-job `id` is shown in the command result
+(a2f0a43d-730a-4991-8481-746c3e76556e in the example).
+This is the `JOB_ID`. Use the `JOB_ID` to get the
+status of the onboarding process in the following commands:
 
 ```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<EIC_GAS_HOST>/app-manager/onboarding/v1/apps/<APP_ONBOARDING_ID>' \
---header 'accept: application/json' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>'
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-onboarding/v2/onboarding-jobs/<JOB_ID>' \
+--header 'Authorization: Bearer <access-token>' \
+--header 'accept: application/json'
 ```
 
-It can take up to five minutes for the status to change to ONBOARDED.
-Repeat the command till the status is changed to ONBOARDED.
+It can take several minutes for the status to change to `ONBOARDED`.
+Repeat the command until the status is changed to `ONBOARDED`.
 
 Example of command result:
 
 ```json
 {
-  "id": 8,
-  "name": "helloworldAppPackage.csar",
-  "username": "Unknown",
-  "version": "1.1.1",
-  "size": "100MB",
-  "vendor": "Unknown",
-  "type": "APP",
-  "onboardedDate": "2022-08-19T11:33:03.955+00:00",
+  "id": "a2f0a43d-730a-4991-8481-746c3e76556e",
+  "fileName": "helloworldAppPackage.csar",
+  "packageVersion": "3.1.1-0",
+  "packageSize": "53.1282MiB",
+  "vendor": "Ericsson",
+  "type": "rApp",
+  "onboardStartedAt": "2024-09-13T09:48:53.239542Z",
   "status": "ONBOARDED",
-  "mode": "DISABLED",
-  "artifacts": [
+  "onboardEndedAt": "2024-09-13T09:49:01.299826Z",
+  "events": [
     {
-      "id": 12,
-      "name": "docker.tar",
-      "type": "IMAGE",
-      "version": "--",
-      "status": "COMPLETED",
-      "location": "<app-manager-resource-location>"
+      "type": "INFO",
+      "title": "Stored 1 out of 3 artifacts",
+      "detail": "Uploaded eric-oss-hello-world-python-app",
+      "occurredAt": "2024-09-13T09:48:57.556164Z"
     },
     {
-      "id": 11,
-      "name": "eric-oss-hello-world-python-app",
-      "type": "HELM",
-      "version": "1.0.0-0",
-      "status": "COMPLETED",
-      "location": "/api/eric-oss-hello-world-python-app_2.9.985/charts/eric-oss-hello-world-python-app/1.0.0-0"
+      "type": "INFO",
+      "title": "Stored 2 out of 3 artifacts",
+      "detail": "Uploaded eric-oss-hello-world-python-appASD.yaml",
+      "occurredAt": "2024-09-13T09:48:57.556165Z"
+    },
+    {
+      "type": "INFO",
+      "title": "Stored 3 out of 3 artifacts",
+      "detail": "Uploaded docker.tar",
+      "occurredAt": "2024-09-13T09:49:00.962182Z"
     }
   ],
-  "events": []
+  "self": {
+    "href": "app-onboarding/v2/onboarding-jobs/a2f0a43d-730a-4991-8481-746c3e76556e"
+  },
+  "app": {
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+    "href": "app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
+}
+```
+
+The `APP_ID` is the `id` of the `app` returned in the previous
+command (rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0 in the example).
+Run the following command to initialize the App.
+
+```bash
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/initialization-actions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <access-token>' \
+-d '{"action": "INITIALIZE"}'
+```
+
+Example of command result:
+
+```json
+{
+  "app": {
+    "status": "INITIALIZING",
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
+}
+```
+
+Repeat the following command until the status is changed to `INITIALIZED`.
+
+```shell
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <access-token>'
+```
+
+Example of command result:
+
+```json
+{
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "type": "rApp",
+  "provider": "Ericsson",
+  "name": "eric-oss-hello-world-python-app",
+  "version": "3.1.1-0",
+  "mode": "DISABLED",
+  "status": "INITIALIZING",
+  "createdAt": "2024-09-13T09:49:01.273Z",
+  "components": [
+    {
+      "type": "MICROSERVICE",
+      "name": "eric-oss-hello-world-python-app",
+      "version": "3.1.1-0",
+      "artifacts": [
+        {
+          "name": "docker.tar",
+          "type": "IMAGE"
+        },
+        {
+          "name": "eric-oss-hello-world-python-app",
+          "type": "HELM"
+        },
+        {
+          "name": "eric-oss-hello-world-python-appASD.yaml",
+          "type": "OPAQUE"
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "resource": "kafka",
+      "scope": "GLOBAL"
+    }
+  ],
+  "roles": [],
+  "events": [],
+  "self": {
+    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
 }
 ```
 
 Run the following command to switch the app mode from 'DISABLED' to 'ENABLED'.
 
 ```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<EIC_GAS_HOST>/app-manager/onboarding/v1/apps/<APP_ONBOARDING_ID>' \
--H 'Content-Type: application/json' \
--d '{"mode": "ENABLED"}' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>'
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/mode' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <access-token>' \
+-d '{"mode": "ENABLED"}'
 ```
 
 Example of command result:
 
 ```json
 {
-  "id": 8,
-  "name": "helloworldAppPackage.csar",
-  "username": "Unknown",
-  "version": "1.1.1",
-  "size": "100MB",
-  "vendor": "Unknown",
-  "type": "APP",
-  "onboardedDate": "2022-08-19T11:33:03.955+00:00",
-  "status": "ONBOARDED",
   "mode": "ENABLED",
-  "artifacts": [
-    {
-      "id": 12,
-      "name": "docker.tar",
-      "type": "IMAGE",
-      "version": "--",
-      "status": "COMPLETED",
-      "location": "<app-manager-resource-location>"
-    },
-    {
-      "id": 11,
-      "name": "eric-oss-hello-world-python-app",
-      "type": "HELM",
-      "version": "1.0.0-0",
-      "status": "COMPLETED",
-      "location": "/api/eric-oss-hello-world-python-app_2.9.985/charts/eric-oss-hello-world-python-app/1.0.0-0"
-    }
-  ],
-  "events": []
+  "app": {
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
 }
 ```
 
 ## Instantiate the App
 
+> Instantiating with App LCM API V1 is deprecated,
+> and will be removed from EIC after 2024 Q4. If you still need to
+> onboard with App LCM API V1, please follow:
+> [Instantiating the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=6&chapter=instiating-app-with-jsessionid)
+> in the *Build, onboard and instantiate a 'Hello World App' in Go*
+> tutorial.
+
+This section describes how the App can communicate with IAM and produce logs to
+ the platform. The App is instantiated using App Administration and the API is
+ exposed and secured by the Service Exposure capability.
+
 ### Prerequisites for Instantiation
 
-- You need the JSession ID generated in **Onboard the App** prerequisite
-  to access the App Manager for instantiating the Hello World CSAR App Package.
-- Contact your platform administrator to generate required App key,
-  certificates, and secret name in which they are stored.
+- You need the access token generated in **Onboard the App** prerequisite to
+ access the App Manager for instantiating the Hello World CSAR App Package.
+- Contact your platform administrator to generate the required App key,
+ certificates key, certificates, and the secrets which store them. The
+  details of the secrets, keys, certs and EIC endpoint details will be passed
+   to App Administration through the `userDefinedHelmParameters` when
+    instantiating the App. The required parameters are:
+  - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
+   sample App first communicates with IAM to obtain a client token (login)
+    before returning the "Hello World!!" string output.
+  - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
+   secure TLS communication. Refer to
+    [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
+     to understand how certificates are loaded into the App during
+      instantiation for secure communication.
+  - The `appSecretName`, `logEndpoint`,
+   `appKeyFileName`, `appCertFileName`
+    for mTLS communication. For more information on the variable values
+     required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
 
 ### Steps for Instantiation
 
-Use the APP LCM capability to instantiate the **Hello World CSAR App**.
-For more details on this capability, see [App LCM](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-lifecycle-management/developer-guide).
+Use the App Administration capability to instantiate the
+ **Hello World CSAR App**. For more details on instantiating an App, see
+  [App Administration](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-administration/developer-guide-manage?chapter=instantiate).
+Run the following commands to start the instantiation process using the
+ `APP_ID` from **Onboard the App**.
 
-Run the following command to start the instantiation process using
-the appOnboarding ID from **Onboard the App**.
+#### Create App Instance
 
-```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_GAS_HOST>/app-manager/lcm/app-lcm/v1/app-instances' \
+```shell
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances' \
 --header 'accept: application/json' \
 --header 'Content-Type: application/json' \
--d '{"appId": <ONBOARDED_APP_ID>,
-    "additionalParameters": {
-        "platformSecretName": "<PLATFORM_SECRET>",
-        "caCertFileName": "tls.crt",
-        "caCertMountPath": "cacerts",
-        "iamBaseUrl": "https://<IAM_HOST_URL>",
-        "rAppLogCertsSecretName": "<APP_MTLS_SECRET>",
-        "logCACertSecretName": "la-cacert-secret",
-        "logEndpoint": "<LOG_ENDPOINT>",
-        "rAppLogTlsKeyFileName": "<APP_PRIVATE_KEY>",
-        "rAppLogTlsCertFileName": "<APP_CERTIFICATE>",
-        "logTlsCACertFileName": "<LOG_AGGREGATOR_CA_CERTIFICATE>",
-        "logCaFilePath": "</PATH/TO/CA/LOG/FILE/>",
-        "rAppLogCertFilePath": "</PATH/TO/APP/LOG/FILE/>"
-}}' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>'
+--header 'Authorization: Bearer <access-token>' \
+-d '{
+  "appId": "<APP_ID>"
+}'
 ```
 
-> All additional parameters are required for
-successful instantiation of your App.
+Example command result:
 
-The `iamBaseUrl` is required as the `/sample-app/python/hello` endpoint of this
-sample app first communicates with IAM to obtain a client token (login)
-before returning the `Hello World!\n` string output.
+```json
+{
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-28057851",
+  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "status": "UNDEPLOYED",
+  "credentials": {
+    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+  },
+  "componentInstances": [
+    {
+      "name": "eric-oss-hello-world-python-app",
+      "version": "3.1.1-0",
+      "type": "MICROSERVICE",
+      "deployState": "UNDEPLOYED",
+      "properties": {
+        "namespace": "<namespace>",
+        "timeout": 5
+      }
+    }
+  ],
+  "self": {
+    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+  },
+  "app": {
+    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
+}
+```
 
-`platformSecretName`, `caCertFileName`, and `caCertMountPath` are required to enable
-secure TLS communication. See [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
-to understand how the certificates are loaded into the App during
-instantiation for secure communication.
+An app-instance `id` is shown in the command result
+ (rapp-ericsson-eric-oss-hello-world-python-app-28057851 in the example). This
+ is the `APP_INSTANCE_ID` used in the following commands.
 
-Use the prerequisites gathered from your platform administrator to
-populate the additional parameters:
-`rAppLogCertsSecretName`, `logCACertSecretName`, `logEndpoint`,
-`rAppLogTlsKeyFileName`, `rAppLogTlsCertFileName`, `logTlsCACertFileName`.
-For more information on variables values required,
-see [App Logging Developer Guide to Produce logs.](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names)
+#### Deploy App Instance
 
-The `logCaFilePath` and `rAppLogCertFilePath` are configurable file paths to
-the `CACert` and App log files respectively.
+> All `userDefinedHelmParameters` are required for successful instantiation
+ of your App.
+
+```shell
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
+  --header 'accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <access-token>' \
+  -d '{
+  "type": "DEPLOY",
+  "additionalData": {
+    "componentInstances": [
+      {
+        "name": "eric-oss-hello-world-python-app",
+        "properties": {
+          "timeout": 5,
+          "userDefinedHelmParameters": {
+            "iamBaseUrl": "https://<eic-host>",
+            "logEndpoint": "<LOG_ENDPOINT>",
+            "platformCaCertSecretName": "<PLATFORM_CA_CERT_SECRET>",
+            "appSecretName": "<APP_MTLS_SECRET>",
+            "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
+            "appKeyFileName": "<APP_PRIVATE_KEY>",
+            "appCertFileName": "<APP_CERTIFICATE>"
+          }
+        }
+      }
+    ]
+  }
+}' \
+```
 
 See the following example command result:
 
 ```json
 {
-  "id": 5,
-  "appOnBoardingAppId": 8,
-  "healthStatus": "PENDING",
-  "targetStatus": "INSTANTIATED",
-  "createdTimestamp": "2022-08-19T11:37:02.491951Z",
-  "additionalParameters": "{
-         \"platformSecretName\":\"iam-cacert-secret\",
-         \"caCertFileName\":\"tls.crt\",
-         \"caCertMountPath\":\"cacerts\",
-         \"iamBaseUrl\":\"https://<IAM_HOST_URL>\",
-         \"rAppLogCertsSecretName\":\"<APP_MTLS_SECRET>\",
-         \"logCACertSecretName\":\"la-cacert-secret\",
-         \"logEndpoint\":\"<LOG_ENDPOINT>\",
-         \"rAppLogTlsKeyFileName\":\"<APP_PRIVATE_KEY>\",
-         \"rAppLogTlsCertFileName\":\"<APP_CERTIFICATE>\",
-         \"logTlsCACertFileName\":\"<LOG_AGGREGATOR_CA_CERTIFICATE>\",
-         \"logCaFilePath\":\"</PATH/TO/CA/LOG/FILE/>\",
-         \"rAppLogCertFilePath\":\"</PATH/TO/APP/LOG/FILE/>\"
-}","links": [
-  {
-    "rel": "self",
-    "href": "https://eric-oss-app-lcm/app-manager/lcm/app-lcm/v1/app-instances/5"
+  "type": "DEPLOY",
+  "additionalData": {
+    "componentInstances": [
+      {
+        "name": "eric-oss-hello-world-python-app",
+        "properties": {
+          "timeout": 5,
+          "userDefinedHelmParameters": {
+            "platformCaCertSecretName": "<PLATFORM_CA_CERT_SECRET>",
+            "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
+            "iamBaseUrl": "https://<eic-host>",
+            "appSecretName": "<APP_MTLS_SECRET>",
+            "logEndpoint": "<LOG_ENDPOINT>",
+            "appKeyFileName": "<APP_PRIVATE_KEY>",
+            "appCertFileName": "<APP_CERTIFICATE>"
+          }
+        }
+      }
+    ]
   },
-  {
-    "rel": "artifact-instances",
-    "href": "https://eric-oss-app-lcm/app-manager/lcm/app-lcm/v1/app-instances/5/artifact-instances"
-  },
-  {
-    "rel": "app",
-    "href": "https://eric-oss-app-lcm/app-manager/onboarding/v1/apps/8"
-  },
-  {
-    "rel": "artifacts",
-    "href": "https://eric-oss-app-lcm/app-manager/onboarding/v1/apps/8/artifacts"
+  "appInstance": {
+    "status": "DEPLOYING",
+    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
   }
-]
 }
 ```
 
-The ID returned by the command output is the instantiation ID, in the
-previous example `"id:5"`. Use the instantiation app ID in the
-following command to check the instantiation status.
-Repeat the command until the health status is changed
-to `"healthStatus":"INSTANTIATED"`.
+Use the App instance ID in the following command to check the instantiation
+ status. Repeat the command until the health status is changed
+  to `"status":"DEPLOYED"`.
 
-```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<EIC_GAS_HOST>/app-manager/lcm/app-lcm/v1/app-instances/<INSTANTIATION_APP_ID>' \
--H 'accept: application/json' \
--H 'Content-Type: application/json' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>'
+```shell
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>' \
+--header 'accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <access-token>'
 ```
-
-Example of command result:
 
 ```json
 {
-  "id": 5,
-  "appOnBoardingAppId": 8,
-  "healthStatus": "INSTANTIATED",
-  "targetStatus": "INSTANTIATED",
-  "createdTimestamp": "2022-08-19T11:37:02.491951Z",
-  "additionalParameters": "{
-         \"platformSecretName\":\"iam-cacert-secret\",
-         \"caCertFileName\":\"tls.crt\",
-         \"caCertMountPath\":\"cacerts\",
-         \"iamBaseUrl\":\"https://<IAM_HOST_URL>\",
-         \"rAppLogCertsSecretName\":\"<APP_MTLS_SECRET>\",
-         \"logCACertSecretName\":\"la-cacert-secret\",
-         \"logEndpoint\":\"<LOG_ENDPOINT>\",
-         \"rAppLogTlsKeyFileName\":\"<APP_PRIVATE_KEY>\",
-         \"rAppLogTlsCertFileName\":\"<APP_CERTIFICATE>\",
-         \"logTlsCACertFileName\":\"<LOG_AGGREGATOR_CA_CERTIFICATE>\",
-         \"logCaFilePath\":\"</PATH/TO/CA/LOG/FILE/>\",
-         \"rAppLogCertFilePath\":\"</PATH/TO/APP/LOG/FILE/>\"
-}","links": [
-  {
-    "rel": "self",
-    "href": "https://eric-oss-app-lcm/app-manager/lcm/app-lcm/v1/app-instances/5"
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-28057851",
+  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "status": "DEPLOYED",
+  "createdAt": "2024-09-13T09:54:32.950Z",
+  "updatedAt": "2024-09-13T09:56:00.451Z",
+  "credentials": {
+    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-28057851"
   },
-  {
-    "rel": "artifact-instances",
-    "href": "https://eric-oss-app-lcm/app-manager/lcm/app-lcm/v1/app-instances/5/artifact-instances"
-  },
-  {
-    "rel": "app",
-    "href": "https://eric-oss-app-lcm/app-manager/onboarding/v1/apps/8"
-  },
-  {
-    "rel": "artifacts",
-    "href": "https://eric-oss-app-lcm/app-manager/onboarding/v1/apps/8/artifacts"
-  }
-]
-}
-```
-
-## Onboard the Hello World Python App APIs
-
-Run the following command to onboard the Hello World App APIs.
-
-```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_GAS_HOST>/v1/routes' \
---header 'Cookie: JSESSIONID=<JSESSIONID>' \
---header 'Content-Type: application/json' \
---data '{
-  "id": "hello-world-python-route-001",
-  "predicates": [
+  "componentInstances": [
     {
-      "name": "Path",
-      "args": {
-        "_genkey_0": "/sample-app/python/hello"
+      "name": "eric-oss-hello-world-python-app",
+      "version": "3.1.1-0",
+      "type": "MICROSERVICE",
+      "deployState": "DEPLOYED",
+      "properties": {
+        "userDefinedHelmParameters": {
+          "platformCaCertSecretName": "<PLATFORM_CA_CERT_SECRET>",
+          "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
+          "iamBaseUrl": "https://<eic-host>",
+          "appSecretName": "<APP_MTLS_SECRET>",
+          "logEndpoint": "<LOG_ENDPOINT>",
+          "appKeyFileName": "<APP_PRIVATE_KEY>",
+          "appCertFileName": "<APP_CERTIFICATE>"
+        },
+        "namespace": "<namespace>",
+        "timeout": 5
       }
     }
   ],
-  "uri": "http://eric-oss-hello-world-python-app:8050"
+  "events": [],
+  "self": {
+    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+  },
+  "app": {
+    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+  }
+}
+```
+
+To view your logs, access EIC and open your log viewer.
+Within the log viewer, you can filter for App Logging and view the results.
+
+#### Onboard the Hello World Python App APIs
+
+Use Service Exposure to expose the Hello World App API.
+For details, see [Service Exposure - Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/service-exposure/api-exposure-developer-guide).
+
+> Onboarding with Service Exposure API V1 is deprecated,
+> and will be removed in EIC 1.2438. If you still need to
+> onboard with Service Exposure API V1, please follow:
+> [Step 2: Onboard the Hello World App APIs using Legacy Service Exposure](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=6&chapter=step-2-onboard-the-hello-world-apis-with-legacy-sef)
+> in the *Build, onboard and instantiate a 'Hello World App' in Go*
+> tutorial.
+
+To create an API to be onboarded, run the following commands:
+
+```bash
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis' \
+--header 'Authorization: Bearer <access-token>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "serviceCapabilityId": "hello-world-python-route-001",
+  "status": "active",
+  "apiPrefix": "/app/ericsson-helloWorldPythonApp",
+  "apiName": "hello-world-python-route",
+  "apiVersion": "v1",
+  "apiCategory": "/APIGM/category/api",
+  "apiDefinition": [
+    {
+      "operationName": "/sample-app/python/hello/GET",
+      "urlPattern": "/sample-app/python/hello",
+      "methods": [
+        "GET"
+      ]
+    }
+  ]
 }'
 ```
 
-## Manage access control for the Hello World Python App APIs
-
-To allow access to the API end points provided by the 'Hello World' App,
-Role-Based Access Control (RBAC) configuration is required. To add the
-RBAC policy run the following curl command.
+To create an endpoint for the previously generated API, run the
+following command:
 
 ```bash
-curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_GAS_HOST>/idm/rolemgmt/v1/extapp/rbac' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
+--header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
---header 'Cookie: JSESSIONID=<GENERATED_JSESSION_ID>' \
+--data '{
+  "endpointId": "hello-001",
+  "serverUrl": "http://eric-oss-hello-world-python-app:8050"
+}'
+```
+
+To bind the plugin for authorization of the previously
+generated API, run the following command:
+
+```bash
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/phases/auth/plugin-list' \
+--header 'Authorization: Bearer <access-token>' \
+--header 'Content-Type: application/json' \
+--data '[
+  {
+    "name": "requestPartyTokenInterceptor"
+  }
+]'
+```
+
+To configure the binded plugin for authorization,
+run the following command:
+
+```bash
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/plugins/requestPartyTokenInterceptor/configuration' \
+--header 'Authorization: Bearer <access-token>' \
+--header 'Content-Type: application/json' \
+--data '{
+  "configurationSchemaVersion": "v0",
+  "configuration": {
+    "defaultResourceServer": "eo"
+  }
+}'
+```
+
+#### Manage access control for the Hello World Python App APIs
+
+To allow access to the API endpoints provided by the 'Hello World' App,
+Role-Based Access Control (RBAC) configuration is required. To add the
+RBAC policy run the following curl command:
+
+```bash
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/idm/rolemgmt/v1/extapp/rbac' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <access-token>' \
 --data '{
     "tenant": "master",
   "roles": [
@@ -508,7 +686,7 @@ curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_G
         "type": "urn:eo:resources:extrapp",
         "ownerManagedAccess": false,
         "uris": [
-          "/sample-app/python/hello"
+          "/app/ericsson-helloWorldPythonApp/hello-world-python-route/v1/sample-app/python/hello"
         ],
         "scopes": [
           {
@@ -574,4 +752,4 @@ curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<EIC_G
 
 To access the `/sample-app/python/hello` endpoint, the new role
 `Python_SampleApp_Application_Administrator` must be assigned to any
-user accessing the endpoint.
+client accessing the endpoint.

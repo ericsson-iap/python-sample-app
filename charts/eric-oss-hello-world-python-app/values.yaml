@@ -109,4 +109,8 @@ probes:
 podPriority:
   eric-oss-hello-world-python-app:
     priorityClassName : ""
-    
+
+# Defaults if these values are not provided at instantiation
+instantiationDefaults:
+  platformCaCertMountPath: "/etc/tls-ca/platform/"
+  appCertMountPath: "/etc/tls/log/"
