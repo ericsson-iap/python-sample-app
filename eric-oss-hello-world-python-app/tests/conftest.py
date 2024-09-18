@@ -10,18 +10,7 @@ from main import Application
 from config import get_config
 
 def pytest_generate_tests():
-    '''Override environment variables to simulate instantiation with these values set'''
-    os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
-    os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
-    os.environ["IAM_BASE_URL"] = "https://www.iam-base-url.com"
-    os.environ["CA_CERT_FILENAME"] = "CA_CERT_FILENAME"
-    os.environ["CA_CERT_MOUNT_PATH"] = "CA_CERT_MOUNT_PATH"
-    os.environ["LOG_ENDPOINT"] = "LOG_ENDPOINT"
-    os.environ["APP_LOG_TLS_KEY"] = "APP_LOG_TLS_KEY"
-    os.environ["APP_LOG_TLS_CERT"] = "APP_LOG_TLS_CERT"
-    os.environ["LOG_TLS_CA_CERT"] = "LOG_TLS_CA_CERT"
-    os.environ["LOG_CA_CERT_FILE_PATH"] = "LOG_CA_CERT_FILE_PATH"
-    os.environ["APP_LOG_CERT_FILE_PATH"] = "APP_LOG_CERT_FILE_PATH"
+    populate_environment_variables()
 
 @pytest.fixture(name="mock_log_api")
 def fixture_mock_log_api(config):
@@ -41,14 +30,10 @@ def fixture_app(mock_log_api):
         "TESTING": True,
     })
 
-    # other setup can go here
-
-    yield application
+    # Why 'yield'? See: https://docs.pytest.org/en/7.1.x/how-to/fixtures.html#dynamic-scope
+    yield application 
     GLOBAL_METRICS_REGISTRY.unregister(application.requests_total)
     GLOBAL_METRICS_REGISTRY.unregister(application.requests_failed)
-
-
-    # clean up / reset resources here
 
 
 @pytest.fixture()
@@ -64,14 +49,24 @@ def fixture_config():
 
 @pytest.fixture(scope="function")
 def no_log_certs():
-    os.environ["APP_LOG_TLS_KEY"] = ""
-    os.environ["APP_LOG_TLS_CERT"] = ""
-    os.environ["LOG_TLS_CA_CERT"] = ""
-    os.environ["LOG_CA_CERT_FILE_PATH"] = ""
-    os.environ["APP_LOG_CERT_FILE_PATH"] = ""
+    # Remove references to log certs to simulate them being undefined.
+    # This would simulate a user not setting these at instantiation time.
+    os.environ["APP_KEY"] =             ""
+    os.environ["APP_CERT"] =            ""
+    os.environ["APP_CERT_FILE_PATH"] =  ""
+    
+    # Why 'yield'? See: https://docs.pytest.org/en/7.1.x/how-to/fixtures.html#dynamic-scope
     yield
-    os.environ["APP_LOG_TLS_KEY"] = "APP_LOG_TLS_KEY"
-    os.environ["APP_LOG_TLS_CERT"] = "APP_LOG_TLS_CERT"
-    os.environ["LOG_TLS_CA_CERT"] = "LOG_TLS_CA_CERT"
-    os.environ["LOG_CA_CERT_FILE_PATH"] = "LOG_CA_CERT_FILE_PATH"
-    os.environ["APP_LOG_CERT_FILE_PATH"] = "APP_LOG_CERT_FILE_PATH"
+    populate_environment_variables()
+
+
+def populate_environment_variables():
+    os.environ["IAM_CLIENT_ID"] =           "IAM_CLIENT_ID"
+    os.environ["IAM_CLIENT_SECRET"] =       "IAM_CLIENT_SECRET"
+    os.environ["IAM_BASE_URL"] =            "https://www.iam-base-url.com"
+    os.environ["CA_CERT_FILE_NAME"] =       "CA_CERT_FILE_NAME"
+    os.environ["CA_CERT_FILE_PATH"] =       "CA_CERT_MOUNT_PATH"
+    os.environ["LOG_ENDPOINT"] =            "LOG_ENDPOINT"
+    os.environ["APP_KEY"] =                 "APP_KEY"
+    os.environ["APP_CERT"] =                "APP_CERT"
+    os.environ["APP_CERT_FILE_PATH"] =      "APP_CERT_FILE_PATH"
