@@ -44,7 +44,7 @@ def tls_login(url, form_data, headers):
     This function sends an HTTP POST request with TLS for the login operation
     '''
     config = get_config()
-    cert = os.path.join("/", config.get("ca_mount_path"), config.get("ca_cert_file_name"))
+    cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
     try:
         response = requests.post(url, data=form_data, headers = headers, timeout=5, verify=cert)
         if response.status_code != 200:

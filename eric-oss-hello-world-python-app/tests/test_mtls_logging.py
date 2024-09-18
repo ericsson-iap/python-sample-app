@@ -10,12 +10,11 @@ def test_log_stdout_and_mtls(caplog):
     with_mocked_post(send_log, message, Severity.DEBUG, Severity.CRITICAL).assert_called()
     assert message in caplog.text
 
-def test_log_stdout_and_not_mtls(no_log_certs,caplog):
+def test_log_stdout_and_not_mtls(no_log_certs, caplog):
     # pylint: disable=unused-argument
     '''Ensure log is only sent to STDOUT when missing log certs'''
     message = "Message which should appear in STDOUT"
-    error_message = ("Missing TLS logging additional parameter(s): ['logTlsCACertFileName', "
-                     "'rAppLogTlsCertFileName', 'rAppLogTlsKeyFileName','logCaFilePath','rAppLogCertFilePath'")
+    error_message = ("Missing TLS logging additional parameter(s): log_ctrl_file app_key app_cert app_cert_file_path")
     with_mocked_post(send_log, message, Severity.DEBUG, Severity.CRITICAL).assert_not_called()
     assert message in caplog.text
     assert error_message in caplog.text

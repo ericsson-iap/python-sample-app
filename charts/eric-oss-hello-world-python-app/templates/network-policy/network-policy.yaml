@@ -20,6 +20,9 @@ spec:
           app: eric-eo-api-gateway
     - podSelector:
         matchLabels:
+          app: eric-sef-exposure-api-gateway
+    - podSelector:
+        matchLabels:
           app: eric-pm-server
     ports:
     - port: {{ .Values.service.port }}
