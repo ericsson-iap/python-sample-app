@@ -31,7 +31,7 @@ class MtlsLogging:
         handler.setFormatter(formatter)
 
         if not level:
-            # default level is info
+            # Set a default level if logger is not initialized with one
             level = Severity.INFO
             if self.config["log_ctrl_file"]:
                 # If level is defined in charts\eric-oss-hello-world-python-app\logcontrol.json
@@ -60,11 +60,12 @@ class MtlsLogging:
         Send request to log aggregator with mTLS
         '''
 
-        cert_available = (self.config.get("log_tls_ca_cert") != ""
-                          and self.config.get("log_tls_cert") != ""
-                          and self.config.get("log_tls_key") != ""
-                          and self.config.get("log_ca_cert_file_path") != ""
-                          and self.config.get("rapp_log_cert_file_path") != "")
+        # Determine if certs are set.
+        cert_available = (self.config.get("ca_cert_file_name") != ""
+                          and self.config.get("ca_cert_file_path") != ""
+                          and self.config.get("app_cert") != ""
+                          and self.config.get("app_key") != ""
+                          and self.config.get("app_cert_file_path") != "")
 
         log_url = self.config.get("log_endpoint")
         time = datetime.now(timezone.utc).isoformat()
@@ -84,14 +85,18 @@ class MtlsLogging:
         self.logger.log(severity, message)
 
         if not cert_available:
-            self.logger.error(("Missing TLS logging additional parameter(s): ['logTlsCACertFileName', "
-                               "'rAppLogTlsCertFileName', 'rAppLogTlsKeyFileName','logCaFilePath','rAppLogCertFilePath'"))
+            missing_parameters = "Missing TLS logging additional parameter(s): "
+            for k, v in self.config.items():
+                if v == "":
+                    missing_parameters += k + " "
+
+            self.logger.error(missing_parameters)
         elif severity >= self.logger.getEffectiveLevel():
             # send log to log transformer
             try:
-                ca_cert = os.path.join("/", self.config.get("log_ca_cert_file_path"), self.config.get("log_tls_ca_cert"))
-                app_cert = os.path.join("/", self.config.get("rapp_log_cert_file_path"), self.config.get("log_tls_cert"))
-                app_key = os.path.join("/", self.config.get("rapp_log_cert_file_path"), self.config.get("log_tls_key"))
+                ca_cert = os.path.join("/", self.config.get("ca_cert_file_path"), self.config.get("ca_cert_file_name"))
+                app_cert = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_cert"))
+                app_key = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_key"))
                 requests.post(f"https://{log_url}", json=json_data, timeout=5,
                                     headers = headers, verify=ca_cert, cert=(app_cert, app_key))
             except (requests.exceptions.InvalidURL, requests.exceptions.MissingSchema) as exception:
