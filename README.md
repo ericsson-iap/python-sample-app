@@ -150,8 +150,8 @@ available for accessing the required platform APIs.
 > [Onboarding the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=5&chapter=onboarding-the-app-with-jsessionid)
 > in the *Build, onboard and instantiate a 'Hello World App' in Go* tutorial.
 
-For *onboarding and instantiating* the Hello World App, the user logged into
-the system needs to be assigned all the following permissions:
+For *onboarding and instantiating* the Hello World App, the client logged into
+the platform needs to be assigned all the following permissions:
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -160,9 +160,11 @@ the system needs to be assigned all the following permissions:
 | Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.                      |
 | UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps.                  |
 
-Use the following command to generate a valid access token:
+> **Note:** Contact the platform administrator to request a client with the required roles, as well as the CA certificate required for authentication. They will provide you with a Client ID and Client Secret, along with a CA certificate file.
 
-> Contact your platform administrator for the required CA certificate.
+Refer to [Client Access to REST APIs](#tutorials/client-access) for further details on client authentication.
+
+Use the following command to generate a valid access token:
 
 ```bash
 curl --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
