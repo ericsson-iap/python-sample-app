@@ -144,8 +144,9 @@ ls ./csar-output
 The client with the required roles is authenticated and an access token is
 available for accessing the required platform APIs.
 
-> Authenticating a user with JSession ID is deprecated, and will be removed
-> in EIC 1.2438. If you still need to authenticate with a JSession ID,
+> Authenticating a user with JSession ID is deprecated. It will be
+> available until release EIC 1.2513 (2025 Q1).
+> If you still need to authenticate with a JSession ID,
 > please follow:
 > [Onboarding the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=5&chapter=onboarding-the-app-with-jsessionid)
 > in the *Build, onboard and instantiate a 'Hello World App' in Go* tutorial.
@@ -588,9 +589,10 @@ Within the log viewer, you can filter for App Logging and view the results.
 Use Service Exposure to expose the Hello World App API.
 For details, see [Service Exposure - Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/service-exposure/api-exposure-developer-guide).
 
-> Onboarding with Service Exposure API V1 is deprecated,
-> and will be removed in EIC 1.2438. If you still need to
-> onboard with Service Exposure API V1, please follow:
+> Onboarding with Service Exposure API V1 is deprecated.
+> It will be available until release EIC 1.2513 (2025 Q1).
+> If you still need to onboard with Service Exposure API V1,
+> please follow:
 > [Step 2: Onboard the Hello World App APIs using Legacy Service Exposure](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=6&chapter=step-2-onboard-the-hello-world-apis-with-legacy-sef)
 > in the *Build, onboard and instantiate a 'Hello World App' in Go*
 > tutorial.
