@@ -150,6 +150,40 @@ Timezone variable
 {{- print $timezone | quote -}}
 {{- end -}}
 
+{{/*
+Create container level annotations (apparmorProfile - DR-D1123-127)
+*/}}
+{{- define "eric-oss-hello-world-python-app.container-annotations" }}
+    {{- if .Values.appArmorProfile -}}
+    {{- $appArmorValue := .Values.appArmorProfile.type -}}
+        {{- if .Values.appArmorProfile.type -}}
+            {{- if eq .Values.appArmorProfile.type "localhost" -}}
+                {{- $appArmorValue = printf "%s/%s" .Values.appArmorProfile.type .Values.appArmorProfile.localhostProfile }}
+            {{- end}}
+container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ $appArmorValue | quote }}
+        {{- end}}
+    {{- end}}
+{{- end}}
+ 
+{{/*
+Seccomp profile section (DR-1123-128)
+*/}}
+{{- define "eric-oss-hello-world-python-app.seccomp-profile" }}
+    {{- if .Values.seccompProfile }}
+      {{- if .Values.seccompProfile.type }}
+          {{- if eq .Values.seccompProfile.type "Localhost" }}
+              {{- if .Values.seccompProfile.localhostProfile }}
+seccompProfile:
+  type: {{ .Values.seccompProfile.type }}
+  localhostProfile: {{ .Values.seccompProfile.localhostProfile }}
+            {{- end }}
+          {{- else }}
+seccompProfile:
+  type: {{ .Values.seccompProfile.type }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
+{{- end }}
 
 {{/*
 Create image repo path

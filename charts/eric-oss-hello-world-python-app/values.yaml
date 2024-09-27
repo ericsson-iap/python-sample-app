@@ -29,6 +29,18 @@ replicaCount: 1
 nameOverride: ""
 fullnameOverride: ""
 
+# choice='unconfined, runtime/default, localhost' [ default= ""]
+# Configuration of AppArmor profile type. The following values are possible:
+# unconfined  - Indicates that there is no profile loaded.
+# runtime/default - Applies the default profile of the container engine.
+# localhost   - Applies a specific profile loaded on the host
+appArmorProfile:
+  type: ""
+  localhostProfile:
+seccompProfile:
+  type: "RuntimeDefault"
+  localhostProfile:
+
 service:
   type: ClusterIP
   port: 8050
