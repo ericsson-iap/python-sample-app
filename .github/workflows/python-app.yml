@@ -29,3 +29,8 @@ jobs:
     - name: Pytest
       run: |
         python3 -m pytest
+    - name: markdownlint-cli
+      uses: nosborn/github-action-markdown-cli@v3.3.0
+      with:
+        files: .
+        config_file: .markdownlint.yaml
