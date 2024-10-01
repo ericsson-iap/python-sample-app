@@ -7,8 +7,9 @@
 > **already have full access** to the EIAP Ecosystem.
 > If you do not have this access, **please do not proceed.**
 
+
 >**Note:**
-If you need help accessing the EIAP Ecosystem, contact support 
+If you need help accessing the EIAP Ecosystem, contact support
 at this **email address:** intelligent.automation.platform@ericsson.com
 
 ## Introduction
