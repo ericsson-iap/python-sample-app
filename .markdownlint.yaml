@@ -1,0 +1,16 @@
+---
+default: true
+# These rules are set so that the Markdown linter is compatible with the
+# result of Markdown formatted by Pandoc.
+ul-start-left: false
+ul-indent: false
+ol-prefix:
+  style: ordered
+line-length:
+  code_blocks: false
+  tables: false
+MD048:
+  style: backtick
+list-marker-space: false
+no-trailing-punctuation:
+  punctuation: '.,;:!'
