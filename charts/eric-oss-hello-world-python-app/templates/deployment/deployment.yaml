@@ -37,7 +37,7 @@ spec:
         service.cleartext/scraping: "true"
       annotations:
         {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}
-        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-go-app: {{ include "eric-oss-hello-world-go-app.appArmorProfileAnnotation" . | default "runtime/default" }}
+        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}
         {{- end }}
         prometheus.io/port: "{{ .Values.service.port }}"
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
