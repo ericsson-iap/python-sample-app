@@ -160,11 +160,15 @@ Retrieve AppArmor profile value for the securityContext in Kubernetes >=1.30.0
 {{/*
 Retrieve AppArmor profile value as a string for container annotations in Kubernetes <1.30.0
 */}}
-{{- define "eric-oss-hello-world-python-app.appArmorProfileAnnotation" }}
+{{- define "eric-oss-hello-world-go-app.appArmorProfileAnnotation" }}
 {{- if .Values.appArmorProfile -}}
-  {{ .Values.appArmorProfile.type | quote }}
+  {{ if eq .Values.appArmorProfile.type "RuntimeDefault" -}}
+    "runtime/default"
+  {{ else -}}
+    {{ .Values.appArmorProfile.type | quote }}
+  {{- end }}
 {{- else -}}
-  "RuntimeDefault"
+  "runtime/default"
 {{- end }}
 {{- end }}
  
