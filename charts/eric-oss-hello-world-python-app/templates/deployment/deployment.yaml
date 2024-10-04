@@ -36,7 +36,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         service.cleartext/scraping: "true"
       annotations:
-      {{- $container := include "eric-oss-hello-world-python-app.container-annotations" . | fromYaml }}
+        {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}
+        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}
+        {{- end }}
         prometheus.io/port: "{{ .Values.service.port }}"
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
         prometheus.io/path: "{{ .Values.prometheus.path }}"
@@ -66,6 +68,10 @@ spec:
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
           imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
           securityContext:
+            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} 
+            appArmorProfile:
+              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
+            {{- end }}
             allowPrivilegeEscalation: false
             privileged: false
             readOnlyRootFilesystem: true

@@ -151,19 +151,26 @@ Timezone variable
 {{- end -}}
 
 {{/*
-Create container level annotations (apparmorProfile - DR-D1123-127)
+Retrieve AppArmor profile value for the securityContext in Kubernetes >=1.30.0
 */}}
-{{- define "eric-oss-hello-world-python-app.container-annotations" }}
-    {{- if .Values.appArmorProfile -}}
-    {{- $appArmorValue := .Values.appArmorProfile.type -}}
-        {{- if .Values.appArmorProfile.type -}}
-            {{- if eq .Values.appArmorProfile.type "localhost" -}}
-                {{- $appArmorValue = printf "%s/%s" .Values.appArmorProfile.type .Values.appArmorProfile.localhostProfile }}
-            {{- end}}
-container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ $appArmorValue | quote }}
-        {{- end}}
-    {{- end}}
-{{- end}}
+{{- define "eric-oss-hello-world-python-app.appArmorProfile.type" -}}
+{{ .Values.appArmorProfile.type | default "RuntimeDefault" | quote }}
+{{- end }}
+
+{{/*
+Retrieve AppArmor profile value as a string for container annotations in Kubernetes <1.30.0
+*/}}
+{{- define "eric-oss-hello-world-python-app.appArmorProfileAnnotation" }}
+{{- if .Values.appArmorProfile -}}
+  {{ if eq .Values.appArmorProfile.type "RuntimeDefault" -}}
+    "runtime/default"
+  {{ else -}}
+    {{ .Values.appArmorProfile.type | quote }}
+  {{- end }}
+{{- else -}}
+  "runtime/default"
+{{- end }}
+{{- end }}
  
 {{/*
 Seccomp profile section (DR-1123-128)
