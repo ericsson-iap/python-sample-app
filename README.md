@@ -7,6 +7,10 @@
 > **already have full access** to the EIAP Ecosystem.
 > If you do not have this access, **please do not proceed.**
 
+**Note:**
+If you need help accessing the EIAP Ecosystem, contact support
+at this **email address:** intelligent.automation.platform@ericsson.com
+
 ## Introduction
 
 This is a simple Hello World Python App with the following three endpoints:
@@ -139,19 +143,23 @@ ls ./csar-output
 
 ## Onboard the App
 
-### Prerequisites for Onboarding
-
-The client with the required roles is authenticated and an access token is
-available for accessing the required platform APIs.
-
 > Authenticating a user with JSession ID is deprecated, and will be removed
 > in EIC 1.2438. If you still need to authenticate with a JSession ID,
 > please follow:
 > [Onboarding the App with JSESSIONID](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/go-sample-app?step=5&chapter=onboarding-the-app-with-jsessionid)
 > in the *Build, onboard and instantiate a 'Hello World App' in Go* tutorial.
 
-For *onboarding and instantiating* the Hello World App, the client logged into
-the platform needs to be assigned all the following permissions:
+### Prerequisites for Onboarding
+
+Contact the platform administrator to request the following:
+
+- A CA certificate
+  - This is needed for secure communication with the platform APIs.
+- Client Access to the platform with the required roles.
+  - This is needed for authorized communication with the platform APIs used to to
+  *onboard and instantiate* the Hello World App.
+  - You will receive a Client ID and Client Secret from the platform administrator.
+  - Include the required roles listed below in the request.
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -160,9 +168,8 @@ the platform needs to be assigned all the following permissions:
 | Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.                      |
 | UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps.                  |
 
-> **Note:** Contact the platform administrator to request a client with the required roles, as well as the CA certificate required for authentication. They will provide you with a Client ID and Client Secret, along with a CA certificate file.
-
-Refer to [Client Access to REST APIs](#tutorials/client-access) for further details on client authentication.
+Refer to [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
+ for further details on client authentication.
 
 Use the following command to generate a valid access token:
 
