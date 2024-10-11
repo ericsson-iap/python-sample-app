@@ -148,7 +148,10 @@ ls ./csar-output
 Contact the platform administrator to request the following:
 
 - A CA certificate, needed for secure communication with the platform APIs.
-- Client Access to the platform with the required roles, needed for authorized communication with the platform APIs used to *onboard and instantiate* the Hello World App. You will receive a Client ID and Client Secret from the platform administrator. Include the required roles listed below in the request.
+- Client Access to the platform with the required roles, needed for authorized
+communication with the platform APIs used to *onboard and instantiate* the
+Hello World App. You will receive a Client ID and Client Secret from the
+platform administrator. Include the required roles listed below in the request.
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
