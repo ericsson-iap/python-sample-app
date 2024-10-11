@@ -149,13 +149,8 @@ ls ./csar-output
 
 Contact the platform administrator to request the following:
 
-- A CA certificate
-  - This is needed for secure communication with the platform APIs.
-- Client Access to the platform with the required roles.
-  - This is needed for authorized communication with the platform APIs used to to
-  *onboard and instantiate* the Hello World App.
-  - You will receive a Client ID and Client Secret from the platform administrator.
-  - Include the required roles listed below in the request.
+- A CA certificate, needed for secure communication with the platform APIs.
+- Client Access to the platform with the required roles, needed for authorized communication with the platform APIs used to *onboard and instantiate* the Hello World App. You will receive a Client ID and Client Secret from the platform administrator. Include the required roles listed below in the request.
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -164,7 +159,7 @@ Contact the platform administrator to request the following:
 | Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.                      |
 | UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps.                  |
 
-Refer to [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
+See [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
  for further details on client authentication.
 
 Use the following command to generate a valid access token:
