@@ -145,11 +145,13 @@ ls ./csar-output
 
 ### Prerequisites for Onboarding
 
-The client with the required roles is authenticated and an access token is
-available for accessing the required platform APIs.
+Contact the platform administrator to request the following:
 
-For *onboarding and instantiating* the Hello World App, the user logged into
-the system needs to be assigned all the following permissions:
+- A CA certificate, needed for secure communication with the platform APIs.
+- Client Access to the platform with the required roles, needed for authorized
+communication with the platform APIs used to *onboard and instantiate* the
+Hello World App. You will receive a Client ID and Client Secret from the
+platform administrator. Include the required roles listed below in the request.
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -158,9 +160,10 @@ the system needs to be assigned all the following permissions:
 | Exposure_Application_Administrator                              | Access to Service Exposure Onboarding APIs for the Apps.                      |
 | UserAdministration_ExtAppRbac_Application_SecurityAdministrator | Access to Service Exposure Access control APIs for the Apps.                  |
 
-Use the following command to generate a valid access token:
+See [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
+ for further details on client authentication.
 
-> Contact your platform administrator for the required CA certificate.
+Use the following command to generate a valid access token:
 
 ```bash
 curl --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
