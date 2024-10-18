@@ -608,7 +608,7 @@ curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-h
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
-  "endpointId": "pysa-hello-001",
+  "endpointId": "python-hello-001",
   "serverUrl": "http://eric-oss-hello-world-python-app:8050"
 }'
 ```
