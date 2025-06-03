@@ -47,7 +47,7 @@ def tls_login(url, form_data, headers):
     ca_cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
     app_cert = os.path.join("/", config.get("app_cert_file_path"), config.get("app_cert"))
     app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
-    authentication_type = config.get("authentication_type")
+    authentication_type = config.get("authentication_type").lower()
     try:
         if authentication_type == "client-x509":
             response = requests.post(

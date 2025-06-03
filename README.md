@@ -421,9 +421,9 @@ This section describes how the App can communicate with IAM and produce logs to
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
     before returning the "Hello World!!" string output.
-  - The `authenticationType` defines the authentication method based on the
-   iamBaseUrl protocol—set to `client-x509` for mTLS endpoints or `client-secret` for
-    TLS endpoints.
+  - The `authenticationType` defines the authentication method the sample app
+   will use to communicate with IAM - set to `client-x509` for mTLS or
+    'client-secret' for TLS.
   - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure TLS communication. Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
