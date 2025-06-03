@@ -108,6 +108,8 @@ spec:
               value: {{ index .Values "appCertFileName" | quote }}
             - name: APP_CERT_FILE_PATH
               value: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
+            - name: AUTHENTICATION_TYPE
+              value: {{ index .Values "authenticationType" | default .Values.instantiationDefaults.authenticationType | quote }}
             - name: SERVICE_NAME
               value: {{ .Chart.Name }}
             - name: CONTAINER_NAME

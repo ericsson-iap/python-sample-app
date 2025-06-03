@@ -205,8 +205,8 @@ Example of command result:
 {
   "fileName": "helloworldAppPackage.csar",
   "onboardingJob": {
-    "id": "a2f0a43d-730a-4991-8481-746c3e76556e",
-    "href": "app-onboarding/v2/onboarding-jobs/a2f0a43d-730a-4991-8481-746c3e76556e"
+    "id": "af036040-a732-4af9-b65a-8103da56c35c",
+    "href": "/onboarding-jobs/af036040-a732-4af9-b65a-8103da56c35c"
   }
 }
 ```
@@ -229,37 +229,43 @@ Example of command result:
 
 ```json
 {
-  "id": "a2f0a43d-730a-4991-8481-746c3e76556e",
+  "id": "af036040-a732-4af9-b65a-8103da56c35c",
   "fileName": "helloworldAppPackage.csar",
   "packageVersion": "3.1.1-0",
-  "packageSize": "53.1282MiB",
+  "packageSize": "51.7659MiB",
   "vendor": "Ericsson",
   "type": "rApp",
-  "onboardStartedAt": "2024-09-13T09:48:53.239542Z",
+  "onboardStartedAt": "2025-05-31T13:51:56.616Z",
   "status": "ONBOARDED",
-  "onboardEndedAt": "2024-09-13T09:49:01.299826Z",
+  "onboardEndedAt": "2025-05-31T13:51:59.955Z",
   "events": [
     {
       "type": "INFO",
-      "title": "Stored 1 out of 3 artifacts",
-      "detail": "Uploaded eric-oss-hello-world-python-app",
-      "occurredAt": "2024-09-13T09:48:57.556164Z"
-    },
-    {
-      "type": "INFO",
-      "title": "Stored 2 out of 3 artifacts",
+      "title": "Stored 1 out of 4 artifacts",
       "detail": "Uploaded eric-oss-hello-world-python-appASD.yaml",
-      "occurredAt": "2024-09-13T09:48:57.556165Z"
+      "occurredAt": "2025-05-31T13:51:58.042Z"
     },
     {
       "type": "INFO",
-      "title": "Stored 3 out of 3 artifacts",
+      "title": "Stored 2 out of 4 artifacts",
+      "detail": "Uploaded eric-oss-hello-world-python-app",
+      "occurredAt": "2025-05-31T13:51:58.043Z"
+    },
+    {
+      "type": "INFO",
+      "title": "Stored 3 out of 4 artifacts",
       "detail": "Uploaded docker.tar",
-      "occurredAt": "2024-09-13T09:49:00.962182Z"
+      "occurredAt": "2025-05-31T13:51:59.792Z"
+    },
+    {
+      "type": "INFO",
+      "title": "Stored 4 out of 4 artifacts",
+      "detail": "Uploaded metadata.json",
+      "occurredAt": "2025-05-31T13:51:59.812Z"
     }
   ],
   "self": {
-    "href": "app-onboarding/v2/onboarding-jobs/a2f0a43d-730a-4991-8481-746c3e76556e"
+    "href": "/onboarding-jobs/af036040-a732-4af9-b65a-8103da56c35c"
   },
   "app": {
     "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
@@ -286,7 +292,7 @@ Example of command result:
   "app": {
     "status": "INITIALIZING",
     "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
-    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
   }
 }
 ```
@@ -309,11 +315,11 @@ Example of command result:
   "name": "eric-oss-hello-world-python-app",
   "version": "3.1.1-0",
   "mode": "DISABLED",
-  "status": "INITIALIZING",
-  "createdAt": "2024-09-13T09:49:01.273Z",
+  "status": "INITIALIZED",
+  "createdAt": "2025-05-31T13:51:59.931Z",
   "components": [
     {
-      "type": "MICROSERVICE",
+      "type": "ASD",
       "name": "eric-oss-hello-world-python-app",
       "version": "3.1.1-0",
       "artifacts": [
@@ -322,11 +328,22 @@ Example of command result:
           "type": "IMAGE"
         },
         {
-          "name": "eric-oss-hello-world-python-app",
-          "type": "HELM"
+          "name": "eric-oss-hello-world-python-appASD.yaml",
+          "type": "OPAQUE"
         },
         {
-          "name": "eric-oss-hello-world-python-appASD.yaml",
+          "name": "eric-oss-hello-world-python-app",
+          "type": "HELM"
+        }
+      ]
+    },
+    {
+      "type": "SECURITYMANAGEMENT",
+      "name": "security-mgmt",
+      "version": "1.0.0",
+      "artifacts": [
+        {
+          "name": "metadata.json",
           "type": "OPAQUE"
         }
       ]
@@ -339,9 +356,28 @@ Example of command result:
     }
   ],
   "roles": [],
-  "events": [],
+  "events": [
+    {
+      "type": "INITIALIZE",
+      "title": "SUCCEEDED",
+      "detail": "INITIALIZE has successfully completed",
+      "createdAt": "2025-05-31T13:55:50.421Z"
+    },
+    {
+      "type": "INITIALIZE",
+      "title": "STARTED",
+      "detail": "INITIALIZE has started",
+      "createdAt": "2025-05-31T13:55:34.171Z"
+    },
+    {
+      "type": "CREATE",
+      "title": "SUCCEEDED",
+      "detail": "CREATE has successfully completed",
+      "createdAt": "2025-05-31T13:51:59.945Z"
+    }
+  ],
   "self": {
-    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
   }
 }
 ```
@@ -362,7 +398,7 @@ Example of command result:
   "mode": "ENABLED",
   "app": {
     "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
-    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
   }
 }
 ```
@@ -385,6 +421,9 @@ This section describes how the App can communicate with IAM and produce logs to
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
     before returning the "Hello World!!" string output.
+  - The `authenticationType` defines the authentication method based on the
+   iamBaseUrl protocol—set to `x509` for mTLS endpoints or `client-secret` for
+    TLS endpoints.
   - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure TLS communication. Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
@@ -419,35 +458,47 @@ Example command result:
 
 ```json
 {
-  "id": "rapp-ericsson-eric-oss-hello-world-python-app-28057851",
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-68129972",
   "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
   "status": "UNDEPLOYED",
   "credentials": {
-    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "componentInstances": [
     {
       "name": "eric-oss-hello-world-python-app",
       "version": "3.1.1-0",
-      "type": "MICROSERVICE",
+      "type": "ASD",
       "deployState": "UNDEPLOYED",
       "properties": {
+        "userDefinedHelmParameters": {
+          "global.clientCredentials.secret.clientIdKey": "clientId",
+          "global.clientCredentials.secret.name": "rapp-ericsson-eric-oss-hello-world-python-app-68129972-cc"
+        },
         "namespace": "<namespace>",
         "timeout": 5
+      }
+    },
+    {
+      "name": "security-mgmt",
+      "version": "1.0.0",
+      "type": "SECURITYMANAGEMENT",
+      "properties": {
+        "authenticatorType": "client-x509"
       }
     }
   ],
   "self": {
-    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+    "href": "/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "app": {
-    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
   }
 }
 ```
 
 An app-instance `id` is shown in the command result
- (rapp-ericsson-eric-oss-hello-world-python-app-28057851 in the example). This
+ (rapp-ericsson-eric-oss-hello-world-python-app-68129972 in the example). This
  is the `APP_INSTANCE_ID` used in the following commands.
 
 #### Deploy App Instance
@@ -475,13 +526,14 @@ curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-h
             "appSecretName": "<APP_MTLS_SECRET>",
             "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
             "appKeyFileName": "<APP_PRIVATE_KEY>",
-            "appCertFileName": "<APP_CERTIFICATE>"
+            "appCertFileName": "<APP_CERTIFICATE>",
+            "authenticationType": "<AUTHENTICATION_TYPE>"
           }
         }
       }
     ]
   }
-}' \
+}'
 ```
 
 See the following example command result:
@@ -502,7 +554,10 @@ See the following example command result:
             "appSecretName": "<APP_MTLS_SECRET>",
             "logEndpoint": "<LOG_ENDPOINT>",
             "appKeyFileName": "<APP_PRIVATE_KEY>",
-            "appCertFileName": "<APP_CERTIFICATE>"
+            "appCertFileName": "<APP_CERTIFICATE>",
+            "authenticationType": "<AUTHENTICATION_TYPE>",
+            "global.clientCredentials.secret.name": "<CLIENT_SECRET>",
+            "global.clientCredentials.secret.clientIdKey": "<CLIENT_ID>"
           }
         }
       }
@@ -510,7 +565,7 @@ See the following example command result:
   },
   "appInstance": {
     "status": "DEPLOYING",
-    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+        "href": "/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   }
 }
 ```
@@ -528,41 +583,71 @@ curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-ho
 
 ```json
 {
-  "id": "rapp-ericsson-eric-oss-hello-world-python-app-28057851",
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-68129972",
   "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
   "status": "DEPLOYED",
-  "createdAt": "2024-09-13T09:54:32.950Z",
-  "updatedAt": "2024-09-13T09:56:00.451Z",
+  "createdAt": "2025-05-31T14:01:01.741Z",
+  "updatedAt": "2025-05-31T14:04:16.300Z",
   "credentials": {
-    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+    "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "componentInstances": [
     {
       "name": "eric-oss-hello-world-python-app",
       "version": "3.1.1-0",
-      "type": "MICROSERVICE",
+      "type": "ASD",
       "deployState": "DEPLOYED",
       "properties": {
         "userDefinedHelmParameters": {
-          "platformCaCertSecretName": "<PLATFORM_CA_CERT_SECRET>",
-          "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
           "iamBaseUrl": "https://<eic-host>",
-          "appSecretName": "<APP_MTLS_SECRET>",
           "logEndpoint": "<LOG_ENDPOINT>",
+          "platformCaCertSecretName": "<PLATFORM_CA_CERT_SECRET>",
+          "appSecretName": "<APP_MTLS_SECRET>",
+          "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
           "appKeyFileName": "<APP_PRIVATE_KEY>",
-          "appCertFileName": "<APP_CERTIFICATE>"
+          "appCertFileName": "<APP_CERTIFICATE>",
+          "authenticationType": "<AUTHENTICATION_TYPE>",
+          "global.clientCredentials.secret.name": "<CLIENT_SECRET>",
+          "global.clientCredentials.secret.clientIdKey": "<CLIENT_ID>"
         },
         "namespace": "<namespace>",
         "timeout": 5
       }
+    },
+    {
+      "name": "security-mgmt",
+      "version": "1.0.0",
+      "type": "SECURITYMANAGEMENT",
+      "properties": {
+        "authenticatorType": "client-x509"
+      }
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "type": "DEPLOY",
+      "title": "SUCCEEDED",
+      "detail": "DEPLOY has successfully completed",
+      "createdAt": "2025-05-31T14:04:16.297Z"
+    },
+    {
+      "type": "DEPLOY",
+      "title": "STARTED",
+      "detail": "DEPLOY has started",
+      "createdAt": "2025-05-31T14:04:15.609Z"
+    },
+    {
+      "type": "CREATE",
+      "title": "SUCCEEDED",
+      "detail": "CREATE has successfully completed",
+      "createdAt": "2025-05-31T14:01:01.753Z"
+    }
+  ],
   "self": {
-    "href": "/app-lifecycle-management/v3/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-28057851"
+    "href": "/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "app": {
-    "href": "/app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
   }
 }
 ```
