@@ -49,7 +49,7 @@ def tls_login(url, form_data, headers):
     app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
     authentication_type = config.get("authentication_type")
     try:
-        if authentication_type == "client-x509":
+        if authentication_type == "x509":
             response = requests.post(
                 url,
                 data=form_data,
