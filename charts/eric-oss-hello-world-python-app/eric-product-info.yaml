@@ -5,6 +5,6 @@ images:
     productName: "Python hello world sample app image"
     productNumber: ""
     registry: "armdocker.rnd.ericsson.se"
-    repoPath: "REPO_PATH"
+    repoPath: "proj-eric-oss-drop"
     name: "eric-oss-hello-world-python-app"
-    tag: "VERSION"
+    tag: "1.0.1-1"

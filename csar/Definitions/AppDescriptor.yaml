@@ -1,10 +1,14 @@
 #tosca_definitions_version: Metadata/Tosca.meta
 Description of an APP:
     APPName: eric-oss-hello-world-python-app
-    APPVersion: VERSION
+    APPVersion: 1.0.1-1
     APPType: rApp
-APPComponent:
-    NameofComponent: eric-oss-hello-world-python-app
-    Version: VERSION
-    Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
-    ArtefactType: Microservice
+AppComponentList:
+    - NameofComponent: eric-oss-hello-world-python-app
+      Version: 1.0.1-1
+      Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
+      ArtefactType: ASD
+    - NameofComponent: security-mgmt
+      Version: 1.0.0
+      Path: OtherDefinitions/SecurityManagement
+      ArtefactType: SecurityManagement

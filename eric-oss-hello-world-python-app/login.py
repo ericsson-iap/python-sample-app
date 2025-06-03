@@ -44,9 +44,28 @@ def tls_login(url, form_data, headers):
     This function sends an HTTP POST request with TLS for the login operation
     '''
     config = get_config()
-    cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
+    ca_cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
+    app_cert = os.path.join("/", config.get("app_cert_file_path"), config.get("app_cert"))
+    app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
+    authentication_type = config.get("authentication_type")
     try:
-        response = requests.post(url, data=form_data, headers = headers, timeout=5, verify=cert)
+        if authentication_type == "client-x509":
+            response = requests.post(
+                url,
+                data=form_data,
+                headers=headers,
+                timeout=5,
+                verify=ca_cert,
+                cert=(app_cert, app_key)
+            )
+        elif authentication_type == "client-secret":
+            response = requests.post(
+                url,
+                data=form_data,
+                headers=headers,
+                timeout=5,
+                verify=ca_cert
+            )
         if response.status_code != 200:
             raise LoginError(f"Login failed ({response.status_code})")
     except Exception as exception:
