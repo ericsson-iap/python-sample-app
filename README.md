@@ -260,7 +260,7 @@ Example of command result:
     {
       "type": "INFO",
       "title": "Stored 4 out of 4 artifacts",
-      "detail": "Uploaded metadata.json",
+      "detail": "Uploaded security-metadata.json",
       "occurredAt": "2025-05-31T13:51:59.812Z"
     }
   ],
@@ -343,7 +343,7 @@ Example of command result:
       "version": "1.0.0",
       "artifacts": [
         {
-          "name": "metadata.json",
+          "name": "security-metadata.json",
           "type": "OPAQUE"
         }
       ]
