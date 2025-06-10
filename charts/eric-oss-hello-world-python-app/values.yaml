@@ -126,4 +126,3 @@ podPriority:
 instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
-  authenticationType: "client-x509"

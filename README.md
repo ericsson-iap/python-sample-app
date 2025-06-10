@@ -423,8 +423,7 @@ This section describes how the App can communicate with IAM and produce logs to
     before returning the "Hello World!!" string output.
   - The `authenticationType` defines the authentication method the sample app
    will use to communicate with IAM - set to `client-x509` for mTLS or
-    `client-secret` for TLS. If `authenticationType` is not used, then by default 
-    it will be mTLS as its mentioned in values.yaml
+    `client-secret` for TLS.
   - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure TLS communication. Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
