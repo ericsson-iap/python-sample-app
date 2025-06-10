@@ -169,7 +169,7 @@ Use the following command to generate a valid access token:
 curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
 https://<eic-host>/auth/realms/master/protocol/openid-connect/token \
 --header 'content-type: application/x-www-form-urlencoded' \
---data "grant_type=client_credentials&client_id=<IAM_CLIENT_ID>&client_secret=<IAM_CLIENT_SECRET>"
+--data "grant_type=client_credentials&client_id=<IAM_CLIENT_ID>"
 ```
 
 This command returns an access token, which is used in the commands in the
