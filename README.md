@@ -428,7 +428,7 @@ This section describes how the App can communicate with IAM and produce logs to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
      to understand how certificates are loaded into the App during
       instantiation for secure communication.
-  - The `logEndpoint` endpoint  designed to capture log data supports only
+  - The `logEndpoint` endpoint  designed to capture log data, supports only
    mTLS communication. 
   - The `appSecretName`, `appKeyFileName`, `appCertFileName`
     for mTLS communication. For more information on the variable values
@@ -508,7 +508,7 @@ An app-instance `id` is shown in the command result
 
  **Note:** The `authenticationType` defines the authentication method the sample app
    will use to communicate with IAM - set to `client-x509` for mTLS or
-    `client-secret` for TLS. This parameter is only used navigate between TLS and mTLS
+    `client-secret` for TLS. This parameter is only used to navigate between TLS and mTLS
     within the app code.
 
 ```shell
