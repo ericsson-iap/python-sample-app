@@ -79,6 +79,8 @@ with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
+**Note:** By default, the app code uses mTLS commincation with the hosts.
+
 ```bash
 mkdir -p helloworldAppPackage
 ```
@@ -421,16 +423,14 @@ This section describes how the App can communicate with IAM and produce logs to
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
     before returning the "Hello World!!" string output.
-  - The `authenticationType` defines the authentication method the sample app
-   will use to communicate with IAM - set to `client-x509` for mTLS or
-    `client-secret` for TLS.
   - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure TLS communication. Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
      to understand how certificates are loaded into the App during
       instantiation for secure communication.
-  - The `appSecretName`, `logEndpoint`,
-   `appKeyFileName`, `appCertFileName`
+  - The `logEndpoint` endpoint  designed to capture log data supports only
+   mTLS communication. 
+  - The `appSecretName`, `appKeyFileName`, `appCertFileName`
     for mTLS communication. For more information on the variable values
      required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
 
@@ -505,6 +505,11 @@ An app-instance `id` is shown in the command result
 
 > All `userDefinedHelmParameters` are required for successful instantiation
  of your App.
+
+ **Note:** The `authenticationType` defines the authentication method the sample app
+   will use to communicate with IAM - set to `client-x509` for mTLS or
+    `client-secret` for TLS. This parameter is only used navigate between TLS and mTLS
+    within the app code.
 
 ```shell
 curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
