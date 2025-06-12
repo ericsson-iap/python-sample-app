@@ -79,7 +79,7 @@ with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
-**Note:** By default, the app code uses mTLS commincation with the hosts.
+**Note:** By default, the app code uses mTLS commincation with the EIC host and logging host.
 
 ```bash
 mkdir -p helloworldAppPackage
@@ -424,15 +424,15 @@ This section describes how the App can communicate with IAM and produce logs to
    sample App first communicates with IAM to obtain a client token (login)
     before returning the "Hello World!!" string output.
   - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
-   secure TLS communication. Refer to
+   secure communication. Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
      to understand how certificates are loaded into the App during
       instantiation for secure communication.
   - The `logEndpoint` endpoint  designed to capture log data, supports only
-   mTLS communication. 
-  - The `appSecretName`, `appKeyFileName`, `appCertFileName`
-    for mTLS communication. For more information on the variable values
+   mTLS communication. For more information on the variable values
      required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
+  - The `appSecretName`, `appKeyFileName`, `appCertFileName`
+    used for mTLS communication to verify the client. 
 
 ### Steps for Instantiation
 
