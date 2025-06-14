@@ -79,7 +79,7 @@ with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
-**Note:** By default, the app code uses mTLS commincation with the EIC host and logging host.
+**Note:** By default, App code uses mTLS communication with the platform and logging host.
 
 ```bash
 mkdir -p helloworldAppPackage
