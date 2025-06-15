@@ -471,10 +471,7 @@ Example command result:
       "type": "ASD",
       "deployState": "UNDEPLOYED",
       "properties": {
-        "userDefinedHelmParameters": {
-          "global.clientCredentials.secret.clientIdKey": "clientId",
-          "global.clientCredentials.secret.name": "rapp-ericsson-eric-oss-hello-world-python-app-68129972-cc"
-        },
+        "userDefinedHelmParameters": {},
         "namespace": "<namespace>",
         "timeout": 5
       }
@@ -561,8 +558,6 @@ See the following example command result:
             "appKeyFileName": "<APP_PRIVATE_KEY>",
             "appCertFileName": "<APP_CERTIFICATE>",
             "authenticationType": "<AUTHENTICATION_TYPE>",
-            "global.clientCredentials.secret.name": "<CLIENT_SECRET>",
-            "global.clientCredentials.secret.clientIdKey": "<CLIENT_ID>"
           }
         }
       }
@@ -612,8 +607,6 @@ curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_
           "appKeyFileName": "<APP_PRIVATE_KEY>",
           "appCertFileName": "<APP_CERTIFICATE>",
           "authenticationType": "<AUTHENTICATION_TYPE>",
-          "global.clientCredentials.secret.name": "<CLIENT_SECRET>",
-          "global.clientCredentials.secret.clientIdKey": "<CLIENT_ID>"
         },
         "namespace": "<namespace>",
         "timeout": 5
