@@ -15,6 +15,7 @@ def get_config():
     app_key                 = get_os_env_string("APP_KEY", "")
     app_cert                = get_os_env_string("APP_CERT", "")
     app_cert_file_path      = get_os_env_string("APP_CERT_FILE_PATH", "")
+    authentication_type     = get_os_env_string("AUTHENTICATION_TYPE", "")
 
     config = {
             "iam_client_id": iam_client_id,
@@ -26,7 +27,8 @@ def get_config():
             "log_endpoint": log_endpoint,
             "app_key": app_key,
             "app_cert": app_cert,
-            "app_cert_file_path": app_cert_file_path
+            "app_cert_file_path": app_cert_file_path,
+            "authentication_type": authentication_type
     }
     return config
 
