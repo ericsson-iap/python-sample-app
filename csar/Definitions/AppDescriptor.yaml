@@ -7,4 +7,4 @@ APPComponent:
     NameofComponent: eric-oss-hello-world-python-app
     Version: VERSION
     Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
-    ArtefactType: Microservice
+    ArtefactType: ASD
