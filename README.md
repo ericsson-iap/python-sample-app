@@ -168,7 +168,7 @@ See [Client Access to REST APIs](https://developer.intelligentautomationplatform
 Use the following command to generate a valid access token:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --request POST \
 https://<eic-host>/auth/realms/master/protocol/openid-connect/token \
 --header 'content-type: application/x-www-form-urlencoded' \
 --data "grant_type=client_credentials&client_id=<IAM_CLIENT_ID>"
@@ -195,7 +195,7 @@ To start the onboarding of the Hello World CSAR app,
 run the following command in a command line tool.
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-onboarding/v2/app-packages' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-onboarding/v2/app-packages' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'accept: application/json' \
 --form 'file=@"<PATH_TO_CSAR>/helloworldAppPackage.csar"'
@@ -219,7 +219,7 @@ This is the `JOB_ID`. Use the `JOB_ID` to get the
 status of the onboarding process in the following commands:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-onboarding/v2/onboarding-jobs/<JOB_ID>' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-onboarding/v2/onboarding-jobs/<JOB_ID>' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'accept: application/json'
 ```
@@ -281,7 +281,7 @@ command (rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0 in the example).
 Run the following command to initialize the App.
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/initialization-actions' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/initialization-actions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>' \
 -d '{"action": "INITIALIZE"}'
@@ -302,7 +302,7 @@ Example of command result:
 Repeat the following command until the status is changed to `INITIALIZED`.
 
 ```shell
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>'
 ```
@@ -387,7 +387,7 @@ Example of command result:
 Run the following command to switch the app mode from 'DISABLED' to 'ENABLED'.
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/mode' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/mode' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>' \
 -d '{"mode": "ENABLED"}'
@@ -445,7 +445,7 @@ Run the following commands to start the instantiation process using the
 #### Create App Instance
 
 ```shell
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances' \
 --header 'accept: application/json' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>' \
@@ -509,7 +509,7 @@ An app-instance `id` is shown in the command result
     within the app code.
 
 ```shell
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
   --header 'accept: application/json' \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer <access-token>' \
@@ -575,7 +575,7 @@ Use the App instance ID in the following command to check the instantiation
   to `"status":"DEPLOYED"`.
 
 ```shell
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request GET 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>' \
 --header 'accept: application/json' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>'
@@ -661,7 +661,7 @@ For details, see [Service Exposure - Developer Guide](https://developer.intellig
 To create an API to be onboarded, run the following commands:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -687,7 +687,7 @@ To create an endpoint for the previously generated API, run the
 following command:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -700,7 +700,7 @@ To bind the plugin for authorization of the previously
 generated API, run the following command:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/phases/auth/plugin-list' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/phases/auth/plugin-list' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '[
@@ -714,7 +714,7 @@ To configure the binded plugin for authorization,
 run the following command:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/plugins/requestPartyTokenInterceptor/configuration' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/plugins/requestPartyTokenInterceptor/configuration' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -732,7 +732,7 @@ Role-Based Access Control (RBAC) configuration is required. To add the
 RBAC policy run the following curl command:
 
 ```bash
-curl --cert <PATH_TO_APP_CERTIFICATE> --key <PATH_TO_APP_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/idm/rolemgmt/v1/extapp/rbac' \
+curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/idm/rolemgmt/v1/extapp/rbac' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>' \
 --data '{
