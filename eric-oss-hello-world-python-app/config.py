@@ -16,6 +16,8 @@ def get_config():
     app_cert                = get_os_env_string("APP_CERT", "")
     app_cert_file_path      = get_os_env_string("APP_CERT_FILE_PATH", "")
     authentication_type     = get_os_env_string("AUTHENTICATION_TYPE", "")
+    client_creds_file_path  = get_os_env_string("CLIENT_CREDS_FILE_PATH", "")
+    client_id_file_name     = get_os_env_string("CLIENT_ID_FILE_NAME", "")
 
     config = {
             "iam_client_id": iam_client_id,
@@ -28,7 +30,9 @@ def get_config():
             "app_key": app_key,
             "app_cert": app_cert,
             "app_cert_file_path": app_cert_file_path,
-            "authentication_type": authentication_type
+            "authentication_type": authentication_type,
+            "client_creds_file_path": client_creds_file_path,
+            "client_id_file_name": client_id_file_name
     }
     return config
 

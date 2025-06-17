@@ -63,6 +63,10 @@ spec:
           secret:
             secretName: {{ index .Values "appSecretName" | quote }}
             defaultMode: 420
+        - name: client-creds
+          secret:
+            secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
+            defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
@@ -89,6 +93,9 @@ spec:
             - name: app-certs
               mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
               readOnly: true
+            - name: client-creds
+              mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
+              readOnly: true
           env:
             - name: IAM_CLIENT_ID
               value: {{ index .Values "clientId" | quote }}
@@ -108,6 +115,10 @@ spec:
               value: {{ index .Values "appCertFileName" | quote }}
             - name: APP_CERT_FILE_PATH
               value: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
+            - name: CLIENT_CREDS_FILE_PATH
+              value: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
+            - name: CLIENT_ID_FILE_NAME
+              value: {{ .Values.global.clientCredentials.secret.clientIdKey | quote }}
             - name: AUTHENTICATION_TYPE
               value: {{ index .Values "authenticationType" | default .Values.instantiationDefaults.authenticationType | quote }}
             - name: SERVICE_NAME

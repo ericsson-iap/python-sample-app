@@ -97,8 +97,18 @@ class MtlsLogging:
                 ca_cert = os.path.join("/", self.config.get("ca_cert_file_path"), self.config.get("ca_cert_file_name"))
                 app_cert = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_cert"))
                 app_key = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_key"))
-                requests.post(f"https://{log_url}", json=json_data, timeout=5,
-                                    headers = headers, verify=ca_cert, cert=(app_cert, app_key))
+                response = requests.post(
+                    f"https://{log_url}",
+                        json=json_data,
+                        timeout=5,
+                        headers=headers,
+                        verify=ca_cert,
+                        cert=(app_cert, app_key)
+                        )
+
+                    # Add this log after the request
+                print(f"Log POST to https://{log_url} responded with {response.status_code}: {response.text}")
+
             except (requests.exceptions.InvalidURL, requests.exceptions.MissingSchema) as exception:
                 # logs to console if failed to log to log transformer
                 self.logger.error("Request failed for mTLS logging: %s", exception)
