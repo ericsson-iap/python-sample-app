@@ -505,7 +505,7 @@ An app-instance `id` is shown in the command result
 
  **Note:** The `authenticationType` defines the authentication method the sample app
    will use to communicate with IAM - set to `client-x509` for mTLS or
-    `client-secret` for TLS. This parameter is only used to navigate between TLS and mTLS
+    `legacy-client-secret` for TLS. This parameter is only used to navigate between TLS and mTLS
     within the app code.
 
 ```shell
