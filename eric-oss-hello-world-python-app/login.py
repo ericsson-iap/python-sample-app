@@ -23,14 +23,8 @@ def login():
     headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     }
-    form_data = {
-        "grant_type": "client_credentials",
-        "client_id": config.get("iam_client_id"),
-        "client_secret": config.get("iam_client_secret"),
-        "tenant_id": "master"
-    }
     try:
-        resp = tls_login(login_url, form_data, headers)
+        resp = tls_login(login_url, headers)
     except LoginError:
         return None, 0
 
@@ -39,16 +33,43 @@ def login():
     time_until_expiry -= 10 # add a buffer to ensure our session doesn't expire mid-request
     return token, time_until_expiry
 
-def tls_login(url, form_data, headers):
+def tls_login(url, headers):
     '''
     This function sends an HTTP POST request with TLS for the login operation
     '''
     config = get_config()
-    cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
+    ca_cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
+    app_cert = os.path.join("/", config.get("app_cert_file_path"), config.get("app_cert"))
+    app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
+    authentication_type = config.get("authentication_type").lower()
+    form_data = {"grant_type": "client_credentials", "tenant_id": "master"}
+    cert = None
+
+    if authentication_type == "client-x509":
+        client_id_path = os.path.join(config.get("client_creds_file_path"), config.get("client_id_file_name"))
+        form_data["client_id"] = read_file(client_id_path)
+        cert = (app_cert, app_key)
+    elif authentication_type == "client-secret":
+        form_data["client_id"] = config.get("iam_client_id")
+        form_data["client_secret"] = config.get("iam_client_secret")
+    else:
+        raise LoginError(f"Unsupported authentication type: {authentication_type}")
+    
     try:
-        response = requests.post(url, data=form_data, headers = headers, timeout=5, verify=cert)
+        response = requests.post(
+            url,
+            data=form_data,
+            headers=headers,
+            timeout=5,
+            verify=ca_cert,
+            cert=cert
+        )
         if response.status_code != 200:
             raise LoginError(f"Login failed ({response.status_code})")
     except Exception as exception:
         raise LoginError(f"Login failed ({exception})") from exception
     return response.content
+
+def read_file(path):
+    with open(path, "r") as f:
+        return f.read().strip()
