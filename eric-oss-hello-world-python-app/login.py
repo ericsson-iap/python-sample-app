@@ -49,7 +49,7 @@ def tls_login(url, headers):
         client_id_path = os.path.join(config.get("client_creds_file_path"), config.get("client_id_file_name"))
         form_data["client_id"] = read_file(client_id_path)
         cert = (app_cert, app_key)
-    elif authentication_type == "client-secret":
+    elif authentication_type == "legacy-client-secret":
         form_data["client_id"] = config.get("iam_client_id")
         form_data["client_secret"] = config.get("iam_client_secret")
     else:
