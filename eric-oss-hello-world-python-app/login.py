@@ -47,7 +47,8 @@ def tls_login(url, headers):
 
     if authentication_type == "client-x509":
         client_id_path = os.path.join(config.get("client_creds_file_path"), config.get("client_id_file_name"))
-        form_data["client_id"] = read_file(client_id_path)
+        with open(client_id_path, "r") as f:
+            form_data["client_id"] = f.read().strip()
         cert = (app_cert, app_key)
     elif authentication_type == "legacy-client-secret":
         form_data["client_id"] = config.get("iam_client_id")
@@ -69,7 +70,3 @@ def tls_login(url, headers):
     except Exception as exception:
         raise LoginError(f"Login failed ({exception})") from exception
     return response.content
-
-def read_file(path):
-    with open(path, "r") as f:
-        return f.read().strip()
