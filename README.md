@@ -147,7 +147,12 @@ ls ./csar-output
 
 ### Prerequisites for Onboarding
 
-Contact the platform administrator to request the following:
+Provide the following to platform administrator:
+
+- A end-entity ClientCA certificate.
+- Subject DN of end-entity client certificate.
+
+Request the following from platform administrator:
 
 - A CA certificate, needed for secure communication with the platform APIs.
 - Client Access to the platform with the required roles, needed for authorized
