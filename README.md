@@ -104,7 +104,7 @@ Move the created .tgz file to the OtherDefinitions/ASD directory.
 mv eric-oss-hello-world-python-app-<VERSION>.tgz ./helloworldAppPackage/OtherDefinitions/ASD/
 ```
 
-Create a folder where the CSAR app package will be stored into.
+Create a folder where the CSAR App package will be stored into.
 
 ```bash
 mkdir csar-output
@@ -117,7 +117,7 @@ directory.
 docker save proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> -o csar-output/docker.tar
 ```
 
-Run the following command locally to create a CSAR app package using the
+Run the following command locally to create a CSAR App package using the
 eric-oss-app-package-tool.
 
 ```bash
@@ -196,8 +196,7 @@ access token:
 
 Onboard the **Hello World CSAR App Package** using [App Administration](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-administration/developer-guide-manage?chapter=onboard).
 
-To start the onboarding of the Hello World CSAR app,
-run the following command in a command line tool.
+Run the following command.
 
 ```bash
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-onboarding/v2/app-packages' \
@@ -219,7 +218,7 @@ Example of command result:
 ```
 
 An onboarding-job `id` is shown in the command result
-(a2f0a43d-730a-4991-8481-746c3e76556e in the example).
+(af036040-a732-4af9-b65a-8103da56c35c in the example).
 This is the `JOB_ID`. Use the `JOB_ID` to get the
 status of the onboarding process in the following commands:
 
@@ -389,7 +388,7 @@ Example of command result:
 }
 ```
 
-Run the following command to switch the app mode from 'DISABLED' to 'ENABLED'.
+Run the following command to switch the App mode from 'DISABLED' to 'ENABLED'.
 
 ```bash
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/app-lifecycle-management/v3/apps/<APP_ID>/mode' \
@@ -424,20 +423,20 @@ This section describes how the App can communicate with IAM and produce logs to
  certificates key, certificates, and the secrets which store them. The
   details of the secrets, keys, certs and EIC endpoint details will be passed
    to App Administration through the `userDefinedHelmParameters` when
-    instantiating the App. The required parameters are:
+    instantiating the App.  Refer to
+    [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
+     to understand how certificates are loaded into the App during
+      instantiation for secure communication. The required parameters are:
+
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
     before returning the "Hello World!!" string output.
-  - The `platformCaCertSecretName` and `platformCaCertFileName` to enable
-   secure communication. Refer to
-    [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
-     to understand how certificates are loaded into the App during
-      instantiation for secure communication.
+  - The`appSecretName`, `appKeyFileName`, `appCertFileName`,
+  `platformCaCertSecretName` and `platformCaCertFileName` to enable
+   secure communication between the App and the platform.
   - The `logEndpoint` which facilitates streaming App logs to platform,
    supports only mTLS communication. For more information on the variable
     values required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
-  - The `appSecretName`, `appKeyFileName`, `appCertFileName`
-    used for mTLS communication to verify the App. 
 
 ### Steps for Instantiation
 
@@ -508,18 +507,13 @@ An app-instance `id` is shown in the command result
 > All `userDefinedHelmParameters` are required for successful instantiation
  of your App.
 
-`authenticationType` defines the authentication
+The `userDefinedHelmParameters`, `authenticationType` defines the authentication
 method the App will use to communicate with the platform.
 
 Set:
   - `client-x509` for mTLS.
-  - `legacy-client-secret` for TLS.
 
-
-`authenticationType` is used by the App when retrieving a token. If `client-x509` is set,
-a Security Management Component must be configured in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](#tutorials/app-authentication) for more information.
-
-
+`authenticationType` is used by the App when retrieving a token.
 
 ```shell
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
@@ -665,6 +659,10 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 
 To view your logs, access EIC and open your log viewer.
 Within the log viewer, you can filter for App Logging and view the results.
+
+**Note:** For TLS communication with platform, set `authenticationType` as
+ `legacy-client-secret` and remove the Security Management Component defined
+  in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](#tutorials/app-authentication) for more information.
 
 #### Onboard the Hello World Python App APIs
 
