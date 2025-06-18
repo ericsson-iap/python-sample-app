@@ -1,69 +1,74 @@
-'''
+"""
 This module performs client credentials grant authentication
 by sending HTTP requests with TLS and with required environment
 variables.
- '''
+ """
+
 import os
 from urllib.parse import urljoin
 import json
 import requests
+import time
 from config import get_config
+
 
 class LoginError(Exception):
     """Raised when EIC login fails"""
 
+
 def login():
-    '''
+    """
     Get bearer token for accessing platform REST APIs:
     https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication
-    '''
+    """
     config = get_config()
     login_path = "/auth/realms/master/protocol/openid-connect/token"
     login_url = urljoin(config.get("iam_base_url"), login_path)
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    try:
-        resp = tls_login(login_url, headers)
-    except LoginError:
-        return None, 0
-
-    resp = json.loads(resp.decode('utf-8'))
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    resp = tls_login(login_url, headers)
+    resp = json.loads(resp.decode("utf-8"))
     token, time_until_expiry = resp["access_token"], resp["expires_in"]
-    time_until_expiry -= 10 # add a buffer to ensure our session doesn't expire mid-request
-    return token, time_until_expiry
+    time_until_expiry -= (
+        10  # add a buffer to ensure our session doesn't expire mid-request
+    )
+    return token, time.time() + time_until_expiry
+
 
 def tls_login(url, headers):
-    '''
+    """
     This function sends an HTTP POST request with TLS for the login operation
-    '''
+    """
     config = get_config()
-    ca_cert = os.path.join("/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name"))
-    app_cert = os.path.join("/", config.get("app_cert_file_path"), config.get("app_cert"))
+    ca_cert = os.path.join(
+        "/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name")
+    )
+    app_cert = os.path.join(
+        "/", config.get("app_cert_file_path"), config.get("app_cert")
+    )
     app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
     authentication_type = config.get("authentication_type").lower()
     form_data = {"grant_type": "client_credentials", "tenant_id": "master"}
     cert = None
 
     if authentication_type == "client-x509":
-        client_id_path = os.path.join(config.get("client_creds_file_path"), config.get("client_id_file_name"))
-        with open(client_id_path, "r") as f:
-            form_data["client_id"] = f.read().strip()
+        client_id_path = os.path.join(
+            config.get("client_creds_file_path"), config.get("client_id_file_name")
+        )
+        try:
+            with open(client_id_path, "r") as f:
+                form_data["client_id"] = f.read().strip()
+        except OSError as e:
+            raise LoginError(f"Error while reading client id: {e}")
         cert = (app_cert, app_key)
     elif authentication_type == "legacy-client-secret":
         form_data["client_id"] = config.get("iam_client_id")
         form_data["client_secret"] = config.get("iam_client_secret")
     else:
         raise LoginError(f"Unsupported authentication type: {authentication_type}")
-    
+
     try:
         response = requests.post(
-            url,
-            data=form_data,
-            headers=headers,
-            timeout=5,
-            verify=ca_cert,
-            cert=cert
+            url, data=form_data, headers=headers, timeout=5, verify=ca_cert, cert=cert
         )
         if response.status_code != 200:
             raise LoginError(f"Login failed ({response.status_code})")
