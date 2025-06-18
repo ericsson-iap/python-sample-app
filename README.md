@@ -79,8 +79,7 @@ with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
-**Note:** The App code present in the SDK portal ZIP package uses
-mTLS for communication with the platform.
+**Note:** mTLS is used for communication with the platform.
 
 ```bash
 mkdir -p helloworldAppPackage
@@ -148,12 +147,12 @@ ls ./csar-output
 
 ### Prerequisites for Onboarding
 
-Provide the following to platform administrator:
+Provide the following to the platform administrator:
 
-- A end-entity ClientCA certificate.
+- A end-entity client CA certificate.
 - Subject DN of end-entity client certificate.
 
-Request the following from platform administrator:
+Request the following from the platform administrator:
 
 - A CA certificate, needed for secure communication with the platform APIs.
 - Client Access to the platform with the required roles, needed for authorized
@@ -434,11 +433,11 @@ This section describes how the App can communicate with IAM and produce logs to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
      to understand how certificates are loaded into the App during
       instantiation for secure communication.
-  - The `logEndpoint` endpoint  designed to capture log data, supports only
-   mTLS communication. For more information on the variable values
-     required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
+  - The `logEndpoint` which facilitates streaming App logs to platform,
+   supports only mTLS communication. For more information on the variable
+    values required, see [App Logging Developer Guide to Produce logs](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-logging/how-to-produce-logs?chapter=identify-environment-and-secret-variables-names).
   - The `appSecretName`, `appKeyFileName`, `appCertFileName`
-    used for mTLS communication to verify the client.
+    used for mTLS communication to verify the App. 
 
 ### Steps for Instantiation
 
@@ -509,11 +508,18 @@ An app-instance `id` is shown in the command result
 > All `userDefinedHelmParameters` are required for successful instantiation
  of your App.
 
- **Note:** The `authenticationType` defines the authentication method
- the sample app will use to communicate with
- IAM - set to `client-x509` for mTLS or `legacy-client-secret` for TLS.
- This parameter is only used to navigate
- between TLS and mTLS within the app code.
+`authenticationType` defines the authentication
+method the App will use to communicate with the platform.
+
+Set:
+  - `client-x509` for mTLS.
+  - `legacy-client-secret` for TLS.
+
+
+`authenticationType` is used by the App when retrieving a token. If `client-x509` is set,
+a Security Management Component must be configured in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](#tutorials/app-authentication) for more information.
+
+
 
 ```shell
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
