@@ -45,7 +45,7 @@ def tls_login(url, headers):
     app_cert = os.path.join(
         "/", config.get("app_cert_file_path"), config.get("app_cert")
     )
-    app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
+    app_key = os.path.join(config.get("app_cert_file_path"), config.get("app_key"))
     authentication_type = config.get("authentication_type").lower()
     form_data = {"grant_type": "client_credentials", "tenant_id": "master"}
     cert = None
