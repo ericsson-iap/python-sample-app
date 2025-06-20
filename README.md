@@ -9,7 +9,7 @@
 
 **Note:**
 If you need help accessing the EIAP Ecosystem, contact support
-at this **email address:** intelligent.automation.platform@ericsson.com
+at this **email address:** <intelligent.automation.platform@ericsson.com>
 
 ## Introduction
 
@@ -27,7 +27,7 @@ This is a simple Hello World Python App with the following three endpoints:
 ## Build Docker
 
 Extract the downloaded sample App package. Using a command line tool,
- go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
+ go inside the extracted  `eric-oss-hello-world-python-app-<VERSION>` directory.
 
 ```bash
 cd <PATH_TO_PROJECT>/eric-oss-hello-world-python-app-<VERSION>
