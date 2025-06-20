@@ -24,10 +24,10 @@ This is a simple Hello World Python App with the following three endpoints:
   the number of successful and failed invocations of
   the '/sample-app/python/hello' endpoint.
 
-## Build Docker 
+## Build Docker
 
-Extract the downloaded sample App package. Using a command line tool, 
-go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
+Extract the downloaded sample App package. Using a command line tool,
+ go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
 
 ```bash
 cd <PATH_TO_PROJECT>/eric-oss-hello-world-python-app-<VERSION>
@@ -518,6 +518,7 @@ The `userDefinedHelmParameters`, `authenticationType` defines the authentication
 method the App will use to communicate with the platform.
 
 Set:
+
   - `client-x509` for mTLS.
 
 `authenticationType` is used by the App when retrieving a token.
@@ -669,7 +670,8 @@ Within the log viewer, you can filter for App Logging and view the results.
 
 **Note:** For TLS communication with platform, set `authenticationType` as
  `legacy-client-secret` and remove the Security Management Component defined
-  in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](#tutorials/app-authentication) for more information.
+  in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication)
+   for more information.
 
 #### Onboard the Hello World Python App APIs
 
