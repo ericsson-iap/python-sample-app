@@ -24,7 +24,14 @@ This is a simple Hello World Python App with the following three endpoints:
   the number of successful and failed invocations of
   the '/sample-app/python/hello' endpoint.
 
-## Build Docker Image
+## Build Docker 
+
+Extract the downloaded sample App package. Using a command line tool, 
+go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
+
+```bash
+cd <PATH_TO_PROJECT>/eric-oss-hello-world-python-app-<VERSION>
+```
 
 Rename the `Dockerfile-template` file to `Dockerfile`.
 
@@ -34,9 +41,6 @@ mv Dockerfile-template Dockerfile
 
 Replace `<PYTHON_IMAGE_NAME>` in the Dockerfile with a slim Python base image.
 Refer to: [Python on Docker™ Hub](https://hub.docker.com/_/python)
-
-Extract the downloaded sample App package. Using a command line tool, 
-go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
 
 Run the following command to build the image.
 
