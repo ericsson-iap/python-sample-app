@@ -35,6 +35,9 @@ mv Dockerfile-template Dockerfile
 Replace `<PYTHON_IMAGE_NAME>` in the Dockerfile with a slim Python base image.
 Refer to: [Python on Docker™ Hub](https://hub.docker.com/_/python)
 
+Extract the downloaded sample App package. Using a command line tool, 
+go inside the extracted eric-oss-hello-world-python-app-<VERSION> directory.
+
 Run the following command to build the image.
 
 ```bash
