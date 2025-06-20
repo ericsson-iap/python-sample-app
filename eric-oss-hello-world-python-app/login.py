@@ -51,7 +51,7 @@ def tls_login(url, headers):
     cert = None
 
     if authentication_type == "client-x509":
-        client_id_path = os.path.join(
+        client_id_path = os.path.join("/", 
             config.get("client_creds_file_path"), config.get("client_id_file_name")
         )
         try:
