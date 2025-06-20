@@ -129,5 +129,5 @@ def populate_environment_variables():
     os.environ["APP_CERT"] = "APP_CERT"
     os.environ["APP_CERT_FILE_PATH"] = "APP_CERT_FILE_PATH"
     os.environ["AUTHENTICATION_TYPE"] = "client-x509"
-    os.environ["CLIENT_CREDS_FILE_PATH"] = "eric-oss-hello-world-python-app/tests/"
+    os.environ["CLIENT_CREDS_FILE_PATH"] = "/eric-oss-hello-world-python-app/tests/"
     os.environ["CLIENT_ID_FILE_NAME"] = "client_id_example"
