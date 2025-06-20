@@ -126,3 +126,10 @@ podPriority:
 instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
+  clientCredsMountPath: "/etc/client-creds/"
+
+global:
+  clientCredentials:
+    secret:
+      clientIdKey: "clientId"
+      name: "<instance id>-cc"

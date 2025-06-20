@@ -342,3 +342,20 @@ Define the annotations for security policy
 {{- define "eric-oss-hello-world-python-app.securityPolicy.annotations" -}}
 # Automatically generated annotations for documentation purposes.
 {{- end -}}
+
+{{/*
+Define the function to get the secret name
+ */}}
+{{- define "eric-oss-hello-world-python-app.clientSecret" -}}
+{{- $clientSecret := "" -}}
+{{- if .Values.global }}
+  {{- if .Values.global.clientCredentials }}
+    {{- if .Values.global.clientCredentials.secret }}
+      {{- if .Values.global.clientCredentials.secret.name }}
+        {{- $clientSecret = .Values.global.clientCredentials.secret.name }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- print $clientSecret }}
+{{- end }}
