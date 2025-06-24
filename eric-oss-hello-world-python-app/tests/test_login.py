@@ -12,9 +12,9 @@ def test_login_receives_token_x509(mock_login_api, config):
     assert token == "2YotnFZFEjr1zCsicMWpAA" and expiry > time.time()
 
 
-def test_login_receives_token_legacy(mock_login_api, config, legacy_authentication):
+def test_login_receives_token_legacy(mock_login_api, config,):
     """Check if we receive a token"""
-    token, expiry = login()
+    token, expiry = login("legacy-client-secret")
     assert token == "2YotnFZFEjr1zCsicMWpAA" and expiry > time.time()
 
 

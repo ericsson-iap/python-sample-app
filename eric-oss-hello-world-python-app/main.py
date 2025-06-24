@@ -71,7 +71,7 @@ class Application(Flask):
         """Refresh session if it expires."""
         if int(time.time()) >= self.session["expiry_time"]:
             try:
-                self.session["token"], self.session["expiry_time"] = login()
+                self.session["token"], self.session["expiry_time"] = login() # if you want to use legacy client authentication, call login("legacy-client-secret")
             except Exception as e:
                 # since the token isn't used for anything,
                 # this is just a WARNING level log instead of ERROR

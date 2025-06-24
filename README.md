@@ -86,7 +86,8 @@ with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
-**Note:** mTLS is used for communication with the platform.
+**Note:**  X.509 Certificates are used for authentication and
+ cermTLS is used for communication with the platform.
 
 ```bash
 mkdir -p helloworldAppPackage
@@ -436,7 +437,8 @@ This section describes how the App can communicate with IAM and produce logs to
 
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
-    before returning the "Hello World!!" string output.
+    before returning the "Hello World!!" string output. This endpoint should be
+    R1 host.
   - The`appSecretName`, `appKeyFileName`, `appCertFileName`,
   `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure communication between the App and the platform.
@@ -513,15 +515,6 @@ An app-instance `id` is shown in the command result
 > All `userDefinedHelmParameters` are required for successful instantiation
  of your App.
 
-The `userDefinedHelmParameters`, `authenticationType` defines the authentication
-method the App will use to communicate with the platform.
-
-Set:
-
-  - `client-x509` for mTLS.
-
-`authenticationType` is used by the App when retrieving a token.
-
 ```shell
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/app-lifecycle-management/v3/app-instances/<APP_INSTANCE_ID>/deployment-actions' \
   --header 'accept: application/json' \
@@ -543,7 +536,6 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
             "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
             "appKeyFileName": "<APP_PRIVATE_KEY>",
             "appCertFileName": "<APP_CERTIFICATE>",
-            "authenticationType": "<AUTHENTICATION_TYPE>"
           }
         }
       }
@@ -571,7 +563,6 @@ See the following example command result:
             "logEndpoint": "<LOG_ENDPOINT>",
             "appKeyFileName": "<APP_PRIVATE_KEY>",
             "appCertFileName": "<APP_CERTIFICATE>",
-            "authenticationType": "<AUTHENTICATION_TYPE>",
           }
         }
       }
@@ -620,7 +611,6 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
           "platformCaCertFileName": "<PLATFORM_CA_CERT_FILENAME>",
           "appKeyFileName": "<APP_PRIVATE_KEY>",
           "appCertFileName": "<APP_CERTIFICATE>",
-          "authenticationType": "<AUTHENTICATION_TYPE>",
         },
         "namespace": "<namespace>",
         "timeout": 5
@@ -666,11 +656,6 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 
 To view your logs, access EIC and open your log viewer.
 Within the log viewer, you can filter for App Logging and view the results.
-
-**Note:** For TLS communication with the platform, set `authenticationType` as
- `legacy-client-secret` and remove the Security Management Component defined
-  in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication)
-   for more information.
 
 #### Onboard the Hello World Python App APIs
 

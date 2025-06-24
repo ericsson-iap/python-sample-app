@@ -16,7 +16,7 @@ class LoginError(Exception):
     """Raised when EIC login fails"""
 
 
-def login():
+def login(authentication_type = "client-x509"):
     """
     Get bearer token for accessing platform REST APIs:
     https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication
@@ -25,7 +25,7 @@ def login():
     login_path = "/auth/realms/master/protocol/openid-connect/token"
     login_url = urljoin(config.get("iam_base_url"), login_path)
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    resp = tls_login(login_url, headers)
+    resp = tls_login(login_url, headers, authentication_type)
     resp = json.loads(resp.decode("utf-8"))
     token, time_until_expiry = resp["access_token"], resp["expires_in"]
     time_until_expiry -= (
@@ -34,7 +34,7 @@ def login():
     return token, time.time() + time_until_expiry
 
 
-def tls_login(url, headers):
+def tls_login(url, headers, authentication_type = "client-x509"):
     """
     This function sends an HTTP POST request with TLS for the login operation
     """
@@ -46,7 +46,6 @@ def tls_login(url, headers):
         "/", config.get("app_cert_file_path"), config.get("app_cert")
     )
     app_key = os.path.join(config.get("app_cert_file_path"), config.get("app_key"))
-    authentication_type = config.get("authentication_type").lower()
     form_data = {"grant_type": "client_credentials", "tenant_id": "master"}
     cert = None
 

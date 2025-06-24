@@ -111,12 +111,6 @@ def no_log_certs():
     populate_environment_variables()
 
 
-@pytest.fixture(scope="function")
-def legacy_authentication():
-    os.environ["AUTHENTICATION_TYPE"] = "legacy-client-secret"
-    yield
-    populate_environment_variables()
-
 
 def populate_environment_variables():
     os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
@@ -128,6 +122,5 @@ def populate_environment_variables():
     os.environ["APP_KEY"] = "APP_KEY"
     os.environ["APP_CERT"] = "APP_CERT"
     os.environ["APP_CERT_FILE_PATH"] = "APP_CERT_FILE_PATH"
-    os.environ["AUTHENTICATION_TYPE"] = "client-x509"
     os.environ["CLIENT_CREDS_FILE_PATH"] = os.path.relpath(os.path.dirname(__file__), "/")
     os.environ["CLIENT_ID_FILE_NAME"] = "client_id_example"
