@@ -161,11 +161,10 @@ Provide the following to the platform administrator:
 
 Request the following from the platform administrator:
 
-- A CA certificate, needed for secure communication with the platform APIs.
-- Client Access to the platform with the required roles, needed for authorized
+- A platform CA certificate, needed for secure communication with the platform APIs.
+- Client ID to access the platform with the required roles, needed for authorized
 communication with the platform APIs used to *onboard and instantiate* the
-Hello World App. You will receive a Client ID from the platform administrator.
-Include the required roles listed below in the request.
+Hello World App. Include the required roles listed below in the request.
 
 | Role                                                            | Role Description                                                              |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -668,7 +667,7 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 To view your logs, access EIC and open your log viewer.
 Within the log viewer, you can filter for App Logging and view the results.
 
-**Note:** For TLS communication with platform, set `authenticationType` as
+**Note:** For TLS communication with the platform, set `authenticationType` as
  `legacy-client-secret` and remove the Security Management Component defined
   in the `AppDescriptor.yaml`. Refer to [App Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication)
    for more information.
