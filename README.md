@@ -667,7 +667,7 @@ For details, see [Service Exposure - Developer Guide](https://developer.intellig
 To create an API to be onboarded, run the following commands:
 
 ```bash
-curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -693,7 +693,7 @@ To create an endpoint for the previously generated API, run the
 following command:
 
 ```bash
-curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -706,7 +706,7 @@ To bind the plugin for authorization of the previously
 generated API, run the following command:
 
 ```bash
-curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/phases/auth/plugin-list' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/phases/auth/plugin-list' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '[
@@ -720,7 +720,7 @@ To configure the binded plugin for authorization,
 run the following command:
 
 ```bash
-curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/plugins/requestPartyTokenInterceptor/configuration' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request PUT 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/plugins/requestPartyTokenInterceptor/configuration' \
 --header 'Authorization: Bearer <access-token>' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -738,7 +738,7 @@ Role-Based Access Control (RBAC) configuration is required. To add the
 RBAC policy run the following curl command:
 
 ```bash
-curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/idm/rolemgmt/v1/extapp/rbac' \
+curl --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/idm/rolemgmt/v1/extapp/rbac' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <access-token>' \
 --data '{
