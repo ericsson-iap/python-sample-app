@@ -87,7 +87,7 @@ from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
 
 **Note:**  X.509 Certificates are used for authentication and
- cermTLS is used for communication with the platform.
+ mTLS is used for communication with the platform.
 
 ```bash
 mkdir -p helloworldAppPackage
@@ -176,6 +176,8 @@ Hello World App. Include the required roles listed below in the request.
 
 See [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
  for further details on client authentication.
+
+**Note:** Replace `<eic-host>` with the valid R1 host provided by plaform administrator.
 
 Use the following command to generate a valid access token:
 
@@ -437,8 +439,8 @@ This section describes how the App can communicate with IAM and produce logs to
 
   - The `iamBaseUrl`, as the `/sample-app/python/hello` endpoint of this
    sample App first communicates with IAM to obtain a client token (login)
-    before returning the "Hello World!!" string output. This endpoint should be
-    R1 host.
+    before returning the "Hello World!!" string output. This `iamBaseUrl`
+     should be R1 host.
   - The`appSecretName`, `appKeyFileName`, `appCertFileName`,
   `platformCaCertSecretName` and `platformCaCertFileName` to enable
    secure communication between the App and the platform.
