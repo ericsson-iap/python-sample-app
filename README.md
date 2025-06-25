@@ -437,7 +437,7 @@ This section describes how the App can communicate with IAM and produce logs to
      to understand how certificates are loaded into the App during
       instantiation for secure communication. The required parameters are:
 
-  - The `iamBaseUrl` must point to the R1 host, as the `/sample-app/python/hello`
+  - The `iamBaseUrl` must point to the `R1 host`, as the `/sample-app/python/hello`
    endpoint in this sample app first communicates with IAM to obtain a
     client token (login) before returning the "Hello World!!" string response.
   - The`appSecretName`, `appKeyFileName`, `appCertFileName`,
