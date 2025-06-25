@@ -177,7 +177,7 @@ Hello World App. Include the required roles listed below in the request.
 See [Client Access to REST APIs](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/client-access)
  for further details on client authentication.
 
-**Note:** Replace `<eic-host>` with the valid R1 host provided by plaform administrator.
+**Note:** Replace `<eic-host>` with the valid `R1 host` provided by platform administrator.
 
 Use the following command to generate a valid access token:
 
