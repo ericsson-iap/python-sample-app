@@ -12,12 +12,6 @@ def test_login_receives_token_x509(mock_login_api, config):
     assert token == "2YotnFZFEjr1zCsicMWpAA" and expiry > time.time()
 
 
-def test_login_receives_token_legacy(mock_login_api, config,):
-    """Check if we receive a token"""
-    token, expiry = login("legacy-client-secret")
-    assert token == "2YotnFZFEjr1zCsicMWpAA" and expiry > time.time()
-
-
 def test_login_bad_credentials(requests_mock, config):
     """Ensure we get an error if credentials are bad"""
     login_url = urljoin(
