@@ -155,14 +155,10 @@ ls ./csar-output
 
 ### Prerequisites for Onboarding
 
-Provide the following to the platform administrator:
+Contact the platform administrator to request the following:
 
-- A end-entity client CA certificate.
-- Subject DN of end-entity client certificate.
-
-Request the following from the platform administrator:
-
-- A platform CA certificate, needed for secure communication with the platform APIs.
+- A Client certificate, Client key and platform CA certificate,
+ needed for secure communication with the platform APIs.
 - Client ID to access the platform with the required roles, needed for authorized
 communication with the platform APIs used to *onboard and instantiate* the
 Hello World App. Include the required roles listed below in the request.
