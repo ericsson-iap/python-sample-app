@@ -1,10 +1,8 @@
 """Tests which ensure the application handles Authentication & Authorisation properly"""
-
 from urllib.parse import urljoin
+import time
 from login import login, LoginError
 import pytest
-import time
-
 
 def test_login_receives_token_x509(mock_login_api, config):
     """Check if we receive a token"""

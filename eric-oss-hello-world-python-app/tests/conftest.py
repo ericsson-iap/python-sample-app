@@ -1,12 +1,9 @@
-"""
-Configure a Flask fixture based off the Application defined in main.py
-"""
-
+"""Configure a Flask fixture based off the Application defined in main.py"""
 import os
+from urllib.parse import urljoin
 import pytest
 import requests_mock
 from prometheus_client import REGISTRY as GLOBAL_METRICS_REGISTRY
-from urllib.parse import urljoin
 from main import Application
 from config import get_config
 

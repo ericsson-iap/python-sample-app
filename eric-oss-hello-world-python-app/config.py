@@ -4,9 +4,7 @@ import os
 
 
 def get_config():
-    """
-    get env and return config with all env vals required
-    """
+    """get env and return config with all env vals required"""
     iam_client_id = get_os_env_string("IAM_CLIENT_ID", "")
     iam_client_secret = get_os_env_string("IAM_CLIENT_SECRET", "")
     iam_base_url = get_os_env_string("IAM_BASE_URL", "")
@@ -38,7 +36,5 @@ def get_config():
 
 
 def get_os_env_string(env_name, default_value):
-    """
-    get env
-    """
+    """get env"""
     return os.getenv(env_name, default_value).strip()

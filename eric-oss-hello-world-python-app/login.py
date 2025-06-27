@@ -7,14 +7,13 @@ variables.
 import os
 from urllib.parse import urljoin
 import json
-import requests
 import time
+import requests
 from config import get_config
 
 
 class LoginError(Exception):
     """Raised when EIC login fails"""
-
 
 def login():
     """
@@ -35,9 +34,7 @@ def login():
 
 
 def tls_login(url, headers):
-    """
-    This function sends an HTTP POST request with TLS for the login operation
-    """
+    """This function sends an HTTP POST request with TLS for the login operation"""
     config = get_config()
     ca_cert = os.path.join(
         "/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name")
@@ -58,7 +55,7 @@ def tls_login(url, headers):
             form_data["client_id"] = f.read().strip()
     except OSError as e:
         raise LoginError(f"Error while reading client id: {e}")
-    
+
     try:
         response = requests.post(
             url, data=form_data, headers=headers, timeout=5, verify=ca_cert, cert=cert

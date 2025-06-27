@@ -1,5 +1,4 @@
 """This module handles mTLS logging"""
-
 import json
 import os
 import logging
@@ -12,18 +11,15 @@ from config import get_config, get_os_env_string
 
 class Severity(IntEnum):
     """We use this to map the logging library severity to the mTLS logging"""
-
     DEBUG = 10
     INFO = 20
     WARNING = 30
     ERROR = 40
     CRITICAL = 50
 
-
 # pylint: disable=too-few-public-methods
 class MtlsLogging:
     """mTLS logger which will log to STDOUT, as well as Log Aggregator"""
-
     def __init__(self, level=None):
         werkzeug_logger = logging.getLogger("werkzeug")
         werkzeug_logger.setLevel(logging.ERROR)
@@ -60,10 +56,7 @@ class MtlsLogging:
         self.log(f"Level set to: {level}", Severity.INFO)
 
     def log(self, message, severity):
-        """
-        Send request to log aggregator with mTLS
-        """
-
+        """Send request to log aggregator with mTLS"""
         # Determine if certs are set.
         cert_available = (
             self.config.get("ca_cert_file_name") != ""
