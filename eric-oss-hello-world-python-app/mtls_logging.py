@@ -1,5 +1,4 @@
-'''This module handles mTLS logging'''
-
+"""This module handles mTLS logging"""
 import json
 import os
 import logging
@@ -11,18 +10,18 @@ from config import get_config, get_os_env_string
 
 
 class Severity(IntEnum):
-    '''We use this to map the logging library severity to the mTLS logging'''
+    """We use this to map the logging library severity to the mTLS logging"""
     DEBUG = 10
     INFO = 20
     WARNING = 30
     ERROR = 40
     CRITICAL = 50
 
-#pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods
 class MtlsLogging:
-    '''mTLS logger which will log to STDOUT, as well as Log Aggregator'''
+    """mTLS logger which will log to STDOUT, as well as Log Aggregator"""
     def __init__(self, level=None):
-        werkzeug_logger = logging.getLogger('werkzeug')
+        werkzeug_logger = logging.getLogger("werkzeug")
         werkzeug_logger.setLevel(logging.ERROR)
         self.config = get_config()
         self.logger = logging.getLogger(__name__)
@@ -35,7 +34,9 @@ class MtlsLogging:
             level = Severity.INFO
             if self.config["log_ctrl_file"]:
                 # If level is defined in charts\eric-oss-hello-world-python-app\logcontrol.json
-                with open(self.config["log_ctrl_file"], "r", encoding="utf-8") as log_ctrl_file:
+                with open(
+                    self.config["log_ctrl_file"], "r", encoding="utf-8"
+                ) as log_ctrl_file:
                     log_ctrl = json.load(log_ctrl_file)
                     container_name = get_os_env_string("CONTAINER_NAME", "")
                     for obj in log_ctrl:
@@ -54,31 +55,27 @@ class MtlsLogging:
         self.logger.addHandler(handler)
         self.log(f"Level set to: {level}", Severity.INFO)
 
-
     def log(self, message, severity):
-        '''
-        Send request to log aggregator with mTLS
-        '''
-
+        """Send request to log aggregator with mTLS"""
         # Determine if certs are set.
-        cert_available = (self.config.get("ca_cert_file_name") != ""
-                          and self.config.get("ca_cert_file_path") != ""
-                          and self.config.get("app_cert") != ""
-                          and self.config.get("app_key") != ""
-                          and self.config.get("app_cert_file_path") != "")
+        cert_available = (
+            self.config.get("ca_cert_file_name") != ""
+            and self.config.get("ca_cert_file_path") != ""
+            and self.config.get("app_cert") != ""
+            and self.config.get("app_key") != ""
+            and self.config.get("app_cert_file_path") != ""
+        )
 
         log_url = self.config.get("log_endpoint")
         time = datetime.now(timezone.utc).isoformat()
 
-        headers = {
-            "Content-Type": "application/json"
-        }
+        headers = {"Content-Type": "application/json"}
         json_data = {
             "timestamp": time,
             "version": "0.0.1",
             "message": message,
             "service_id": "rapp-eric-oss-hello-world-python-app",
-            "severity": severity.name.lower()
+            "severity": severity.name.lower(),
         }
 
         # print to console
@@ -94,11 +91,32 @@ class MtlsLogging:
         elif severity >= self.logger.getEffectiveLevel():
             # send log to log transformer
             try:
-                ca_cert = os.path.join("/", self.config.get("ca_cert_file_path"), self.config.get("ca_cert_file_name"))
-                app_cert = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_cert"))
-                app_key = os.path.join("/", self.config.get("app_cert_file_path"), self.config.get("app_key"))
-                requests.post(f"https://{log_url}", json=json_data, timeout=5,
-                                    headers = headers, verify=ca_cert, cert=(app_cert, app_key))
-            except (requests.exceptions.InvalidURL, requests.exceptions.MissingSchema) as exception:
+                ca_cert = os.path.join(
+                    "/",
+                    self.config.get("ca_cert_file_path"),
+                    self.config.get("ca_cert_file_name"),
+                )
+                app_cert = os.path.join(
+                    "/",
+                    self.config.get("app_cert_file_path"),
+                    self.config.get("app_cert"),
+                )
+                app_key = os.path.join(
+                    "/",
+                    self.config.get("app_cert_file_path"),
+                    self.config.get("app_key"),
+                )
+                requests.post(
+                    f"https://{log_url}",
+                    json=json_data,
+                    timeout=5,
+                    headers=headers,
+                    verify=ca_cert,
+                    cert=(app_cert, app_key),
+                )
+            except (
+                requests.exceptions.InvalidURL,
+                requests.exceptions.MissingSchema,
+            ) as exception:
                 # logs to console if failed to log to log transformer
                 self.logger.error("Request failed for mTLS logging: %s", exception)

@@ -3,8 +3,12 @@ Description of an APP:
     APPName: eric-oss-hello-world-python-app
     APPVersion: VERSION
     APPType: rApp
-APPComponent:
-    NameofComponent: eric-oss-hello-world-python-app
-    Version: VERSION
-    Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
-    ArtefactType: ASD
+AppComponentList:
+    - NameofComponent: eric-oss-hello-world-python-app
+      Version: VERSION
+      Path: OtherDefinitions/ASD/eric-oss-hello-world-python-appASD.yaml
+      ArtefactType: ASD
+    - NameofComponent: security-mgmt
+      Version: 1.0.0
+      Path: OtherDefinitions/SecurityManagement
+      ArtefactType: SecurityManagement
