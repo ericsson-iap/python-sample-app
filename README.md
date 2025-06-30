@@ -242,7 +242,7 @@ Example of command result:
 {
   "id": "af036040-a732-4af9-b65a-8103da56c35c",
   "fileName": "helloworldAppPackage.csar",
-  "packageVersion": "3.1.1-0",
+  "packageVersion": "4.0.0-0",
   "packageSize": "51.7659MiB",
   "vendor": "Ericsson",
   "type": "rApp",
@@ -279,14 +279,14 @@ Example of command result:
     "href": "/onboarding-jobs/af036040-a732-4af9-b65a-8103da56c35c"
   },
   "app": {
-    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
-    "href": "app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
+    "href": "app-lifecycle-management/v3/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
 
 The `APP_ID` is the `id` of the `app` returned in the previous
-command (rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0 in the example).
+command (rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0 in the example).
 Run the following command to initialize the App.
 
 ```bash
@@ -302,8 +302,8 @@ Example of command result:
 {
   "app": {
     "status": "INITIALIZING",
-    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
-    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
@@ -320,11 +320,11 @@ Example of command result:
 
 ```json
 {
-  "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "id": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
   "type": "rApp",
   "provider": "Ericsson",
   "name": "eric-oss-hello-world-python-app",
-  "version": "3.1.1-0",
+  "version": "4.0.0-0",
   "mode": "DISABLED",
   "status": "INITIALIZED",
   "createdAt": "2025-05-31T13:51:59.931Z",
@@ -332,7 +332,7 @@ Example of command result:
     {
       "type": "ASD",
       "name": "eric-oss-hello-world-python-app",
-      "version": "3.1.1-0",
+      "version": "4.0.0-0",
       "artifacts": [
         {
           "name": "docker.tar",
@@ -388,7 +388,7 @@ Example of command result:
     }
   ],
   "self": {
-    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
@@ -408,8 +408,8 @@ Example of command result:
 {
   "mode": "ENABLED",
   "app": {
-    "id": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
-    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "id": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
@@ -468,7 +468,7 @@ Example command result:
 ```json
 {
   "id": "rapp-ericsson-eric-oss-hello-world-python-app-68129972",
-  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
   "status": "UNDEPLOYED",
   "credentials": {
     "clientId": "rapp-ericsson-eric-oss-hello-world-python-app-68129972"
@@ -476,7 +476,7 @@ Example command result:
   "componentInstances": [
     {
       "name": "eric-oss-hello-world-python-app",
-      "version": "3.1.1-0",
+      "version": "4.0.0-0",
       "type": "ASD",
       "deployState": "UNDEPLOYED",
       "properties": {
@@ -498,7 +498,7 @@ Example command result:
     "href": "/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "app": {
-    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
@@ -586,7 +586,7 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 ```json
 {
   "id": "rapp-ericsson-eric-oss-hello-world-python-app-68129972",
-  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0",
+  "appId": "rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0",
   "status": "DEPLOYED",
   "createdAt": "2025-05-31T14:01:01.741Z",
   "updatedAt": "2025-05-31T14:04:16.300Z",
@@ -596,7 +596,7 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
   "componentInstances": [
     {
       "name": "eric-oss-hello-world-python-app",
-      "version": "3.1.1-0",
+      "version": "4.0.0-0",
       "type": "ASD",
       "deployState": "DEPLOYED",
       "properties": {
@@ -646,7 +646,7 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
     "href": "/app-instances/rapp-ericsson-eric-oss-hello-world-python-app-68129972"
   },
   "app": {
-    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-3-1-1-0"
+    "href": "/apps/rapp-ericsson-eric-oss-hello-world-python-app-4-0-0-0"
   }
 }
 ```
