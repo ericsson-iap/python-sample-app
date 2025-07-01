@@ -60,3 +60,21 @@ def send_log(message, logger_level, log_level):
     """Send a log through the MTLS logger"""
     logger = MtlsLogging(logger_level)
     logger.log(message, log_level)
+
+def test_log_handles_invalid_url(caplog):
+    """Ensure logger logs an error if requests.post raises InvalidURL"""
+    message = "Test message for InvalidURL"
+    with mock.patch.object(requests, "post", side_effect=requests.exceptions.InvalidURL("Bad URL")):
+        logger = MtlsLogging(Severity.DEBUG)
+        logger.log(message, Severity.CRITICAL)
+    assert "Request failed for mTLS logging: Bad URL" in caplog.text
+
+
+def test_log_handles_missing_schema(caplog):
+    """Ensure logger logs an error if requests.post raises MissingSchema"""
+    message = "Test message for MissingSchema"
+    with mock.patch.object(requests, "post", side_effect=requests.exceptions.MissingSchema("Missing schema")):
+        logger = MtlsLogging(Severity.DEBUG)
+        logger.log(message, Severity.CRITICAL)
+    assert "Request failed for mTLS logging: Missing schema" in caplog.text
+
