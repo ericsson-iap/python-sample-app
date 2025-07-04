@@ -24,6 +24,9 @@ This is a simple Hello World Python App with the following three endpoints:
   the number of successful and failed invocations of
   the '/sample-app/python/hello' endpoint.
 
+**Note:**  X.509 certificates are used for authentication, and
+ mTLS uses them to secure communication between the App and the platform.
+
 ## Build Docker
 
 Extract the downloaded sample App package. Using a command line tool,
@@ -85,9 +88,6 @@ named `armdocker.rnd.ericsson.se/proj-eric-oss-dev-test/releases/eric-oss-app-pa
 with the correct Python Sample App version. Run the following commands
 from within your project directory
 `eric-oss-hello-world-python-app-<VERSION>`.
-
-**Note:**  X.509 certificates are used for authentication, and
- mTLS uses them to secure communication between the App and the platform.
 
 ```bash
 mkdir -p helloworldAppPackage
