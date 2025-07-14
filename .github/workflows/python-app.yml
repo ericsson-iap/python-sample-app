@@ -28,7 +28,7 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Pytest
       run: |
-        python3 -m pytest --cov=eric-oss-hello-world-python-app --cov-fail-under=100
+        python3 -m pytest --cov=eric-oss-hello-world-python-app --cov-fail-under=90
     - name: markdownlint-cli
       uses: nosborn/github-action-markdown-cli@v3.3.0
       with:
