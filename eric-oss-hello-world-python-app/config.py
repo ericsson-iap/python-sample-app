@@ -15,8 +15,13 @@ def get_config():
     app_key = get_os_env_string("APP_KEY", "")
     app_cert = get_os_env_string("APP_CERT", "")
     app_cert_file_path = get_os_env_string("APP_CERT_FILE_PATH", "")
+    app_sef_key = get_os_env_string("APP_SEF_KEY", "")
+    app_sef_cert = get_os_env_string("APP_SEF_CERT", "")
+    app_sef_cert_file_path = get_os_env_string("APP_SEF_CERT_FILE_PATH", "")
     client_creds_file_path = get_os_env_string("CLIENT_CREDS_FILE_PATH", "")
     client_id_file_name = get_os_env_string("CLIENT_ID_FILE_NAME", "")
+    ca_sef_cert_file_name = get_os_env_string("CA_SEF_CERT_FILE_NAME", "")
+    ca_sef_cert_file_path = get_os_env_string("CA_SEF_CERT_FILE_PATH", "")
 
     config = {
         "iam_client_id": iam_client_id,
@@ -31,6 +36,11 @@ def get_config():
         "app_cert_file_path": app_cert_file_path,
         "client_creds_file_path": client_creds_file_path,
         "client_id_file_name": client_id_file_name,
+        "app_sef_key": app_sef_key,
+        "app_sef_cert": app_sef_cert,
+        "app_sef_cert_file_path": app_sef_cert_file_path,
+        "ca_sef_cert_file_name": ca_sef_cert_file_name,
+        "ca_sef_cert_file_path": ca_sef_cert_file_path,
     }
     return config
 

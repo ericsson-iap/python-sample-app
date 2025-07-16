@@ -24,7 +24,7 @@ def login():
     login_path = "/auth/realms/master/protocol/openid-connect/token"
     login_url = urljoin(config.get("iam_base_url"), login_path)
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    resp = tls_login(login_url, headers)
+    resp = mtls_login(login_url, headers)
     resp = json.loads(resp.decode("utf-8"))
     token, time_until_expiry = resp["access_token"], resp["expires_in"]
     time_until_expiry -= (
@@ -33,8 +33,8 @@ def login():
     return token, time.time() + time_until_expiry
 
 
-def tls_login(url, headers):
-    """This function sends an HTTP POST request with TLS for the login operation"""
+def mtls_login(url, headers):
+    """This function sends an HTTP POST request with mTLS for the login operation"""
     config = get_config()
     ca_cert = os.path.join(
         "/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name")
