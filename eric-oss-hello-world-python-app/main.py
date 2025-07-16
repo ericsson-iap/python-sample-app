@@ -6,6 +6,9 @@ This Python script defines a Flask application that implements a simple "Hello W
 along with a health check and metrics endpoints.
 """
 import time
+import os
+import ssl
+
 from flask import abort
 from flask import Flask
 from login import login
@@ -17,6 +20,7 @@ from prometheus_client import (
     CollectorRegistry,
     Counter,
 )
+from config import get_config
 
 SERVICE_PREFIX = "python_hello_world"
 
@@ -91,6 +95,21 @@ class Application(Flask):
         self.registry.register(self.requests_failed)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     instance = Application()
-    instance.run(host="0.0.0.0", port="8050")
+
+    config = get_config()
+
+    # Build paths from config
+    ca_sef_cert = os.path.join("/", config.get("ca_sef_cert_file_path"), config.get("ca_sef_cert_file_name"))
+    app_sef_cert = os.path.join("/", config.get("app_sef_cert_file_path"), config.get("app_sef_cert"))
+    app_sef_key = os.path.join("/", config.get("app_sef_cert_file_path"), config.get("app_sef_key"))
+
+    # Create SSL context configured for mTLS
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.load_cert_chain(certfile=app_sef_cert, keyfile=app_sef_key)
+    ssl_context.load_verify_locations(cafile=ca_sef_cert)
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+
+    # Start the application with SSL
+    instance.run(host='0.0.0.0', port=8050, ssl_context=ssl_context)

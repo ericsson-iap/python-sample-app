@@ -67,6 +67,14 @@ spec:
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
             defaultMode: 420
+        - name: app-sef-certs
+          secret:
+            secretName: {{ index .Values "appSefSecretName" | quote }}
+            defaultMode: 420
+        - name: platform-sef-cacerts
+          secret:
+            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
+            defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
@@ -96,6 +104,12 @@ spec:
             - name: client-creds
               mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
               readOnly: true
+            - name: app-sef-certs
+              mountPath: {{ index .Values "appSefCredsMountPath" | default .Values.instantiationDefaults.appSefCredsMountPath | quote }}
+              readOnly: true
+            - name: platform-sef-cacerts
+              mountPath: {{ index .Values "platformSefCaCertMountPath" | default .Values.instantiationDefaults.platformSefCaCertMountPath | quote }}
+              readOnly: true
           env:
             - name: IAM_CLIENT_ID
               value: {{ index .Values "clientId" | quote }}
@@ -109,12 +123,22 @@ spec:
               value: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
             - name: CA_CERT_FILE_NAME
               value:  {{ index .Values "platformCaCertFileName" | quote }}
+            - name: CA_SEF_CERT_FILE_PATH
+              value: {{ index .Values "platformSefCaCertMountPath" | default .Values.instantiationDefaults.platformSefCaCertMountPath | quote }}
+            - name: CA_SEF_CERT_FILE_NAME
+              value:  {{ index .Values "platformSefCaCertFileName" | quote }}
             - name: APP_KEY
               value: {{ index .Values "appKeyFileName" | quote }}
             - name: APP_CERT
               value: {{ index .Values "appCertFileName" | quote }}
             - name: APP_CERT_FILE_PATH
               value: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
+            - name: APP_SEF_KEY
+              value: {{ index .Values "appSefKeyFileName" | quote }}
+            - name: APP_SEF_CERT
+              value: {{ index .Values "appSefCertFileName" | quote }}
+            - name: APP_SEF_CERT_FILE_PATH
+              value: {{ index .Values "appSefCertMountPath" | default .Values.instantiationDefaults.appSefCertMountPath | quote }}
             - name: CLIENT_CREDS_FILE_PATH
               value: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
             - name: CLIENT_ID_FILE_NAME

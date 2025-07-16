@@ -5,13 +5,13 @@ global:
   timezone: UTC
   registry:
     url: armdocker.rnd.ericsson.se
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
   pullSecret:
   internalIPFamily:
 
 imageCredentials:
   repoPath:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   registry:
     url:
   pullSecret:
@@ -127,6 +127,8 @@ instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
   clientCredsMountPath: "/etc/client-creds/"
+  platformSefCaCertMountPath: "/etc/tls-ca/platform/sef/"
+  appSefCertMountPath: "/etc/tls/log/sef/"
 
 global:
   clientCredentials:
