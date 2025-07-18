@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}-gateway
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+      {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+  {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+spec:
+  selector:
+    app: service-mesh-ingress-gateway
+  servers:
+    - hosts:
+        - ./eic.stsossflexeic1017-687.stsoss.sero.gic.ericsson.se
+      port:
+        name: https
+        number: 443
+        protocol: HTTPS
+      tls:
+        mode: MUTUAL
+        httpsRedirect: true
