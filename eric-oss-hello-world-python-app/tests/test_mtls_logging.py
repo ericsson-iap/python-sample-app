@@ -1,6 +1,5 @@
 """Tests which cover the app's logging, both to STDOUT and to Log Aggregator"""
 
-import builtins
 import json
 from unittest import mock
 import requests
