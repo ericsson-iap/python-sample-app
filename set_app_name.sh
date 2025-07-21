@@ -108,6 +108,11 @@ done
 echo "Renaming directories..."
 for path in "${INPUT_PATHS[@]}"; do
   find "$path" -depth -type d -name "*$CURRENT_APP_NAME*" | while read -r dir; do
+    # Skip renaming the outermost directory itself
+    if [[ "$(realpath "$dir")" == "$(realpath "$path")" ]]; then
+      continue
+    fi
+
     newdir="$(dirname "$dir")/$(basename "$dir" | sed "s/$CURRENT_APP_NAME/$NEW_APP_NAME/g")"
     mv -f "$dir" "$newdir"
   done
