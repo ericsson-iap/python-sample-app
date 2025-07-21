@@ -51,10 +51,10 @@ def tls_login(url, headers):
     cert = (app_cert, app_key)
 
     try:
-        with open(client_id_path, "r") as f:
+        with open(client_id_path, "r", encoding="utf-8") as f:
             form_data["client_id"] = f.read().strip()
     except OSError as e:
-        raise LoginError(f"Error while reading client id: {e}")
+        raise LoginError(f"Error while reading client id: {e}") from e
 
     try:
         response = requests.post(

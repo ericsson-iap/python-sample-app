@@ -4,7 +4,9 @@ import time
 from login import login, LoginError
 import pytest
 
+
 def test_login_receives_token_x509(mock_login_api, config):
+    # pylint: disable=unused-argument
     """Check if we receive a token"""
     token, expiry = login()
     assert token == "2YotnFZFEjr1zCsicMWpAA" and expiry > time.time()
