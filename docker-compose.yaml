@@ -1,0 +1,17 @@
+services:
+  nginx:
+    image: nginx:stable
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - eric-oss-hello-world-python-app
+
+  eric-oss-hello-world-python-app:
+    build:
+      context: .
+    ports:
+      - "8050:8050"

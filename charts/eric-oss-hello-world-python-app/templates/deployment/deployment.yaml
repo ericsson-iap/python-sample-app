@@ -9,6 +9,7 @@ metadata:
     {{- end }}
   annotations:
     {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+    sidecar.istio.io/inject: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -37,7 +38,7 @@ spec:
         service.cleartext/scraping: "true"
       annotations:
         {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}
-        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}
+{{/*        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}*/}}
         {{- end }}
         prometheus.io/port: "{{ .Values.service.port }}"
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
@@ -55,27 +56,27 @@ spec:
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
-        - name: platform-cacerts
-          secret:
-            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
-            defaultMode: 420
-        - name: app-certs
-          secret:
-            secretName: {{ index .Values "appSecretName" | quote }}
-            defaultMode: 420
-        - name: client-creds
-          secret:
-            secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
-            defaultMode: 420
+{{/*        - name: platform-cacerts*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ index .Values "platformCaCertSecretName" | quote }}*/}}
+{{/*            defaultMode: 420*/}}
+{{/*        - name: app-certs*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ index .Values "appSecretName" | quote }}*/}}
+{{/*            defaultMode: 420*/}}
+{{/*        - name: client-creds*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}*/}}
+{{/*            defaultMode: 420*/}}
       containers:
         - name: eric-oss-hello-world-python-app
-          image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
+          image: python-sample-app-eric-oss-hello-world-python-app
           imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
           securityContext:
-            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} 
-            appArmorProfile:
-              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
-            {{- end }}
+{{/*            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} */}}
+{{/*            appArmorProfile:*/}}
+{{/*              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}*/}}
+{{/*            {{- end }}*/}}
             allowPrivilegeEscalation: false
             privileged: false
             readOnlyRootFilesystem: true
@@ -87,15 +88,15 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/adp
-            - name: platform-cacerts
-              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
-              readOnly: true
-            - name: app-certs
-              mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
-              readOnly: true
-            - name: client-creds
-              mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
-              readOnly: true
+{{/*            - name: platform-cacerts*/}}
+{{/*              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
+{{/*            - name: app-certs*/}}
+{{/*              mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
+{{/*            - name: client-creds*/}}
+{{/*              mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
           env:
             - name: IAM_CLIENT_ID
               value: {{ index .Values "clientId" | quote }}
