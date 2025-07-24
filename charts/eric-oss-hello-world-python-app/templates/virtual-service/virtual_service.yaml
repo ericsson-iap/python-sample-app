@@ -1,0 +1,36 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}-pa
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+    {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+spec:
+  hosts:
+    - eric-oss-hello-world-python-app
+  http:
+    - match:
+        - port: 80
+          uri:
+            prefix: /sample-app/python/metrics
+        - port: 80
+          uri:
+            prefix: /sample-app/python/health
+      route:
+        - destination:
+            host: eric-oss-hello-world-python-app
+            port:
+              number: 80
+    - match:
+        - port: 443
+          uri:
+            prefix: /sample-app/python/hello
+      route:
+        - destination:
+            host: eric-oss-hello-world-python-app
+            port:
+              number: 443

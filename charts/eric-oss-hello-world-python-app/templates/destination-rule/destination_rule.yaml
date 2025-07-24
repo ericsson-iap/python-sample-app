@@ -1,0 +1,23 @@
+{{/*apiVersion: networking.istio.io/v1*/}}
+{{/*kind: DestinationRule*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ include "eric-oss-hello-world-python-app.name" . }}-pa*/}}
+{{/*  labels:*/}}
+{{/*    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}*/}}
+{{/*    {{- if .Values.labels }}*/}}
+{{/*    {{ .Values.labels | toYaml | indent 4 }}*/}}
+{{/*    {{- end }}*/}}
+{{/*  annotations:*/}}
+{{/*    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}*/}}
+{{/*spec:*/}}
+{{/*  host: eric-oss-hello-world-python-app*/}}
+{{/*  trafficPolicy:*/}}
+{{/*    portLevelSettings:*/}}
+{{/*      - port:*/}}
+{{/*          number: 80*/}}
+{{/*        tls:*/}}
+{{/*          mode: DISABLE*/}}
+{{/*      - port:*/}}
+{{/*          number: 443*/}}
+{{/*        tls:*/}}
+{{/*          mode: ISTIO_MUTUAL*/}}

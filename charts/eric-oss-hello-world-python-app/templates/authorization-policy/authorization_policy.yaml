@@ -1,0 +1,24 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}-ap
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+    {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: eric-oss-hello-world-python-app
+  rules:
+    - to:
+        - operation:
+            ports: ["80"]
+            paths: ["/sample-app/python/metrics", "/sample-app/python/health"]
+    - to:
+        - operation:
+            ports: ["443"]
+            paths: ["/sample-app/python/hello"]

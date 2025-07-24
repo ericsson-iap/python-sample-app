@@ -34,8 +34,8 @@ fullnameOverride: ""
 # unconfined  - Indicates that there is no profile loaded.
 # runtime/default - Applies the default profile of the container engine.
 # localhost   - Applies a specific profile loaded on the host
-appArmorProfile:
-  type: "RuntimeDefault"
+#appArmorProfile:
+#  type: "RuntimeDefault"
 
 seccompProfile:
   type: "RuntimeDefault"
