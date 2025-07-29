@@ -8,6 +8,7 @@ wsl_safe_sed_replace() {
   local file=$2
   local tmpfile
   tmpfile=$(mktemp "${file}.XXXXXX") || exit 1
+  chmod "$(stat --format=%a $file)" "$tmpfile"
   sed "$pattern" "$file" > "$tmpfile" && mv -f "$tmpfile" "$file"
 }
 
