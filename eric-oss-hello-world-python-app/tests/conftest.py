@@ -80,7 +80,6 @@ def fixture_app(mock_log_api):
     # Why 'yield'? See: https://docs.pytest.org/en/7.1.x/how-to/fixtures.html#dynamic-scope
     yield application
     GLOBAL_METRICS_REGISTRY.unregister(application.requests_total)
-    GLOBAL_METRICS_REGISTRY.unregister(application.requests_failed)
 
 
 @pytest.fixture()
