@@ -25,7 +25,7 @@ class Application(Flask):
     def __init__(self):
         super().__init__(__name__)
         disable_created_metrics()
-        self.counters = {"total_failed": 0, "total_requests": 0}
+        self.counters = {"total_requests": 0}
         self.session = {"token": None, "expiry_time": 0}
         self.create_metrics()
         self.wsgi_app = DispatcherMiddleware(
@@ -82,13 +82,7 @@ class Application(Flask):
             name="requests_total",
             documentation="Total number of API requests",
         )
-        self.requests_failed = Counter(
-            namespace=SERVICE_PREFIX,
-            name="requests_failed_total",
-            documentation="Total number of API request failures",
-        )
         self.registry.register(self.requests_total)
-        self.registry.register(self.requests_failed)
 
 
 if __name__ == "__main__":
