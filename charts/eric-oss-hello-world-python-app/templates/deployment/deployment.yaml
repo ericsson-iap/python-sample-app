@@ -67,6 +67,17 @@ spec:
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
             defaultMode: 420
+        - name: envoy-config
+          configMap:
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-config
+        - name: sidecar-platform-cacerts
+          secret:
+            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
+            defaultMode: 420
+        - name: sidecar-app-certs
+          secret:
+            secretName: {{ index .Values "appSecretName" | quote }}
+            defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
@@ -182,6 +193,37 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources.helloWorld | nindent 12 }}
+        - name: envoy
+          image: envoyproxy/envoy:v1.23.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - /usr/local/bin/envoy
+            - -c
+            - /etc/envoy/envoy.yaml
+            - --log-level
+            - info
+          ports:
+            - name: envoy-https
+              containerPort: 8443
+              protocol: TCP
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+            - name: sidecar-platform-cacerts
+              mountPath: /etc/ssl/certs
+              readOnly: true
+            - name: sidecar-app-certs
+              mountPath: /etc/ssl/private
+              readOnly: true
+          securityContext:
+            runAsUser: 1337  # non-root user, adjust as per Envoy recommendations
+            runAsGroup: 1337
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - all
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:
         - name: {{ template "eric-oss-hello-world-python-app.pullSecrets" . }}

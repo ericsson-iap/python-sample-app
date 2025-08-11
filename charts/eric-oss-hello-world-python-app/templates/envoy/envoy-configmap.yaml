@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "eric-oss-hello-world-python-app.fullname" . }}-envoy-config
+data:
+  envoy.yaml: |
+    node:
+      id: {{ .Release.Name }}
+      cluster: python-hello-world
+
+    static_resources:
+      listeners:
+        - name: listener_https
+          address:
+            socket_address:
+              address: 0.0.0.0
+              port_value: 8443
+          filter_chains:
+            - filter_chain_match:
+                transport_protocol: "tls"
+              tls_context:
+                common_tls_context:
+                  tls_certificates:
+                    - certificate_chain:
+                        filename: /etc/envoy/tls/server.crt
+                      private_key:
+                        filename: /etc/envoy/tls/server.key
+                  validation_context:
+                    trusted_ca:
+                      filename: /etc/envoy/client-ca/ca.crt
+                    match_subject_alt_names:
+                      - exact: "client.example.com"  # Replace with your expected client SAN if needed
+                  # Enforce client cert validation (mTLS)
+                  require_client_certificate: true
+              filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: ingress_http
+                    route_config:
+                      name: local_route
+                      virtual_hosts:
+                        - name: backend
+                          domains: ["*"]
+                          routes:
+                            - match:
+                                prefix: "/sample-app/python/hello"
+                              route:
+                                cluster: python_service
+                    http_filters:
+                      - name: envoy.filters.http.router
+
+      clusters:
+        - name: python_service
+          connect_timeout: 0.25s
+          type: logical_dns
+          lb_policy: round_robin
+          load_assignment:
+            cluster_name: python_service
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: 127.0.0.1
+                          port_value: 8050
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              # If your python service doesn't do TLS, comment/remove this section
+              # Here it assumes plain HTTP upstream, so no TLS to upstream
+
