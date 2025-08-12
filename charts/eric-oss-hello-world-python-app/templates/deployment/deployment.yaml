@@ -36,9 +36,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
         service.cleartext/scraping: "true"
       annotations:
-        {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}
-        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}
-        {{- end }}
+{{/*        {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}*/}}
+{{/*        container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}*/}}
+{{/*        {{- end }}*/}}
         prometheus.io/port: "{{ .Values.service.port }}"
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
         prometheus.io/path: "{{ .Values.prometheus.path }}"
@@ -49,33 +49,58 @@ spec:
       priorityClassName: {{ (index .Values "podPriority" "eric-oss-hello-world-python-app" "priorityClassName") }}
       {{- end }}
       volumes:
+        - name: envoy-certs
+          secret:
+            secretName: envoy-mtls
         - name: config-volume
           configMap:
             name: {{ include "eric-oss-hello-world-python-app.name" . }}
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
-        - name: platform-cacerts
-          secret:
-            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
-            defaultMode: 420
-        - name: app-certs
-          secret:
-            secretName: {{ index .Values "appSecretName" | quote }}
-            defaultMode: 420
-        - name: client-creds
-          secret:
-            secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
-            defaultMode: 420
+              - key: ENVOY_CONFIG_FILE
+                path: envoy.yaml
+{{/*        - name: platform-cacerts*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ index .Values "platformCaCertSecretName" | quote }}*/}}
+{{/*            defaultMode: 420*/}}
+{{/*        - name: app-certs*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ index .Values "appSecretName" | quote }}*/}}
+{{/*            defaultMode: 420*/}}
+{{/*        - name: client-creds*/}}
+{{/*          secret:*/}}
+{{/*            secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}*/}}
+{{/*            defaultMode: 420*/}}
       containers:
+        - name: envoy
+          image: envoyproxy/envoy:v1.35.0
+{{/*          restartPolicy: Always*/}}
+          ports:
+            - containerPort: 8080
+              name: envoy-http
+              protocol: TCP
+            - containerPort: 8443
+              name: envoy-https
+              protocol: TCP
+            - containerPort: 9901
+              name: admin
+          args: [ "-c", "/etc/envoy/envoy.yaml" ]
+          volumeMounts:
+            - mountPath: /etc/envoy
+              name: config-volume
+
+            - name: envoy-certs
+              mountPath: /etc/envoy/certs
+              readOnly: true
         - name: eric-oss-hello-world-python-app
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
           imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
           securityContext:
-            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} 
-            appArmorProfile:
-              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
-            {{- end }}
+{{/*            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} */}}
+{{/*            appArmorProfile:*/}}
+{{/*              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}*/}}
+{{/*            {{- end }}*/}}
             allowPrivilegeEscalation: false
             privileged: false
             readOnlyRootFilesystem: true
@@ -85,17 +110,18 @@ spec:
               - all
             {{- include "eric-oss-hello-world-python-app.seccomp-profile" . | indent 12 }}
           volumeMounts:
-            - name: config-volume
-              mountPath: /etc/adp
-            - name: platform-cacerts
-              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
-              readOnly: true
-            - name: app-certs
-              mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}
-              readOnly: true
-            - name: client-creds
-              mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
-              readOnly: true
+{{/*            - name: config-volume*/}}
+{{/*              mountPath: /etc/adp*/}}
+{{/*            - name: platform-cacerts*/}}
+{{/*              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
+{{/*            - name: app-certs*/}}
+{{/*              mountPath: {{ index .Values "appCertMountPath" | default .Values.instantiationDefaults.appCertMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
+{{/*            - name: client-creds*/}}
+{{/*              mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}*/}}
+{{/*              readOnly: true*/}}
+
           env:
             - name: IAM_CLIENT_ID
               value: {{ index .Values "clientId" | quote }}
