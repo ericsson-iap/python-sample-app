@@ -12,7 +12,10 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: eric-oss-hello-world-python-app
+      app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
   ingress:
   - from:
     - podSelector:
@@ -24,6 +27,12 @@ spec:
     - podSelector:
         matchLabels:
           app: eric-pm-server
+    {{- if eq .Values.profile "minikube" }}
+    - podSelector:
+        matchLabels:
+          run: curl
+    {{- end }}
     ports:
-    - port: {{ .Values.service.port }}
-
+        - port: 8080   # Envoy HTTP
+        - port: 8443   # Envoy HTTPS
+        - port: {{ .Values.service.port }}  # Optional: app port (e.g., 8050)
