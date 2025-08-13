@@ -1,9 +1,9 @@
 apiVersion: v1
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: curl-certs
 data:
   ca.crt: xxxxxxxxx
   client.crt: xxxxxxxxx
   client.key: xxxxxxxxx
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: client-certs

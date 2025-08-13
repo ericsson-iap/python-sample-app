@@ -49,16 +49,22 @@ spec:
       priorityClassName: {{ (index .Values "podPriority" "eric-oss-hello-world-python-app" "priorityClassName") }}
       {{- end }}
       volumes:
+        {{- if eq .Values.profile "minikube" }}
         - name: envoy-certs
           secret:
-            secretName: envoy-mtls
+            secretName: envoy-mtls-secret
+        {{- end }}
         - name: config-volume
           configMap:
-            name: {{ include "eric-oss-hello-world-python-app.name" . }}
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}-log-ctrl
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
-              - key: ENVOY_CONFIG_FILE
+        - name: envoy-config
+          configMap:
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-configmap
+            items:
+              - key: envoy.yaml
                 path: envoy.yaml
 {{/*        - name: platform-cacerts*/}}
 {{/*          secret:*/}}
@@ -75,6 +81,7 @@ spec:
       containers:
         - name: envoy
           image: envoyproxy/envoy:v1.35.0
+          args: [ "-c", "/etc/envoy/envoy.yaml" ]
 {{/*          restartPolicy: Always*/}}
           ports:
             - containerPort: 8080
@@ -85,11 +92,9 @@ spec:
               protocol: TCP
             - containerPort: 9901
               name: admin
-          args: [ "-c", "/etc/envoy/envoy.yaml" ]
           volumeMounts:
-            - mountPath: /etc/envoy
-              name: config-volume
-
+            - name: envoy-config
+              mountPath: /etc/envoy
             - name: envoy-certs
               mountPath: /etc/envoy/certs
               readOnly: true
@@ -107,9 +112,9 @@ spec:
             runAsNonRoot: true
             capabilities:
               drop:
-              - all
+                - all
             {{- include "eric-oss-hello-world-python-app.seccomp-profile" . | indent 12 }}
-          volumeMounts:
+{{/*          volumeMounts:*/}}
 {{/*            - name: config-volume*/}}
 {{/*              mountPath: /etc/adp*/}}
 {{/*            - name: platform-cacerts*/}}
@@ -134,7 +139,7 @@ spec:
             - name: CA_CERT_FILE_PATH
               value: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
             - name: CA_CERT_FILE_NAME
-              value:  {{ index .Values "platformCaCertFileName" | quote }}
+              value: {{ index .Values "platformCaCertFileName" | quote }}
             - name: APP_KEY
               value: {{ index .Values "appKeyFileName" | quote }}
             - name: APP_CERT
@@ -208,6 +213,22 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources.helloWorld | nindent 12 }}
+{{/*      initContainers:*/}}
+{{/*        - name: envoy*/}}
+{{/*          image: envoyproxy/envoy:v1.35.0*/}}
+{{/*          restartPolicy: Always*/}}
+{{/*          ports:*/}}
+{{/*            - containerPort: 8080*/}}
+{{/*            - containerPort: 8443*/}}
+{{/*            - containerPort: 9901*/}}
+{{/*          args: [ "-c", "/etc/envoy/envoy.yaml" ]*/}}
+{{/*          volumeMounts:*/}}
+{{/*            - mountPath: /etc/envoy*/}}
+{{/*              name: config-volume*/}}
+
+{{/*            - name: envoy-certs*/}}
+{{/*              mountPath: /etc/envoy/certs*/}}
+{{/*              readOnly: true*/}}
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:
         - name: {{ template "eric-oss-hello-world-python-app.pullSecrets" . }}

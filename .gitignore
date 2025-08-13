@@ -160,6 +160,6 @@ cython_debug/
 #.idea/
 
 # Self-signed certs for testing
-charts/eric-oss-hello-world-python-app/certs/*.crt
-charts/eric-oss-hello-world-python-app/certs/*.key
-charts/eric-oss-hello-world-python-app/certs/*.pem
+*.crt
+*.key
+*.pem

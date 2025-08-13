@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: client-certs-curl-debug
+  name: curl
 spec:
   restartPolicy: Always
   containers:
-    - name: curl-debug
+    - name: curl
       image: curlimages/curl:latest
       command: ["sleep", "infinity"]
       volumeMounts:
-        - name: client-certs
+        - name: curl-certs
           mountPath: /etc/certs
           readOnly: true
   volumes:
-    - name: client-certs
+    - name: curl-certs
       secret:
-        secretName: client-certs
+        secretName: curl-certs
