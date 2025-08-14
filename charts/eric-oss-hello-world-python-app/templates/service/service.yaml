@@ -15,10 +15,14 @@ spec:
   ipFamilies: [{{ .Values.global.internalIPFamily }}]
   {{- end }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 8050
+    - port: {{ .Values.service.httpport }}
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: envoy-http
+    - port: {{ .Values.service.httpsport }}
+      targetPort: 8443
+      protocol: TCP
+      name: envoy-https
   selector:
     app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

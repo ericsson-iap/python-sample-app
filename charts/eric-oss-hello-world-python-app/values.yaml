@@ -43,7 +43,8 @@ seccompProfile:
 
 service:
   type: ClusterIP
-  port: 8050
+  httpport: 8080
+  httpsport: 8443
 
 ingress:
   enabled: false
@@ -127,6 +128,8 @@ instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
   clientCredsMountPath: "/etc/client-creds/"
+  sidecarPlatformCaCertMountPath: "/etc/sidecar-tls-ca/platform/"
+  sidecarAppCertMountPath: "/etc/sidecar-tls/log/"
 
 global:
   clientCredentials:

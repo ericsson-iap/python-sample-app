@@ -1,0 +1,92 @@
+node:
+  id: {{ .Release.Name }}
+  cluster: python-hello-world
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 9901
+static_resources:
+  listeners:
+    - name: listener_https
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8443
+      filter_chains:
+        - transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+              require_client_certificate: true
+              common_tls_context:
+                tls_certificates:
+                  - certificate_chain:
+                      filename: "/etc/envoy/certs/server.crt"
+                    private_key:
+                      filename: "/etc/envoy/certs/server.key"
+                validation_context:
+                  trusted_ca:
+                    filename: "/etc/envoy/certs/ca.crt"
+                  #match_subject_alt_names:
+                  #  - exact: "client.example.com"
+          filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_https_secure
+                route_config:
+                  name: local_route_https_secure
+                  virtual_hosts:
+                    - name: secure_service
+                      domains: ["*"]
+                      routes:
+                        - match:
+                            prefix: "/sample-app/python/hello"
+                          route:
+                            cluster: eric-oss-hello-world-python-cluster
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+    - name: listener_http
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8080
+      filter_chains:
+        - filters:
+            - name: envoy.filters.network.http_connection_manager
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                stat_prefix: ingress_http
+                route_config:
+                  name: local_route_http
+                  virtual_hosts:
+                    - name: backend_http
+                      domains: ["*"]
+                      routes:
+                        - match:
+                            prefix: "/sample-app/python/metrics"
+                          route:
+                            cluster: eric-oss-hello-world-python-cluster
+                        - match:
+                            prefix: "/sample-app/python/health"
+                          route:
+                            cluster: eric-oss-hello-world-python-cluster
+                http_filters:
+                  - name: envoy.filters.http.router
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+  clusters:
+    - name: eric-oss-hello-world-python-cluster
+      type: STATIC
+      load_assignment:
+        cluster_name: eric-oss-hello-world-python-service
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 127.0.0.1
+                      port_value: 8050

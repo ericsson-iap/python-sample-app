@@ -55,6 +55,8 @@ spec:
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
+              - key: ENVOY_CONFIG_FILE
+                path: envoy.yaml
         - name: platform-cacerts
           secret:
             secretName: {{ index .Values "platformCaCertSecretName" | quote }}
@@ -67,16 +69,13 @@ spec:
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
             defaultMode: 420
-        - name: envoy-config
-          configMap:
-            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-config
         - name: sidecar-platform-cacerts
           secret:
-            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
+            secretName: {{ index .Values "sidecarPlatformCaCertSecretName" | quote }}
             defaultMode: 420
         - name: sidecar-app-certs
           secret:
-            secretName: {{ index .Values "appSecretName" | quote }}
+            secretName: {{ index .Values "sidecarAppSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -203,27 +202,40 @@ spec:
             - --log-level
             - info
           ports:
+            - name: envoy-http
+              containerPort: 8080
+              protocol: TCP 
             - name: envoy-https
               containerPort: 8443
               protocol: TCP
+            - name: envoy-admin
+              containerPort: 9901
           volumeMounts:
             - name: envoy-config
               mountPath: /etc/envoy
               readOnly: true
             - name: sidecar-platform-cacerts
-              mountPath: /etc/ssl/certs
+              mountPath: {{ index .Values "sidecarPlatformCaCertMountPath" | default .Values.instantiationDefaults.sidecarPlatformCaCertMountPath | quote }}
               readOnly: true
             - name: sidecar-app-certs
-              mountPath: /etc/ssl/private
+              mountPath: {{ index .Values "sidecarAppCertMountPath" | default .Values.instantiationDefaults.sidecarAppCertMountPath | quote }}
               readOnly: true
           securityContext:
-            runAsUser: 1337  # non-root user, adjust as per Envoy recommendations
+            runAsNonRoot: true
+            runAsUser: 1337
             runAsGroup: 1337
+            fsGroup: 1337
             allowPrivilegeEscalation: false
+            privileged: false
             readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - all
+            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }}
+            appArmorProfile:
+              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
+            {{- end }}
+            {{- include "eric-oss-hello-world-python-app.seccomp-profile" . | indent 2 }}
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:
         - name: {{ template "eric-oss-hello-world-python-app.pullSecrets" . }}
