@@ -1,13 +1,16 @@
 node:
   id: {{ .Release.Name }}
   cluster: python-hello-world
+
 admin:
   address:
     socket_address:
       address: 0.0.0.0
       port_value: 9901
+
 static_resources:
   listeners:
+    # HTTPS listener with mTLS
     - name: listener_https
       address:
         socket_address:
@@ -35,6 +38,10 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_https_secure
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
                 route_config:
                   name: local_route_https_secure
                   virtual_hosts:
@@ -49,6 +56,8 @@ static_resources:
                   - name: envoy.filters.http.router
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+    # HTTP listener that redirects to HTTPS
     - name: listener_http
       address:
         socket_address:
@@ -60,12 +69,21 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_http
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
                 route_config:
                   name: local_route_http
                   virtual_hosts:
                     - name: backend_http
                       domains: ["*"]
                       routes:
+                        # HTTP → HTTPS redirect
+                        - match:
+                            prefix: "/"
+                          redirect:
+                            https_redirect: true
                         - match:
                             prefix: "/sample-app/python/metrics"
                           route:
@@ -78,11 +96,12 @@ static_resources:
                   - name: envoy.filters.http.router
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
   clusters:
     - name: eric-oss-hello-world-python-cluster
       type: STATIC
       load_assignment:
-        cluster_name: eric-oss-hello-world-python-service
+        cluster_name: eric-oss-hello-world-python-cluster
         endpoints:
           - lb_endpoints:
               - endpoint:
