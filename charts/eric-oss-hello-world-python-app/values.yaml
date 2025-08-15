@@ -5,13 +5,13 @@ global:
   timezone: UTC
   registry:
     url: armdocker.rnd.ericsson.se
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
   pullSecret:
   internalIPFamily:
 
 imageCredentials:
   repoPath:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   registry:
     url:
   pullSecret:
@@ -112,6 +112,12 @@ probes:
       initialDelaySeconds: 60
       periodSeconds: 10
       timeoutSeconds: 10
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+  envoy:
     readinessProbe:
       failureThreshold: 3
       initialDelaySeconds: 60

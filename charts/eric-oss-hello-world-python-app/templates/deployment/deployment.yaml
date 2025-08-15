@@ -195,6 +195,17 @@ spec:
         - name: envoy
           image: envoyproxy/envoy:v1.23.0
           imagePullPolicy: IfNotPresent
+          env:
+            - name: ENVOY_CA_CERT_FILE_PATH
+              value: {{ index .Values "sidecarPlatformCaCertMountPath" | default .Values.instantiationDefaults.sidecarPlatformCaCertMountPath | quote }}
+            - name: ENVOY_CA_CERT_FILE_NAME
+              value:  {{ index .Values "sidecarPlatformCaCertFileName" | quote }}
+            - name: ENVOY_APP_KEY
+              value: {{ index .Values "sidecarAppKeyFileName" | quote }}
+            - name: ENVOY_APP_CERT
+              value: {{ index .Values "sidecarAppCertFileName" | quote }}
+            - name: ENVOY_APP_CERT_FILE_PATH
+              value: {{ index .Values "sidecarAppCertMountPath" | default .Values.instantiationDefaults.sidecarAppCertMountPath | quote }}
           args:
             - /usr/local/bin/envoy
             - -c
@@ -208,8 +219,21 @@ spec:
             - name: envoy-https
               containerPort: 8443
               protocol: TCP
-            - name: envoy-admin
-              containerPort: 9901
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
+          {{- end }}
           volumeMounts:
             - name: envoy-config
               mountPath: /etc/envoy

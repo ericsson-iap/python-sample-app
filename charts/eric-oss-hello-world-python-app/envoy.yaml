@@ -2,12 +2,6 @@ node:
   id: {{ .Release.Name }}
   cluster: python-hello-world
 
-admin:
-  address:
-    socket_address:
-      address: 0.0.0.0
-      port_value: 9901
-
 static_resources:
   listeners:
     # HTTPS listener with mTLS
@@ -25,12 +19,12 @@ static_resources:
               common_tls_context:
                 tls_certificates:
                   - certificate_chain:
-                      filename: "/etc/envoy/certs/server.crt"
+                      filename: "${ENVOY_APP_CERT_FILE_PATH}/${ENVOY_APP_CERT}"
                     private_key:
-                      filename: "/etc/envoy/certs/server.key"
+                      filename: "${ENVOY_APP_CERT_FILE_PATH}/${ENVOY_APP_KEY}"
                 validation_context:
                   trusted_ca:
-                    filename: "/etc/envoy/certs/ca.crt"
+                    filename: "${ENVOY_CA_CERT_FILE_PATH}/${ENVOY_CA_CERT_FILE_NAME}"
                   #match_subject_alt_names:
                   #  - exact: "client.example.com"
           filters:
@@ -79,11 +73,6 @@ static_resources:
                     - name: backend_http
                       domains: ["*"]
                       routes:
-                        # HTTP → HTTPS redirect
-                        - match:
-                            prefix: "/"
-                          redirect:
-                            https_redirect: true
                         - match:
                             prefix: "/sample-app/python/metrics"
                           route:
