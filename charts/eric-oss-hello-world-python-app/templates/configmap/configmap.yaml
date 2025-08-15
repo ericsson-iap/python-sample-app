@@ -11,3 +11,5 @@ metadata:
 data:
   LOG_CTRL_FILE: |-
 {{ .Files.Get "logcontrol.json" | indent 4}}
+  ENVOY_CONFIG_FILE: |-
+{{ .Files.Get "envoy.yaml" | indent 4 }}

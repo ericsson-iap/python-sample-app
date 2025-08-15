@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+      args:
+        APP_VERSION: ${APP_VERSION}
+    image: proj-eric-oss-drop/eric-oss-hello-world-python-app:${APP_VERSION}
+    container_name: eric-oss-hello-world-python-app
+    ports:
+      - "8050:8050"       # expose app port
+    restart: unless-stopped
+
+  envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile.envoy
+      args:
+        APP_VERSION: ${APP_VERSION}
+    image: proj-eric-oss-drop/envoy:${APP_VERSION}
+    container_name: envoy
+    depends_on:
+      - app
+    ports:
+      - "8080:8080"       # HTTP
+      - "8443:8443"       # HTTPS
+    restart: unless-stopped

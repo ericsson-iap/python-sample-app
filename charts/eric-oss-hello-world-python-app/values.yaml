@@ -43,7 +43,8 @@ seccompProfile:
 
 service:
   type: ClusterIP
-  port: 8050
+  httpport: 8080
+  httpsport: 8443
 
 ingress:
   enabled: false
@@ -116,6 +117,12 @@ probes:
       initialDelaySeconds: 60
       periodSeconds: 10
       timeoutSeconds: 10
+  envoy:
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
 
 # Pod priority configuration for deployments
 podPriority:
@@ -127,6 +134,8 @@ instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
   clientCredsMountPath: "/etc/client-creds/"
+  sidecarPlatformCaCertMountPath: "/etc/sidecar-tls-ca/platform/"
+  sidecarAppCertMountPath: "/etc/sidecar-tls/log/"
 
 global:
   clientCredentials:
