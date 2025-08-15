@@ -1,4 +1,4 @@
-FROM <PYTHON_IMAGE_NAME>
+FROM python:3.9-slim
 
 ARG USER_ID=60577
 ARG USER_NAME="eric-sdk"

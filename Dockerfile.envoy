@@ -1,0 +1,7 @@
+FROM envoyproxy/envoy:v1.35.0
+
+EXPOSE 8080 8443
+
+USER envoy
+
+CMD ["envoy", "-c", "/etc/envoy/envoy.yaml", "--log-level", "info"]
