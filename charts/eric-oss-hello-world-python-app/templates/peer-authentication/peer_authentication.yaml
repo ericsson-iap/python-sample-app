@@ -1,0 +1,20 @@
+{{/*apiVersion: security.istio.io/v1*/}}
+{{/*kind: PeerAuthentication*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ include "eric-oss-hello-world-python-app.name" . }}-pa*/}}
+{{/*  labels:*/}}
+{{/*    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}*/}}
+{{/*    {{- if .Values.labels }}*/}}
+{{/*    {{ .Values.labels | toYaml | indent 4 }}*/}}
+{{/*    {{- end }}*/}}
+{{/*  annotations:*/}}
+{{/*    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}*/}}
+{{/*spec:*/}}
+{{/*  selector:*/}}
+{{/*    matchLabels:*/}}
+{{/*      app: eric-oss-hello-world-python-app*/}}
+{{/*  mtls:*/}}
+{{/*    mode: STRICT*/}}
+{{/*  portLevelMtls:*/}}
+{{/*    80:*/}}
+{{/*      mode: DISABLE*/}}
