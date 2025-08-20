@@ -15,11 +15,11 @@ spec:
   ipFamilies: [{{ .Values.global.internalIPFamily }}]
   {{- end }}
   ports:
-    - port: {{ .Values.service.httpport }}
+    - port: {{ .Values.service.http-port }}
       targetPort: 8080
       protocol: TCP
       name: envoy-http
-    - port: {{ .Values.service.httpsport }}
+    - port: {{ .Values.service.https-port }}
       targetPort: 8443
       protocol: TCP
       name: envoy-https
