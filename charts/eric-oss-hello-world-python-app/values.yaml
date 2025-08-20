@@ -43,7 +43,8 @@ seccompProfile:
 
 service:
   type: ClusterIP
-  port: 8050
+  httpport: 8080
+  httpsport: 8443
 
 ingress:
   enabled: false
@@ -116,6 +117,17 @@ probes:
       initialDelaySeconds: 60
       periodSeconds: 10
       timeoutSeconds: 10
+  envoy:
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 10
 
 # Pod priority configuration for deployments
 podPriority:
@@ -127,6 +139,11 @@ instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
   clientCredsMountPath: "/etc/client-creds/"
+  envoyPlatformCaCertMountPath: "/etc/certs/ca"
+  envoyAppCertMountPath: "/etc/certs/app"
+  #envoyPlatformCaCertFileName: "dummy1.crt"
+  #envoyAppCertFileName: "dummy2.crt"
+  #envoyAppKeyFileName: "dummy3.key"
 
 global:
   clientCredentials:
