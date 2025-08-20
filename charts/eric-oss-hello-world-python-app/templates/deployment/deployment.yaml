@@ -55,6 +55,14 @@ spec:
             items:
               - key: LOG_CTRL_FILE
                 path: logcontrol.json
+        - name: envoy-config
+          configMap:
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-template
+            items:
+              - key: ENVOY_CONFIG_FILE
+                path: envoy.yaml
+        - name: envoy-config-dir
+          emptyDir: {}
         - name: platform-cacerts
           secret:
             secretName: {{ index .Values "platformCaCertSecretName" | quote }}
@@ -66,6 +74,14 @@ spec:
         - name: client-creds
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
+            defaultMode: 420
+        - name: envoy-platform-cacerts
+          secret:
+            secretName: {{ index .Values "envoyPlatformCaCertSecretName" | quote }}
+            defaultMode: 420
+        - name: envoy-app-certs
+          secret:
+            secretName: {{ index .Values "envoyAppSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -182,6 +198,86 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources.helloWorld | nindent 12 }}
+        - name: envoy
+          image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app-envoy" "values" .Values "files" .Files) }}
+          imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
+          securityContext:
+            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }}
+            appArmorProfile:
+              type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
+            {{- end }}
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+              - all
+            {{- include "eric-oss-hello-world-python-app.seccomp-profile" . | indent 12 }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "==== Dumping envoy config ===="
+              cat /etc/envoy/envoy.yaml
+              echo "==== Starting Envoy ===="
+              exec envoy -c /etc/envoy/envoy.yaml --log-level info --base-id 1
+          ports:
+            - name: envoy-http
+              containerPort: 8080
+              protocol: TCP
+            - name: envoy-https
+              containerPort: 8443
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 8443
+          {{- if (index .Values "probes" "envoy" "livenessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "envoy" "livenessProbe" "initialDelaySeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "livenessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "envoy" "livenessProbe" "failureThreshold") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "livenessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "envoy" "livenessProbe" "periodSeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "livenessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "envoy" "livenessProbe" "timeoutSeconds") }}
+          {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: 8443
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
+          {{- end }}
+          {{- if (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
+          {{- end }}
+          env:
+            - name: ENVOY_APP_CERT_FULL_PATH
+              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyAppCertMountPath .Values.envoyAppCertMountPath) .Values.envoyAppCertFileName }}
+            - name: ENVOY_APP_KEY_FULL_PATH
+              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyAppCertMountPath .Values.envoyAppCertMountPath) .Values.envoyAppKeyFileName }}
+            - name: ENVOY_CA_CERT_FULL_PATH
+              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyPlatformCaCertMountPath .Values.envoyPlatformCaCertMountPath) .Values.envoyPlatformCaCertFileName }}
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+            - name: envoy-platform-cacerts
+              mountPath: {{ index .Values "envoyPlatformCaCertMountPath" | default .Values.instantiationDefaults.envoyPlatformCaCertMountPath | quote }}
+              readOnly: true
+            - name: envoy-app-certs
+              mountPath: {{ index .Values "envoyAppCertMountPath" | default .Values.instantiationDefaults.envoyAppCertMountPath | quote }}
+              readOnly: true
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:
         - name: {{ template "eric-oss-hello-world-python-app.pullSecrets" . }}

@@ -8,10 +8,10 @@ LABEL \
 
 WORKDIR /code
 
-COPY ./eric-oss-hello-world-python-app ./eric-oss-hello-world-python-app
+COPY ./hello-world-pysa ./hello-world-pysa
 COPY requirements.txt .
 
-RUN chmod +x ./eric-oss-hello-world-python-app/main.py
+RUN chmod +x ./hello-world-pysa/main.py
 
 RUN pip install --upgrade pip
 
@@ -22,4 +22,4 @@ RUN echo "$USER_ID:!::0:::::" >>/etc/shadow
 
 USER $USER_ID
 
-CMD ["./eric-oss-hello-world-python-app/main.py"]
+CMD ["./hello-world-pysa/main.py"]
