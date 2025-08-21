@@ -57,7 +57,7 @@ spec:
                 path: logcontrol.json
         - name: envoy-config
           configMap:
-            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-template
+            name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-configmap
             items:
               - key: ENVOY_CONFIG_FILE
                 path: envoy.yaml
