@@ -61,8 +61,6 @@ spec:
             items:
               - key: ENVOY_CONFIG_FILE
                 path: envoy.yaml
-        - name: envoy-config-dir
-          emptyDir: {}
         - name: platform-cacerts
           secret:
             secretName: {{ index .Values "platformCaCertSecretName" | quote }}
