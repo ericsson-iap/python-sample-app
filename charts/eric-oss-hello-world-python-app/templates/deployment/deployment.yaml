@@ -75,13 +75,13 @@ spec:
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
             defaultMode: 420
-        - name: envoy-platform-cacerts
+        - name: proxy-platform-cacerts
           secret:
-            secretName: {{ index .Values "envoyPlatformCaCertSecretName" | quote }}
+            secretName: {{ index .Values "proxyCaCertSecretName" | quote }}
             defaultMode: 420
-        - name: envoy-app-certs
+        - name: proxy-app-certs
           secret:
-            secretName: {{ index .Values "envoyAppSecretName" | quote }}
+            secretName: {{ index .Values "proxyAppSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -220,8 +220,6 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "==== Dumping envoy config ===="
-              cat /etc/envoy/envoy.yaml
               echo "==== Starting Envoy ===="
               exec envoy -c /etc/envoy/envoy.yaml --log-level info --base-id 1
           ports:
@@ -234,49 +232,42 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 8443
-          {{- if (index .Values "probes" "envoy" "livenessProbe" "initialDelaySeconds") }}
-            {{ print "initialDelaySeconds: " (index .Values "probes" "envoy" "livenessProbe" "initialDelaySeconds") }}
+          {{- if (index .Values "probes" "proxy" "livenessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "proxy" "livenessProbe" "initialDelaySeconds") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "livenessProbe" "failureThreshold") }}
-            {{ print "failureThreshold: " (index .Values "probes" "envoy" "livenessProbe" "failureThreshold") }}
+          {{- if (index .Values "probes" "proxy" "livenessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "proxy" "livenessProbe" "failureThreshold") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "livenessProbe" "periodSeconds") }}
-            {{ print "periodSeconds: " (index .Values "probes" "envoy" "livenessProbe" "periodSeconds") }}
+          {{- if (index .Values "probes" "proxy" "livenessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "proxy" "livenessProbe" "periodSeconds") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "livenessProbe" "timeoutSeconds") }}
-            {{ print "timeoutSeconds: " (index .Values "probes" "envoy" "livenessProbe" "timeoutSeconds") }}
+          {{- if (index .Values "probes" "proxy" "livenessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "proxy" "livenessProbe" "timeoutSeconds") }}
           {{- end }}
           readinessProbe:
             tcpSocket:
               port: 8443
-          {{- if (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
-            {{ print "initialDelaySeconds: " (index .Values "probes" "envoy" "readinessProbe" "initialDelaySeconds") }}
+          {{- if (index .Values "probes" "proxy" "readinessProbe" "initialDelaySeconds") }}
+            {{ print "initialDelaySeconds: " (index .Values "probes" "proxy" "readinessProbe" "initialDelaySeconds") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
-            {{ print "failureThreshold: " (index .Values "probes" "envoy" "readinessProbe" "failureThreshold") }}
+          {{- if (index .Values "probes" "proxy" "readinessProbe" "failureThreshold") }}
+            {{ print "failureThreshold: " (index .Values "probes" "proxy" "readinessProbe" "failureThreshold") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
-            {{ print "periodSeconds: " (index .Values "probes" "envoy" "readinessProbe" "periodSeconds") }}
+          {{- if (index .Values "probes" "proxy" "readinessProbe" "periodSeconds") }}
+            {{ print "periodSeconds: " (index .Values "probes" "proxy" "readinessProbe" "periodSeconds") }}
           {{- end }}
-          {{- if (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
-            {{ print "timeoutSeconds: " (index .Values "probes" "envoy" "readinessProbe" "timeoutSeconds") }}
+          {{- if (index .Values "probes" "proxy" "readinessProbe" "timeoutSeconds") }}
+            {{ print "timeoutSeconds: " (index .Values "probes" "proxy" "readinessProbe" "timeoutSeconds") }}
           {{- end }}
-          env:
-            - name: ENVOY_APP_CERT_FULL_PATH
-              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyAppCertMountPath .Values.envoyAppCertMountPath) .Values.envoyAppCertFileName }}
-            - name: ENVOY_APP_KEY_FULL_PATH
-              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyAppCertMountPath .Values.envoyAppCertMountPath) .Values.envoyAppKeyFileName }}
-            - name: ENVOY_CA_CERT_FULL_PATH
-              value: {{ printf "%s/%s" (default .Values.instantiationDefaults.envoyPlatformCaCertMountPath .Values.envoyPlatformCaCertMountPath) .Values.envoyPlatformCaCertFileName }}
           volumeMounts:
             - name: envoy-config
               mountPath: /etc/envoy
               readOnly: true
-            - name: envoy-platform-cacerts
-              mountPath: {{ index .Values "envoyPlatformCaCertMountPath" | default .Values.instantiationDefaults.envoyPlatformCaCertMountPath | quote }}
+            - name: proxy-platform-cacerts
+              mountPath: {{ index .Values "proxyCaCertMountPath" | default .Values.instantiationDefaults.proxyCaCertMountPath | quote }}
               readOnly: true
-            - name: envoy-app-certs
-              mountPath: {{ index .Values "envoyAppCertMountPath" | default .Values.instantiationDefaults.envoyAppCertMountPath | quote }}
+            - name: proxy-app-certs
+              mountPath: {{ index .Values "proxyAppCertMountPath" | default .Values.instantiationDefaults.proxyAppCertMountPath | quote }}
               readOnly: true
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:

@@ -40,12 +40,12 @@ data:
                   common_tls_context:
                     tls_certificates:
                       - certificate_chain:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.envoyAppCertMountPath $.Values.envoyAppCertMountPath) (default $.Values.instantiationDefaults.envoyAppCertFileName $.Values.envoyAppCertFileName) | quote }}
+                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyAppCertMountPath $.Values.proxyAppCertMountPath) (default $.Values.instantiationDefaults.proxyAppCertFileName $.Values.proxyAppCertFileName) | quote }}
                         private_key:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.envoyAppCertMountPath $.Values.envoyAppCertMountPath) (default $.Values.instantiationDefaults.envoyAppKeyFileName $.Values.envoyAppKeyFileName) | quote }}
+                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyAppCertMountPath $.Values.proxyAppCertMountPath) (default $.Values.instantiationDefaults.proxyAppKeyFileName $.Values.proxyAppKeyFileName) | quote }}
                     validation_context:
                       trusted_ca:
-                        filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.envoyPlatformCaCertMountPath $.Values.envoyPlatformCaCertMountPath) (default $.Values.instantiationDefaults.envoyPlatformCaCertFileName $.Values.envoyPlatformCaCertFileName) | quote }}
+                        filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyCaCertMountPath $.Values.proxyCaCertMountPath) (default $.Values.instantiationDefaults.proxyCaCertFileName $.Values.proxyCaCertFileName) | quote }}
 
         # Plain HTTP listener for other endpoints
         - name: listener_http

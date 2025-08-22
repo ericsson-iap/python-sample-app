@@ -3,24 +3,24 @@ kind: Service
 metadata:
   name: {{ include "eric-oss-hello-world-python-app.name" . }}
   labels:
-    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- include "eric-oss-hello-world-python-app.labels" . | nindent 4 }}
     {{- if .Values.labels }}
-      {{ .Values.labels | toYaml | indent 4 }}
+    {{- toYaml .Values.labels | nindent 4 }}
     {{- end }}
   annotations:
-{{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+    {{- include "eric-oss-hello-world-python-app.product-info" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if .Values.global.internalIPFamily }}
   ipFamilies: [{{ .Values.global.internalIPFamily }}]
   {{- end }}
   ports:
-    - port: {{ .Values.service.http-port }}
-      targetPort: 8080
+    - port: {{ index .Values.service "http-port" }}
+      targetPort: {{ .Values.service.httpTargetPort | default 8080 }}
       protocol: TCP
       name: envoy-http
-    - port: {{ .Values.service.https-port }}
-      targetPort: 8443
+    - port: {{ index .Values.service "https-port" }}
+      targetPort: {{ .Values.service.httpsTargetPort | default 8443 }}
       protocol: TCP
       name: envoy-https
   selector:
