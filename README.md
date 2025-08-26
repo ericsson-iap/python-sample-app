@@ -48,7 +48,10 @@ Refer to: [Python on Docker™ Hub](https://hub.docker.com/_/python)
 Run the following command to build the image.
 
 ```bash
-docker build . -t proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> --build-arg APP_VERSION=<VERSION>
+APP_VERSION=<VERSION> \
+APP_IMAGE=proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> \
+ENVOY_IMAGE=proj-eric-oss-drop/eric-oss-hello-world-python-app-envoy:<VERSION> \
+docker compose build --no-cache
 ```
 
 ## Run Docker Image
@@ -57,6 +60,7 @@ A port binding on port 8050 is done to expose the endpoints.
 
 ```bash
 docker run -p 8050:8050 --rm --name python-sample-app proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION>
+docker run -d --name envoy --link python-sample-app -p 8080:8080 -p 8443:8443 proj-eric-oss-drop/eric-oss-hello-world-python-app-envoy:<VERSION>
 ```
 
 Run a curl request to the /sample-app/python/hello endpoint of the app.
@@ -122,7 +126,10 @@ Generate an archive of the Docker image and store it temporarily in the `csar-ou
 directory.
 
 ```bash
-docker save proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> -o csar-output/docker.tar
+docker save \
+  proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> \
+  proj-eric-oss-drop/eric-oss-hello-world-python-app-envoy:<VERSION> \
+  -o ./csar-output/docker.tar
 ```
 
 Run the following command locally to create a CSAR App package using the
