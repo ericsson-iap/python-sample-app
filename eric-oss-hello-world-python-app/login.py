@@ -61,7 +61,8 @@ def tls_login(url, headers):
             url, data=form_data, headers=headers, timeout=5, verify=ca_cert, cert=cert
         )
         if response.status_code != 200:
-            raise LoginError(f"Login failed ({response.status_code})")
+            exception_details = {"status_code": f"{response.status_code} {response.reason}", "headers": response.headers, "body": response.text}
+            raise LoginError(str(exception_details))
     except Exception as exception:
-        raise LoginError(f"Login failed ({exception})") from exception
+        raise LoginError(exception) from exception
     return response.content
