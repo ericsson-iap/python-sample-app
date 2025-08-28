@@ -1,4 +1,5 @@
 """Configure a Flask fixture based off the Application defined in main.py"""
+
 import os
 from urllib.parse import urljoin
 import pytest
@@ -107,7 +108,6 @@ def no_log_certs():
     populate_environment_variables()
 
 
-
 def populate_environment_variables():
     os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
     os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
@@ -118,5 +118,7 @@ def populate_environment_variables():
     os.environ["APP_KEY"] = "APP_KEY"
     os.environ["APP_CERT"] = "APP_CERT"
     os.environ["APP_CERT_FILE_PATH"] = "APP_CERT_FILE_PATH"
-    os.environ["CLIENT_CREDS_FILE_PATH"] = os.path.relpath(os.path.dirname(__file__), "/")
+    os.environ["CLIENT_CREDS_FILE_PATH"] = os.path.relpath(
+        os.path.dirname(__file__), "/"
+    )
     os.environ["CLIENT_ID_FILE_NAME"] = "client_id_example"

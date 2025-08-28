@@ -1,4 +1,5 @@
 """Tests which ensure the application handles Authentication & Authorisation properly"""
+
 from urllib.parse import urljoin
 import time
 from login import login, LoginError

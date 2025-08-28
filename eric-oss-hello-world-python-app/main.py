@@ -20,8 +20,10 @@ from prometheus_client import (
 
 SERVICE_PREFIX = "python_hello_world"
 
+
 class Application(Flask):
     """The Flask application itself. Subclassed for testing."""
+
     def __init__(self):
         super().__init__(__name__)
         disable_created_metrics()

@@ -15,6 +15,7 @@ from config import get_config
 class LoginError(Exception):
     """Raised when EIC login fails"""
 
+
 def login():
     """
     Get bearer token for accessing platform REST APIs:
@@ -42,8 +43,7 @@ def tls_login(url, headers):
     app_cert = os.path.join(
         "/", config.get("app_cert_file_path"), config.get("app_cert")
     )
-    app_key = os.path.join(
-        "/", config.get("app_cert_file_path"), config.get("app_key"))
+    app_key = os.path.join("/", config.get("app_cert_file_path"), config.get("app_key"))
     client_id_path = os.path.join(
         "/", config.get("client_creds_file_path"), config.get("client_id_file_name")
     )
@@ -61,7 +61,11 @@ def tls_login(url, headers):
             url, data=form_data, headers=headers, timeout=5, verify=ca_cert, cert=cert
         )
         if response.status_code != 200:
-            exception_details = {"status_code": f"{response.status_code} {response.reason}", "headers": response.headers, "body": response.text}
+            exception_details = {
+                "status_code": f"{response.status_code} {response.reason}",
+                "headers": response.headers,
+                "body": response.text,
+            }
             raise LoginError(str(exception_details))
     except Exception as exception:
         raise LoginError(exception) from exception
