@@ -123,7 +123,7 @@ mkdir csar-output
 
 Generate an archive of the Docker image and store it temporarily in the `csar-output`
 directory.
-#TODO::REWORK HERE with Proper paths
+
 ```bash
 docker save \
   proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> \
