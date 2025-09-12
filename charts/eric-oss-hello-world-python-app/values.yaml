@@ -97,23 +97,23 @@ probes:
   eric-oss-hello-world-python-app:
     livenessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
     readinessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
   proxy:
     livenessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
     readinessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
 
@@ -129,6 +129,7 @@ instantiationDefaults:
   clientCredsMountPath: "/etc/client-creds/"
   proxyCaCertMountPath: "/etc/certs/ca"
   proxyAppCertMountPath: "/etc/certs/app"
+  serviceName: "eric-oss-hello-world-python-app"
 
 global:
   clientCredentials:

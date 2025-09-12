@@ -15,14 +15,14 @@ at this **email address:** <intelligent.automation.platform@ericsson.com>
 
 This is a simple Hello World Python App with the following three endpoints:
 
-- **/sample-app/python/hello** is a sample endpoint.
+- **/sample-app/python/hello** is a sample secured (uses https) endpoint.
 
-- **/sample-app/python/health** is an endpoint for an external agent to
-  monitor the App liveliness.
+- **/sample-app/python/health** is an unsecured (uses http) endpoint for an
+  external agent to monitor the App liveliness.
 
-- **/sample-app/python/metrics** is an endpoint that presents
-  the number of successful and failed invocations of
-  the '/sample-app/python/hello' endpoint.
+- **/sample-app/python/metrics** is an unsecured endpoint (uses http) that
+  presents the number of successful and failed invocations of the
+  '/sample-app/python/hello' endpoint.
 
 **Note:**  X.509 certificates are used for authentication, and
  mTLS uses them to secure communication between the App and the platform.
@@ -51,7 +51,7 @@ Run the following command to build the image.
 APP_VERSION=<VERSION> \
 APP_IMAGE=proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> \
 ENVOY_IMAGE=proj-eric-oss-drop/eric-oss-hello-world-python-app-envoy:<VERSION> \
-docker compose build --no-cache
+docker compose build
 ```
 
 ## Run Docker Image
@@ -60,7 +60,6 @@ A port binding on port 8050 is done to expose the endpoints.
 
 ```bash
 docker run -p 8050:8050 --rm --name python-sample-app proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION>
-docker run -d --name envoy --link python-sample-app -p 8080:8080 -p 8443:8443 proj-eric-oss-drop/eric-oss-hello-world-python-app-envoy:<VERSION>
 ```
 
 Run a curl request to the /sample-app/python/hello endpoint of the app.
@@ -124,7 +123,7 @@ mkdir csar-output
 
 Generate an archive of the Docker image and store it temporarily in the `csar-output`
 directory.
-
+#TODO::REWORK HERE with Proper paths
 ```bash
 docker save \
   proj-eric-oss-drop/eric-oss-hello-world-python-app:<VERSION> \
@@ -250,7 +249,7 @@ Example of command result:
   "id": "af036040-a732-4af9-b65a-8103da56c35c",
   "fileName": "helloworldAppPackage.csar",
   "packageVersion": "4.0.0-0",
-  "packageSize": "51.7659MiB",
+  "packageSize": "103.4983MiB",
   "vendor": "Ericsson",
   "type": "rApp",
   "onboardStartedAt": "2025-05-31T13:51:56.616Z",
@@ -431,11 +430,11 @@ This section describes how the App can communicate with IAM and produce logs to
 
 - You need the access token generated in **Onboard the App** prerequisite to
  access the App Manager for instantiating the Hello World CSAR App Package.
-- Contact your platform administrator to generate the required App key,
- certificates key, certificates, and the secrets which store them. The
-  details of the secrets, keys, certs and EIC endpoint details will be passed
-   to App Administration through the `userDefinedHelmParameters` when
-    instantiating the App.  Refer to
+- Contact your platform administrator and provide the `Service Name of your App`
+ to generate the required App key, certificates key, certificates, and
+  the secrets which store them. The details of the secrets, keys, certs and
+   EIC endpoint details will be passed to App Administration through the
+    `userDefinedHelmParameters` when instantiating the App.  Refer to
     [App Certificate Provisioning Developer Guide](https://developer.intelligentautomationplatform.ericsson.net/#capabilities/app-cert-provisioning/developer-guide)
      to understand how certificates are loaded into the App during
       instantiation for secure communication. The required parameters are:
@@ -691,8 +690,11 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 }'
 ```
 
-To create an endpoint for the previously generated API, run the
+To create an secured endpoint for the previously generated API, run the
 following command:
+
+**Note:** Below command requires namespace and domain name.Contact the
+Platform Administrator to get details about namespace and domain.
 
 ```bash
 curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CLIENT_KEY> --cacert <PATH_TO_CA_CERTIFICATE> --location --request POST 'https://<eic-host>/hub/apiprovisioning/v1/admin/v3/apis/hello-world-python-route-001/endpoints' \
@@ -700,7 +702,7 @@ curl --cert <PATH_TO_END_ENTITY_CLIENT_CERTIFICATE> --key <PATH_TO_END_ENTITY_CL
 --header 'Content-Type: application/json' \
 --data '{
   "endpointId": "python-hello-001",
-  "serverUrl": "http://eric-oss-hello-world-python-app:8050"
+  "serverUrl": "https://<service>.<namespace>.<domain>:8050"
 }'
 ```
 

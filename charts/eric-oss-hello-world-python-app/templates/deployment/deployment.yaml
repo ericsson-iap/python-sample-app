@@ -76,11 +76,11 @@ spec:
         #TODO point the below two secret to platformCaCertSecretName and appSecretName :: OA of scope
         - name: proxy-platform-cacerts
           secret:
-            secretName: {{ index .Values "proxyCaCertSecretName" | quote }}
+            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
             defaultMode: 420
         - name: proxy-app-certs
           secret:
-            secretName: {{ index .Values "proxyAppSecretName" | quote }}
+            secretName: {{ index .Values "appSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -216,11 +216,8 @@ spec:
               drop:
               - all
             {{- include "eric-oss-hello-world-python-app.seccomp-profile" . | indent 12 }}
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "==== Starting Envoy ===="
-              exec envoy -c /etc/envoy/envoy.yaml --log-level info --base-id 1
+          command: ["envoy"]
+          args: ["-c", "/etc/envoy/envoy.yaml", "--base-id", "1"]
           ports:
             - name: envoy-http
               containerPort: 8080

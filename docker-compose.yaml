@@ -1,27 +1,21 @@
-version: "3.9"
-
 services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.app
+      dockerfile: app.Dockerfile
       args:
         APP_VERSION: ${APP_VERSION}
     image: ${APP_IMAGE}
-    container_name: eric-oss-hello-world-python-app
     ports:
       - "8050:8050"
-    restart: unless-stopped
 
   envoy:
     build:
       context: .
-      dockerfile: Dockerfile.envoy
+      dockerfile: envoy.Dockerfile
     image: ${ENVOY_IMAGE}
-    container_name: envoy
     depends_on:
       - app
     ports:
       - "8080:8080"
       - "8443:8443"
-    restart: unless-stopped
