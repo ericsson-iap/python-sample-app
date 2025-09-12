@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM <PYTHON_IMAGE_NAME>
 
 ARG USER_ID=60577
 ARG USER_NAME="eric-sdk"
@@ -8,10 +8,10 @@ LABEL \
 
 WORKDIR /code
 
-COPY ./hello-world-pysa ./hello-world-pysa
+COPY ./eric-oss-hello-world-python-app ./eric-oss-hello-world-python-app
 COPY requirements.txt .
 
-RUN chmod +x ./hello-world-pysa/main.py
+RUN chmod +x ./eric-oss-hello-world-python-app/main.py
 
 RUN pip install --upgrade pip
 
@@ -22,4 +22,4 @@ RUN echo "$USER_ID:!::0:::::" >>/etc/shadow
 
 USER $USER_ID
 
-CMD ["./hello-world-pysa/main.py"]
+CMD ["./eric-oss-hello-world-python-app/main.py"]
