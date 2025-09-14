@@ -42,6 +42,7 @@ seccompProfile:
   localhostProfile:
 
 service:
+  serviceName: "eric-oss-hello-world-python-app"
   type: ClusterIP
   http-port: 8080
   https-port: 8443
@@ -129,7 +130,6 @@ instantiationDefaults:
   clientCredsMountPath: "/etc/client-creds/"
   proxyCaCertMountPath: "/etc/certs/ca"
   proxyAppCertMountPath: "/etc/certs/app"
-  serviceName: "eric-oss-hello-world-python-app"
 
 global:
   clientCredentials:
