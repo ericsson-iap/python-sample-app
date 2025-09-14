@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.serviceName }}
+  name: {{ include "eric-oss-hello-world-python-app.name" . }}
   labels:
     {{- include "eric-oss-hello-world-python-app.labels" . | nindent 4 }}
     {{- if .Values.labels }}
@@ -24,5 +24,5 @@ spec:
       protocol: TCP
       name: envoy-https
   selector:
-    app.kubernetes.io/name: {{ .Values.service.serviceName }}
+    app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
