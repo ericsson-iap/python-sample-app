@@ -3,6 +3,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "eric-oss-hello-world-python-app.name" . }}-envoy-configmap
+  labels:
+    {{- include "eric-oss-hello-world-python-app.labels" . | indent 4 }}
+    {{- if .Values.labels }}
+      {{ .Values.labels | toYaml | indent 4 }}
+    {{- end }}
+  annotations:
+    {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
 data:
   ENVOY_CONFIG_FILE: |-
     static_resources:
