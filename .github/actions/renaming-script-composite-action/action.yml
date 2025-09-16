@@ -4,6 +4,7 @@ runs:
   steps:
     - name: "Setting permissions for script"
       run: chmod +x set_app_name.sh
+      name: "Setting permissions for script"
       shell: bash
     - name: "Testing renaming script with invalid name (unsupported characters)"
       run: |
