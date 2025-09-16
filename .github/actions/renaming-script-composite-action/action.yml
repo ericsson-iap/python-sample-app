@@ -6,7 +6,7 @@ runs:
       run: chmod +x set_app_name.sh
       shell: bash
     - name: "Testing renaming script with missing APP_NAME"
-      run: ! ./set_app_name.sh
+      run: \! ./set_app_name.sh
       shell: bash
     - name: "Testing renaming script with invalid name (unsupported characters)"
       run: export APP_NAME="#INVALID" && ! ./set_app_name.sh
