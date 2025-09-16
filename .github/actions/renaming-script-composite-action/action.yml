@@ -1,0 +1,18 @@
+name: "Test renaming script"
+runs:
+  using: "composite"
+  steps:
+    - name: "Setting permissions for script"
+      run: chmod +x set_app_name.sh
+    - name: "Testing renaming script with invalid name (unsupported characters)"
+      run: |
+        export APP_NAME="#INVALID"
+        ! ./set_app_name.sh
+    - name: "Testing renaming script with invalid name (exceeding length)"
+      run: |
+        export APP_NAME="this-app-has-a-name-that-exceeds-fifty-three-characters"
+        ! ./set_app_name.sh
+    - name: "Testing renaming script with valid name"
+      run: |
+        export APP_NAME="valid-app-name"
+        ./set_app_name.sh

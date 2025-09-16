@@ -10,23 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  test-renaming-script:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Setting permissions for script"
-        run: chmod +x set_app_name.sh
-      - name: "Testing renaming script with invalid name (unsupported characters)"
-        run: |
-          export APP_NAME="#INVALID"
-          ! ./set_app_name.sh
-      - name: "Testing renaming script with invalid name (exceeding length)"
-        run: |
-          export APP_NAME="this-app-has-a-name-that-exceeds-fifty-three-characters"
-          ! ./set_app_name.sh
-      - name: "Testing renaming script with valid name"
-        run: |
-          export APP_NAME="valid-app-name"
-          ./set_app_name.sh
   build:
     needs: test-renaming-script
     runs-on: ubuntu-latest
@@ -41,7 +24,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint pytest-cov requests_mock pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
+      - name: Test renaming script
+        uses: ./.github/actions/renaming-script-composite-action/action.yml
 
       - name: Pylint
         run: |
