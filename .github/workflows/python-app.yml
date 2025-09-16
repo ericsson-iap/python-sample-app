@@ -24,18 +24,21 @@ jobs:
           pip install pylint pytest-cov requests_mock pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test renaming script
-        run: |
-          echo "Setting permissions for script"
-          chmod +x set_app_name.sh
-          echo "Testing renaming script with invalid name (unsupported characters)"
-          export APP_NAME="#INVALID"
-          ! ./set_app_name.sh
-          echo "Testing renaming script with invalid name (exceeding length)"
-          export APP_NAME="this-app-has-a-name-that-exceeds-fifty-three-characters"
-          ! ./set_app_name.sh
-          echo "Testing renaming script with valid name"
-          export APP_NAME="valid-app-name"
-          ./set_app_name.sh
+        run:
+          - name: "Setting permissions for script"
+            run: chmod +x set_app_name.sh
+          - name: "Testing renaming script with invalid name (unsupported characters)"
+            run: |
+              export APP_NAME="#INVALID"
+              ! ./set_app_name.sh
+          - name: "Testing renaming script with invalid name (exceeding length)"
+            run: |
+              export APP_NAME="this-app-has-a-name-that-exceeds-fifty-three-characters"
+              ! ./set_app_name.sh
+          - name: "Testing renaming script with valid name"
+            run: |
+              export APP_NAME="valid-app-name"
+              ./set_app_name.sh
 
       - name: Pylint
         run: |
