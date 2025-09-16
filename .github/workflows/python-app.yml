@@ -33,6 +33,9 @@ jobs:
           echo "Testing renaming script with invalid name (exceeding length)"
           export APP_NAME="this-app-has-a-name-that-exceeds-fifty-three-characters"
           ! ./set_app_name.sh
+          echo "Testing renaming script with valid name"
+          export APP_NAME="valid-app-name"
+          ./set_app_name.sh
 
       - name: Pylint
         run: |
@@ -45,3 +48,4 @@ jobs:
         with:
           files: .
           config_file: .markdownlint.yaml
+
