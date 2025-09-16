@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
         with:
@@ -24,7 +24,7 @@ jobs:
           pip install pylint pytest-cov requests_mock pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test renaming script
-        uses: ./.github/actions/renaming-script-composite-action/action.yml
+        uses: ./.github/actions/renaming-script-composite-action
 
       - name: Pylint
         run: |
