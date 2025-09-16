@@ -37,4 +37,6 @@ jobs:
         with:
           files: .
           config_file: .markdownlint.yaml
+      - name: Reset app name
+        run: export TARGET_DIR="../python-sample-app" && export APP_NAME="eric-oss-hello-world-python-app" && ./set_app_name.sh
 
