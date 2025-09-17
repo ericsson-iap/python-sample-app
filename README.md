@@ -1,4 +1,4 @@
-# Hello World Python App
+# Python Hello World App
 
 ## Disclaimer
 
@@ -7,7 +7,7 @@
 > **already have full access** to the EIAP Ecosystem.
 > If you do not have this access, **please do not proceed.**
 
-Python Hello World Sample App Documentation [Here](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/sample-app-in-python).
+Python Hello World App Documentation [Here](https://developer.intelligentautomationplatform.ericsson.net/#tutorials/sample-app-in-python).
 
 **Note:**
 If you need help accessing the EIAP Ecosystem, contact support
