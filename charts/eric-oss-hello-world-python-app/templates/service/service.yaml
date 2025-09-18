@@ -8,17 +8,21 @@ metadata:
       {{ .Values.labels | toYaml | indent 4 }}
     {{- end }}
   annotations:
-{{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
+  {{- include "eric-oss-hello-world-python-app.product-info" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if .Values.global.internalIPFamily }}
   ipFamilies: [{{ .Values.global.internalIPFamily }}]
   {{- end }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 8050
+    - port: 80
+      targetPort: 80
       protocol: TCP
       name: http
+    - port: 443
+      targetPort: 443
+      protocol: TCP
+      name: https
   selector:
     app.kubernetes.io/name: {{ include "eric-oss-hello-world-python-app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
