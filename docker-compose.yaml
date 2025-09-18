@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: app.Dockerfile
       args:
-        APP_VERSION: ${APP_VERSION}
+        APP_VERSION: ${VERSION}
     image: ${APP_IMAGE}
     ports:
       - "8050:8050"
