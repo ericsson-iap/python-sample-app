@@ -197,7 +197,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources.helloWorld | nindent 12 }}
-        - name: envoy
+        - name: envoy-proxy
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app-envoy" "values" .Values "files" .Files) }}
           imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
           securityContext:
