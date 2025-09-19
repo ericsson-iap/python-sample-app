@@ -204,9 +204,9 @@ spec:
             appArmorProfile:
               type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
             {{- end }}
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 60577
+            runAsGroup: 60577
+            fsGroup: 60577
             allowPrivilegeEscalation: false
             privileged: false
             readOnlyRootFilesystem: true
