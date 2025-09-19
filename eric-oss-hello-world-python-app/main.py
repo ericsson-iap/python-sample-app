@@ -62,7 +62,7 @@ class Application(Flask):
             indicate that the application is healthy.
             """
             self.update_session()
-            self.logger.log("200 OK: Health check", Severity.DEBUG)
+            self.logger.log("200 OK: Health check", Severity.INFO)
             return "Ok\n"
 
     def update_session(self):
