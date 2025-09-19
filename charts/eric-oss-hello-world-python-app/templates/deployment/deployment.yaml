@@ -86,7 +86,7 @@ spec:
           image: {{ template "eric-oss-hello-world-python-app.imagePath" (dict "imageId" "eric-oss-hello-world-python-app" "values" .Values "files" .Files) }}
           imagePullPolicy: {{ include "eric-oss-hello-world-python-app.registryImagePullPolicy" . | quote }}
           securityContext:
-            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }} 
+            {{- if semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion }}
             appArmorProfile:
               type: {{ include "eric-oss-hello-world-python-app.appArmorProfile.type" . | default "RuntimeDefault" }}
             {{- end }}

@@ -116,17 +116,6 @@ probes:
       initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
-  envoy:
-    livenessProbe:
-      failureThreshold: 3
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      timeoutSeconds: 10
-    readinessProbe:
-      failureThreshold: 3
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      timeoutSeconds: 10
 
 # Pod priority configuration for deployments
 podPriority:
