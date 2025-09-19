@@ -9,7 +9,7 @@ images:
     name: "eric-oss-hello-world-python-app"
     tag: "VERSION"
   eric-oss-hello-world-python-app-envoy:
-    productName: "Envoy for hello world sample app"
+    productName: "Envoy for Python Hello World App"
     productNumber: ""
     registry: "armdocker.rnd.ericsson.se"
     repoPath: "REPO_PATH"
