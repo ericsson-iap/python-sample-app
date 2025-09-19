@@ -53,7 +53,6 @@ data:
                     validation_context:
                       trusted_ca:
                         filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyCaCertMountPath $.Values.proxyCaCertMountPath) (default $.Values.instantiationDefaults.platformCaCertFileName $.Values.platformCaCertFileName) | quote }}
-
         # Plain HTTP listener for other endpoints
         - name: listener_http
           address:

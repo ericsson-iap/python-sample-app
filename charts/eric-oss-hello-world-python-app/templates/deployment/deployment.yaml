@@ -73,7 +73,6 @@ spec:
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
             defaultMode: 420
-        #TODO point the below two secret to platformCaCertSecretName and appSecretName :: OA of scope
         - name: proxy-platform-cacerts
           secret:
             secretName: {{ index .Values "platformCaCertSecretName" | quote }}
