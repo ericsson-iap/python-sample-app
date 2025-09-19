@@ -8,10 +8,10 @@ LABEL \
 
 WORKDIR /code
 
-COPY ./eric-oss-hello-world-python-app ./eric-oss-hello-world-python-app
+COPY ./hello-world-pysa ./hello-world-pysa
 COPY requirements.txt .
 
-RUN chmod +x ./eric-oss-hello-world-python-app/main.py
+RUN chmod +x ./hello-world-pysa/main.py
 
 RUN pip install --upgrade pip
 
