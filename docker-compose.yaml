@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+      args:
+        APP_VERSION: ${VERSION}
+    image: ${APP_IMAGE}
+    ports:
+      - "8050:8050"
+
+  envoy:
+    build:
+      context: .
+      dockerfile: envoy.Dockerfile
+    image: ${ENVOY_IMAGE}
+    depends_on:
+      - app
+    ports:
+      - "8080:8080"
+      - "8443:8443"

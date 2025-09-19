@@ -43,19 +43,8 @@ seccompProfile:
 
 service:
   type: ClusterIP
-  port: 8050
-
-ingress:
-  enabled: false
-  ingressClass: OAM-IngressClass
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  host: ""
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  http-port: 8080
+  https-port: 8443
 
 resources:
   helloWorld:
@@ -108,12 +97,23 @@ probes:
   eric-oss-hello-world-python-app:
     livenessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
     readinessProbe:
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 10
+  proxy:
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 10
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 10
 
@@ -127,6 +127,8 @@ instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
   appCertMountPath: "/etc/tls/log/"
   clientCredsMountPath: "/etc/client-creds/"
+  proxyCaCertMountPath: "/etc/certs/ca"
+  proxyAppCertMountPath: "/etc/certs/app"
 
 global:
   clientCredentials:

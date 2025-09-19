@@ -23,3 +23,5 @@ RUN echo "$USER_ID:!::0:::::" >>/etc/shadow
 USER $USER_ID
 
 CMD ["./eric-oss-hello-world-python-app/main.py"]
+
+
