@@ -35,6 +35,8 @@ def get_config():
     }
     return config
 
+def get_metrics_namespace(config):
+    return config.get("chosen_name").replace("-", "_")
 
 def get_os_env_string(env_name, default_value):
     """get env"""

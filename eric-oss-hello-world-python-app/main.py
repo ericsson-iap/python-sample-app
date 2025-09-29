@@ -9,7 +9,7 @@ import time
 from flask import abort
 from flask import Flask
 from login import login
-from config import get_config
+from config import get_config, get_metrics_namespace
 from mtls_logging import MtlsLogging, Severity
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from prometheus_client import (
@@ -19,7 +19,6 @@ from prometheus_client import (
     Counter,
 )
 
-METRICS_NAMESPACE = get_config().get("chosen_name").replace("-", "_")
 
 class Application(Flask):
     """The Flask application itself. Subclassed for testing."""
@@ -79,7 +78,7 @@ class Application(Flask):
     def create_metrics(self):
         self.registry = CollectorRegistry()
         self.requests_total = Counter(
-            namespace=METRICS_NAMESPACE,
+            namespace=get_metrics_namespace(get_config()),
             name="requests_total",
             documentation="Total number of API requests",
         )
