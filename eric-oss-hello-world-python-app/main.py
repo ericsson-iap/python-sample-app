@@ -27,6 +27,7 @@ class Application(Flask):
         disable_created_metrics()
         self.counters = {}
         self.session = {"token": None, "expiry_time": 0}
+        self.app_config = get_config()
         self.create_metrics()
         self.wsgi_app = DispatcherMiddleware(
             self.wsgi_app,
@@ -78,7 +79,7 @@ class Application(Flask):
     def create_metrics(self):
         self.registry = CollectorRegistry()
         self.requests_total = Counter(
-            namespace=get_metrics_namespace(get_config()),
+            namespace=get_metrics_namespace(self.app_config),
             name="requests_total",
             documentation="Total number of API requests",
         )
