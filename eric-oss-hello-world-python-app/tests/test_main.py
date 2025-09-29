@@ -1,5 +1,5 @@
 """Tests which cover the routes of the application"""
-from unittest import expectedFailure
+from config import get_metrics_namespace
 
 
 def test_get_root_returns_bad_response(client):
@@ -29,7 +29,7 @@ def test_get_metrics_returns_metrics(client, config):
     """
     response = client.get("/sample-app/python/metrics")
     assert response.status_code == 200
-    expected_response_text = config.get("chosen_name").replace("-", "_") + "_requests_total 0.0"
+    expected_response_text = get_metrics_namespace(config) + "_requests_total 0.0"
     assert expected_response_text in response.text
 
 
@@ -53,7 +53,7 @@ def test_metrics_successfully_increments(client, config):
     client.get("/sample-app/python/hello")
     response = client.get("/sample-app/python/metrics")
     assert response.status_code == 200
-    expected_response_text = config.get("chosen_name").replace("-", "_") + "_requests_total 1.0"
+    expected_response_text = get_metrics_namespace(config) + "_requests_total 1.0"
     assert expected_response_text in response.text
 
 
