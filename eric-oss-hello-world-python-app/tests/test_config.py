@@ -2,6 +2,6 @@
 
 from config import get_metrics_namespace
 
-def test_get_metrics_namespace(config):
-    assert get_metrics_namespace(config) == "eric_oss_hello_world_python_app"
-
+def test_get_metrics_namespace():
+    config = {"chosen_name": "chosen-name-for-test"}
+    assert get_metrics_namespace(config) == "chosen_name_for_test"
