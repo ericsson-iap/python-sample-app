@@ -74,7 +74,7 @@ class MtlsLogging:
             "timestamp": time,
             "version": "0.0.1",
             "message": message,
-            "service_id": "rapp-eric-oss-hello-world-python-app",
+            "service_id": "rapp-" + self.config.get("chosen_name"),
             "severity": severity.name.lower(),
         }
 

@@ -28,7 +28,7 @@ def test_get_metrics_returns_metrics(client):
     """
     response = client.get("/sample-app/python/metrics")
     assert response.status_code == 200
-    assert "python_hello_world_requests_total 0.0" in response.text
+    assert "eric_oss_hello_world_python_app_requests_total 0.0" in response.text
 
 
 def test_metrics_does_not_expose_created(client):
@@ -51,7 +51,7 @@ def test_metrics_successfully_increments(client):
     client.get("/sample-app/python/hello")
     response = client.get("/sample-app/python/metrics")
     assert response.status_code == 200
-    assert "python_hello_world_requests_total 1.0" in response.text
+    assert "eric_oss_hello_world_python_app_requests_total 1.0" in response.text
 
 
 def test_get_health_returns_health_check(client):
