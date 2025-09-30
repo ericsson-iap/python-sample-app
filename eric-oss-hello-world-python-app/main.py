@@ -25,7 +25,6 @@ class Application(Flask):
     def __init__(self):
         super().__init__(__name__)
         disable_created_metrics()
-        self.counters = {}
         self.session = {"token": None, "expiry_time": 0}
         self.app_config = get_config()
         self.create_metrics()
