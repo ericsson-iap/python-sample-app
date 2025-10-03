@@ -9,6 +9,7 @@ import time
 from flask import abort
 from flask import Flask
 from login import login
+from config import get_config, get_metrics_namespace
 from mtls_logging import MtlsLogging, Severity
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from prometheus_client import (
@@ -18,15 +19,14 @@ from prometheus_client import (
     Counter,
 )
 
-SERVICE_PREFIX = "python_hello_world"
 
 class Application(Flask):
     """The Flask application itself. Subclassed for testing."""
     def __init__(self):
         super().__init__(__name__)
         disable_created_metrics()
-        self.counters = {"total_requests": 0}
         self.session = {"token": None, "expiry_time": 0}
+        self.app_config = get_config()
         self.create_metrics()
         self.wsgi_app = DispatcherMiddleware(
             self.wsgi_app,
@@ -78,7 +78,7 @@ class Application(Flask):
     def create_metrics(self):
         self.registry = CollectorRegistry()
         self.requests_total = Counter(
-            namespace=SERVICE_PREFIX,
+            namespace=get_metrics_namespace(self.app_config),
             name="requests_total",
             documentation="Total number of API requests",
         )

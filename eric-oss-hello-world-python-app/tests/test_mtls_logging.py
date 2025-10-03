@@ -96,7 +96,8 @@ def test_init_sets_log_level_from_log_ctrl_file():
         "app_cert": "appcert.pem",
         "app_key": "appkey.pem",
         "app_cert_file_path": "certs",
-        "log_endpoint": "log.endpoint"
+        "log_endpoint": "log.endpoint",
+        "chosen_unique_name": "eric-oss-hello-world-python-app"
     }
 
     # Patch config and environment variable
