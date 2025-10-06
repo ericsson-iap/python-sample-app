@@ -31,9 +31,13 @@ def get_config():
         "app_cert_file_path": app_cert_file_path,
         "client_creds_file_path": client_creds_file_path,
         "client_id_file_name": client_id_file_name,
+        "chosen_unique_name": "eric-oss-hello-world-python-app",
     }
     return config
 
+def get_metrics_namespace(config):
+    """Converts the chosen_unique_name to a valid Prometheus namespace"""
+    return config.get("chosen_unique_name").replace("-", "_")
 
 def get_os_env_string(env_name, default_value):
     """get env"""
