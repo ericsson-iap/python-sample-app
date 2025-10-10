@@ -39,7 +39,7 @@ spec:
         {{- if not (semverCompare ">=1.30.0" .Capabilities.KubeVersion.GitVersion) }}
         container.apparmor.security.beta.kubernetes.io/eric-oss-hello-world-python-app: {{ include "eric-oss-hello-world-python-app.appArmorProfileAnnotation" . | default "runtime/default" }}
         {{- end }}
-        prometheus.io/port: "{{ .Values.service.port }}"
+        prometheus.io/port: '{{ index .Values.service "http-port" }}'
         prometheus.io/scrape: "{{ .Values.prometheus.scrape }}"
         prometheus.io/path: "{{ .Values.prometheus.path }}"
 {{- include "eric-oss-hello-world-python-app.product-info" . | indent 8 }}

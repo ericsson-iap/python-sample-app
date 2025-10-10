@@ -25,5 +25,8 @@ spec:
         matchLabels:
           app: eric-pm-server
     ports:
-    - port: {{ .Values.service.port }}
+    - protocol: TCP
+      port: {{ index .Values.service "http-port" }}
+    - protocol: TCP
+      port: {{ index .Values.service "https-port" }}
 
