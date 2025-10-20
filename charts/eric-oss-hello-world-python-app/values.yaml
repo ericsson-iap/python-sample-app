@@ -135,6 +135,7 @@ global:
     secret:
       clientIdKey: "clientId"
       name: "<instance id>-cc"
+
 #TODO: Verify if this is needed and update if needed
 eic:
-  namespace: "sharpless015-eric-eic-11"
+  namespace: "namespace"
