@@ -136,6 +136,5 @@ global:
       clientIdKey: "clientId"
       name: "<instance id>-cc"
 
-#TODO: Update if required
 eic:
-  namespace: "namespace"
+  namespace:
