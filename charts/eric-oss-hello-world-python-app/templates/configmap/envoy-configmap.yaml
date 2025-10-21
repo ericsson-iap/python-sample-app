@@ -35,6 +35,10 @@ data:
                                 path: "/sample-app/python/hello"
                               route:
                                 cluster: eric-oss-hello-world-python-app-cluster
+                            - match:
+                                path: "/sample-app/python/metrics"
+                              route:
+                                cluster: eric-oss-hello-world-python-app-cluster
                     http_filters:
                       - name: envoy.filters.http.router
                         typed_config:
@@ -72,10 +76,6 @@ data:
                           routes:
                             - match:
                                 path: "/sample-app/python/health"
-                              route:
-                                cluster: eric-oss-hello-world-python-app-cluster
-                            - match:
-                                path: "/sample-app/python/metrics"
                               route:
                                 cluster: eric-oss-hello-world-python-app-cluster
                     http_filters:

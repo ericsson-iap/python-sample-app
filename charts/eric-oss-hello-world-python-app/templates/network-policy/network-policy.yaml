@@ -24,6 +24,9 @@ spec:
     - podSelector:
         matchLabels:
           app: eric-pm-server
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name:  {{ .Values.eic.namespace }}
     ports:
     - protocol: TCP
       port: {{ index .Values.service "http-port" }}
