@@ -130,8 +130,13 @@ instantiationDefaults:
   proxyCaCertMountPath: "/etc/certs/ca"
   proxyAppCertMountPath: "/etc/certs/app"
 
+# Below variables values are populated by App Manager automatically
+
 global:
   clientCredentials:
     secret:
-      clientIdKey: "clientId"
-      name: "<instance id>-cc"
+      clientIdKey:
+      name:
+
+eic:
+  namespace:
