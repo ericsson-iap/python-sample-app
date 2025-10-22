@@ -133,8 +133,8 @@ instantiationDefaults:
 global:
   clientCredentials:
     secret:
-      clientIdKey: "clientId"
-      name: "<instance id>-cc"
+      clientIdKey:
+      name:
 
 eic:
   namespace:
