@@ -17,9 +17,6 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          app: eric-eo-api-gateway
-    - podSelector:
-        matchLabels:
           app: eric-sef-exposure-api-gateway
     - podSelector:
         matchLabels:
