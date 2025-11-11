@@ -15,7 +15,7 @@ def test_login_receives_token_x509(mock_login_api, config):
 def test_login_bad_credentials(requests_mock, config):
     """Ensure we get an error if credentials are bad"""
     login_url = urljoin(
-        config.get("iam_base_url"), "/auth/realms/master/protocol/openid-connect/token"
+        config.get("eic_host_url"), "/auth/realms/master/protocol/openid-connect/token"
     )
     requests_mock.post(
         login_url, status_code=400, json={"error": "invalid_request"}
