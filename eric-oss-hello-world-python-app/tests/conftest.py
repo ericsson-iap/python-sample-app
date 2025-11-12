@@ -48,7 +48,7 @@ def match_request_data(request):
 @pytest.fixture(name="mock_login_api")
 def fixture_mock_login_api(config):
     login_endpoint = urljoin(
-        config.get("iam_base_url"), "/auth/realms/master/protocol/openid-connect/token"
+        config.get("eic_host_url"), "/auth/realms/master/protocol/openid-connect/token"
     )
     with requests_mock.Mocker() as request_mocker:
         request_mocker.post(
@@ -111,7 +111,7 @@ def no_log_certs():
 def populate_environment_variables():
     os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
     os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
-    os.environ["IAM_BASE_URL"] = "https://www.iam-base-url.com"
+    os.environ["EIC_HOST_URL"] = "https://www.eic-host-url.com"
     os.environ["CA_CERT_FILE_NAME"] = "CA_CERT_FILE_NAME"
     os.environ["CA_CERT_FILE_PATH"] = "CA_CERT_MOUNT_PATH"
     os.environ["LOG_ENDPOINT"] = "LOG_ENDPOINT"

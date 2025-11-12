@@ -115,8 +115,8 @@ spec:
               value: {{ index .Values "clientId" | quote }}
             - name: IAM_CLIENT_SECRET
               value: {{ index .Values "clientSecret" | quote }}
-            - name: IAM_BASE_URL
-              value: {{ index .Values "iamBaseUrl" | quote }}
+            - name: EIC_HOST_URL
+              value: {{ index .Values "eicHostUrl" | quote }}
             - name: LOG_ENDPOINT
               value: {{ index .Values "logEndpoint" | quote }}
             - name: CA_CERT_FILE_PATH

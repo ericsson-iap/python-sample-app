@@ -22,7 +22,7 @@ def login():
     """
     config = get_config()
     login_path = "/auth/realms/master/protocol/openid-connect/token"
-    login_url = urljoin(config.get("iam_base_url"), login_path)
+    login_url = urljoin(config.get("eic_host_url"), login_path)
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     resp = tls_login(login_url, headers)
     resp = json.loads(resp.decode("utf-8"))
