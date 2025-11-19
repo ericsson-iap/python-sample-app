@@ -31,18 +31,7 @@ def match_request_data(request):
             ]
         ]
     )
-    uses_legacy = all(
-        [
-            parameter in request.text
-            for parameter in [
-                "grant_type=client_credentials",
-                "tenant_id=master",
-                "client_id=IAM_CLIENT_ID",
-                "client_secret=IAM_CLIENT_SECRET",
-            ]
-        ]
-    )
-    return uses_x509 or uses_legacy
+    return uses_x509
 
 
 @pytest.fixture(name="mock_login_api")
