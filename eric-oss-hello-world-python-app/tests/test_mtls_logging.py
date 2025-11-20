@@ -112,9 +112,7 @@ def test_namespace_is_set_in_mtls_log():
     """Ensure the namespace is set in the mTLS log"""
     message = "Message that should be included in a request payload that includes the namespace"
 
-    # Patch config and environment variable
     with mock.patch("mtls_logging.get_config", return_value=MOCK_CONFIG):
-
         mock_post = with_mocked_post(send_log, message,Severity.INFO, Severity.INFO)
         mock_post.assert_called()
 
