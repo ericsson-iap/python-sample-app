@@ -98,8 +98,6 @@ def no_log_certs():
 
 
 def populate_environment_variables():
-    os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
-    os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
     os.environ["EIC_HOST_URL"] = "https://www.eic-host-url.com"
     os.environ["CA_CERT_FILE_NAME"] = "CA_CERT_FILE_NAME"
     os.environ["CA_CERT_FILE_PATH"] = "CA_CERT_MOUNT_PATH"
