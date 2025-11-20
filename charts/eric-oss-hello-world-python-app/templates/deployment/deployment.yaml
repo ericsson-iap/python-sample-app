@@ -111,10 +111,6 @@ spec:
               mountPath: {{ index .Values "clientCredsMountPath" | default .Values.instantiationDefaults.clientCredsMountPath | quote }}
               readOnly: true
           env:
-            - name: IAM_CLIENT_ID
-              value: {{ index .Values "clientId" | quote }}
-            - name: IAM_CLIENT_SECRET
-              value: {{ index .Values "clientSecret" | quote }}
             - name: EIC_HOST_URL
               value: {{ index .Values "eicHostUrl" | quote }}
             - name: LOG_ENDPOINT

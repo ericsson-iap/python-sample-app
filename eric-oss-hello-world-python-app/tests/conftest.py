@@ -31,18 +31,7 @@ def match_request_data(request):
             ]
         ]
     )
-    uses_legacy = all(
-        [
-            parameter in request.text
-            for parameter in [
-                "grant_type=client_credentials",
-                "tenant_id=master",
-                "client_id=IAM_CLIENT_ID",
-                "client_secret=IAM_CLIENT_SECRET",
-            ]
-        ]
-    )
-    return uses_x509 or uses_legacy
+    return uses_x509
 
 
 @pytest.fixture(name="mock_login_api")
@@ -109,8 +98,6 @@ def no_log_certs():
 
 
 def populate_environment_variables():
-    os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
-    os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
     os.environ["EIC_HOST_URL"] = "https://www.eic-host-url.com"
     os.environ["CA_CERT_FILE_NAME"] = "CA_CERT_FILE_NAME"
     os.environ["CA_CERT_FILE_PATH"] = "CA_CERT_MOUNT_PATH"
