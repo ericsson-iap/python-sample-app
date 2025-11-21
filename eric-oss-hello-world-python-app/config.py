@@ -5,9 +5,7 @@ import os
 
 def get_config():
     """get env and return config with all env vals required"""
-    iam_client_id = get_os_env_string("IAM_CLIENT_ID", "")
-    iam_client_secret = get_os_env_string("IAM_CLIENT_SECRET", "")
-    iam_base_url = get_os_env_string("IAM_BASE_URL", "")
+    eic_host_url = get_os_env_string("EIC_HOST_URL", "")
     ca_cert_file_name = get_os_env_string("CA_CERT_FILE_NAME", "")
     ca_cert_file_path = get_os_env_string("CA_CERT_FILE_PATH", "")
     log_ctrl_file = get_os_env_string("LOG_CTRL_FILE", "")
@@ -19,9 +17,7 @@ def get_config():
     client_id_file_name = get_os_env_string("CLIENT_ID_FILE_NAME", "")
 
     config = {
-        "iam_client_id": iam_client_id,
-        "iam_client_secret": iam_client_secret,
-        "iam_base_url": iam_base_url,
+        "eic_host_url": eic_host_url,
         "ca_cert_file_name": ca_cert_file_name,
         "ca_cert_file_path": ca_cert_file_path,
         "log_ctrl_file": log_ctrl_file,

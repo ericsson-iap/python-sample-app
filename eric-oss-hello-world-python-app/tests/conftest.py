@@ -31,24 +31,13 @@ def match_request_data(request):
             ]
         ]
     )
-    uses_legacy = all(
-        [
-            parameter in request.text
-            for parameter in [
-                "grant_type=client_credentials",
-                "tenant_id=master",
-                "client_id=IAM_CLIENT_ID",
-                "client_secret=IAM_CLIENT_SECRET",
-            ]
-        ]
-    )
-    return uses_x509 or uses_legacy
+    return uses_x509
 
 
 @pytest.fixture(name="mock_login_api")
 def fixture_mock_login_api(config):
     login_endpoint = urljoin(
-        config.get("iam_base_url"), "/auth/realms/master/protocol/openid-connect/token"
+        config.get("eic_host_url"), "/auth/realms/master/protocol/openid-connect/token"
     )
     with requests_mock.Mocker() as request_mocker:
         request_mocker.post(
@@ -109,9 +98,7 @@ def no_log_certs():
 
 
 def populate_environment_variables():
-    os.environ["IAM_CLIENT_ID"] = "IAM_CLIENT_ID"
-    os.environ["IAM_CLIENT_SECRET"] = "IAM_CLIENT_SECRET"
-    os.environ["IAM_BASE_URL"] = "https://www.iam-base-url.com"
+    os.environ["EIC_HOST_URL"] = "https://www.eic-host-url.com"
     os.environ["CA_CERT_FILE_NAME"] = "CA_CERT_FILE_NAME"
     os.environ["CA_CERT_FILE_PATH"] = "CA_CERT_MOUNT_PATH"
     os.environ["LOG_ENDPOINT"] = "LOG_ENDPOINT"
