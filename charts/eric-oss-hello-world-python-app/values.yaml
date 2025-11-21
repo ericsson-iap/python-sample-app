@@ -137,6 +137,5 @@ global:
     secret:
       clientIdKey:
       name:
-
-eic:
-  namespace:
+  platform:
+    namespace:
