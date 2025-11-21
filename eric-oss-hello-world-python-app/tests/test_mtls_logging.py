@@ -6,6 +6,7 @@ import requests
 from mtls_logging import MtlsLogging, Severity
 
 
+
 def test_log_stdout_and_mtls(caplog):
     """Ensure any log is sent both to STDOUT and through HTTPS"""
     message = "Message which should appear in both STDOUT and sent as a POST request"
@@ -80,7 +81,7 @@ def test_log_handles_missing_schema(caplog):
     assert "Request failed for mTLS logging: Missing schema" in caplog.text
 
 
-def test_init_sets_log_level_from_log_ctrl_file():
+def test_init_sets_log_level_from_log_ctrl_file(with_log_ctrl_file):
     # Sample log control file contents with container mapping
     log_ctrl_data = [
         {"container": "test-container", "severity": "critical"},
@@ -88,22 +89,23 @@ def test_init_sets_log_level_from_log_ctrl_file():
     ]
     log_ctrl_json = json.dumps(log_ctrl_data)
 
-    # Mocked config dict including the log_ctrl_file path
-    mock_config = {
-        "log_ctrl_file": "/dummy/path/logcontrol.json",
-        "ca_cert_file_name": "ca.pem",
-        "ca_cert_file_path": "certs",
-        "app_cert": "appcert.pem",
-        "app_key": "appkey.pem",
-        "app_cert_file_path": "certs",
-        "log_endpoint": "log.endpoint",
-        "chosen_unique_name": "eric-oss-hello-world-python-app"
-    }
-
     # Patch config and environment variable
-    with mock.patch("mtls_logging.get_config", return_value=mock_config), \
+    with mock.patch("mtls_logging.get_config", return_value=with_log_ctrl_file), \
          mock.patch("mtls_logging.get_os_env_string", return_value="test-container"), \
          mock.patch("builtins.open", mock.mock_open(read_data=log_ctrl_json)):
 
         logger = MtlsLogging(level=None)
         assert logger.logger.level == Severity.CRITICAL
+
+
+def test_namespace_is_set_in_mtls_log(config):
+    """Ensure the namespace is set in the mTLS log"""
+    message = "Message that should be included in a request payload that includes the namespace"
+
+    with mock.patch("mtls_logging.get_config", return_value=config):
+        mock_post = with_mocked_post(send_log, message, Severity.INFO, Severity.INFO)
+        mock_post.assert_called()
+
+        request_body_object = mock_post.call_args.kwargs.get('json')
+
+        assert request_body_object['metadata']['namespace'] == 'test-namespace'

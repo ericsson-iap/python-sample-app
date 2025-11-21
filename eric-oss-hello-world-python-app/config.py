@@ -15,6 +15,7 @@ def get_config():
     app_cert_file_path = get_os_env_string("APP_CERT_FILE_PATH", "")
     client_creds_file_path = get_os_env_string("CLIENT_CREDS_FILE_PATH", "")
     client_id_file_name = get_os_env_string("CLIENT_ID_FILE_NAME", "")
+    app_namespace = get_os_env_string("APP_NAMESPACE", "")
 
     config = {
         "eic_host_url": eic_host_url,
@@ -28,6 +29,7 @@ def get_config():
         "client_creds_file_path": client_creds_file_path,
         "client_id_file_name": client_id_file_name,
         "chosen_unique_name": "eric-oss-hello-world-python-app",
+        "app_namespace": app_namespace,
     }
     return config
 
