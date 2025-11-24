@@ -96,6 +96,12 @@ def no_log_certs():
     populate_environment_variables()
 
 
+@pytest.fixture(name="with_log_ctrl_file")
+def with_log_ctrl_file():
+    log_ctrl_config = get_config()
+    log_ctrl_config["log_ctrl_file"] = "/dummy/path/logcontrol.json"
+    return log_ctrl_config
+
 
 def populate_environment_variables():
     os.environ["EIC_HOST_URL"] = "https://www.eic-host-url.com"
@@ -107,3 +113,4 @@ def populate_environment_variables():
     os.environ["APP_CERT_FILE_PATH"] = "APP_CERT_FILE_PATH"
     os.environ["CLIENT_CREDS_FILE_PATH"] = os.path.relpath(os.path.dirname(__file__), "/")
     os.environ["CLIENT_ID_FILE_NAME"] = "client_id_example"
+    os.environ["APP_NAMESPACE"] = "test-namespace"
