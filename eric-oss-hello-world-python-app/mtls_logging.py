@@ -76,6 +76,7 @@ class MtlsLogging:
             "message": message,
             "service_id": "rapp-" + self.config.get("chosen_unique_name"),
             "severity": severity.name.lower(),
+            "metadata": {"namespace": self.config.get("app_namespace")},
         }
 
         # print to console

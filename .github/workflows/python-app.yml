@@ -2,9 +2,9 @@ name: Pylint and Pytest
 
 on:
   push:
-    branches: [ "main", "mtls-staging" ]
+    branches: [ "main", "*-staging" ]
   pull_request:
-    branches: [ "main", "mtls-staging" ]
+    branches: [ "main", "*-staging" ]
 
 permissions:
   contents: read
