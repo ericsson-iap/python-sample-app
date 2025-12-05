@@ -43,7 +43,6 @@ seccompProfile:
 
 service:
   type: ClusterIP
-  http-port: 8080
   https-port: 8443
 
 resources:
