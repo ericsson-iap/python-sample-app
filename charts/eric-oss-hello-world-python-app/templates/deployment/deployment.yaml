@@ -156,7 +156,7 @@ spec:
               value: "/etc/adp/logcontrol.json"
             {{- include "eric-oss-hello-world-python-app.jaegerEnv" . | indent 12 }}
           ports:
-            - name: http-metrics
+            - name: http
               containerPort: 8050
               protocol: TCP
           livenessProbe:
@@ -215,9 +215,6 @@ spec:
           command: ["envoy"]
           args: ["-c", "/etc/envoy/envoy.yaml", "--base-id", "1"]
           ports:
-            - name: envoy-http
-              containerPort: 8080
-              protocol: TCP
             - name: envoy-https
               containerPort: 8443
               protocol: TCP

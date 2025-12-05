@@ -15,10 +15,6 @@ spec:
   ipFamilies: [{{ .Values.global.internalIPFamily }}]
   {{- end }}
   ports:
-    - port: {{ index .Values.service "http-port" }}
-      targetPort: {{ .Values.service.httpTargetPort | default 8080 }}
-      protocol: TCP
-      name: envoy-http
     - port: {{ index .Values.service "https-port" }}
       targetPort: {{ .Values.service.httpsTargetPort | default 8443 }}
       protocol: TCP
