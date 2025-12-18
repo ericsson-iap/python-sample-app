@@ -5,10 +5,10 @@ variables.
  """
 
 import os
-from urllib.parse import urljoin
 import json
 import time
 import requests
+from urllib.parse import urljoin
 from config import get_config
 
 
@@ -21,34 +21,25 @@ def login():
     https://developer.intelligentautomationplatform.ericsson.net/#tutorials/app-authentication
     """
     config = get_config()
+
     login_path = "/auth/realms/master/protocol/openid-connect/token"
-    login_url = urljoin(config.get("eic_host_url"), login_path)
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    resp = tls_login(login_url, headers)
-    resp = json.loads(resp.decode("utf-8"))
-    token, time_until_expiry = resp["access_token"], resp["expires_in"]
-    time_until_expiry -= (
-        10  # add a buffer to ensure our session doesn't expire mid-request
-    )
-    return token, time.time() + time_until_expiry
 
+    # Envoy outbound listener
+    envoy_base_url = "http://127.0.0.1:9000"
+    login_url = urljoin(envoy_base_url, login_path)
 
-def tls_login(url, headers):
-    """This function sends an HTTP POST request with TLS for the login operation"""
-    config = get_config()
-    ca_cert = os.path.join(
-        "/", config.get("ca_cert_file_path"), config.get("ca_cert_file_name")
-    )
-    app_cert = os.path.join(
-        "/", config.get("app_cert_file_path"), config.get("app_cert")
-    )
-    app_key = os.path.join(
-        "/", config.get("app_cert_file_path"), config.get("app_key"))
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    form_data = {
+        "grant_type": "client_credentials",
+        "tenant_id": "master",
+    }
+
     client_id_path = os.path.join(
         "/", config.get("client_creds_file_path"), config.get("client_id_file_name")
     )
-    form_data = {"grant_type": "client_credentials", "tenant_id": "master"}
-    cert = (app_cert, app_key)
 
     try:
         with open(client_id_path, "r", encoding="utf-8") as f:
@@ -58,10 +49,26 @@ def tls_login(url, headers):
 
     try:
         response = requests.post(
-            url, data=form_data, headers=headers, timeout=5, verify=ca_cert, cert=cert
+            login_url,
+            data=form_data,
+            headers=headers,
+            timeout=5,
         )
+
         if response.status_code != 200:
-            raise LoginError(f"Login failed ({response.status_code})")
+            raise LoginError(
+                f"Login failed ({response.status_code}): {response.text}"
+            )
+
     except Exception as exception:
         raise LoginError(f"Login failed ({exception})") from exception
-    return response.content
+
+    resp = response.json()
+
+    token = resp["access_token"]
+    time_until_expiry = resp["expires_in"]
+
+    # buffer to avoid expiry mid-request
+    time_until_expiry -= 10
+
+    return token, time.time() + time_until_expiry
