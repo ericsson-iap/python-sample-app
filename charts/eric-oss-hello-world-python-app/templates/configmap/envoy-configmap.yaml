@@ -13,6 +13,17 @@ metadata:
 data:
   ENVOY_CONFIG_FILE: |-
     static_resources:
+      secrets:
+        - name: server_cert
+          tls_certificate:
+            certificate_chain:
+              filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerCertFileName $.Values.appServerCertFileName) | quote }}
+            private_key:
+              filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerKeyFileName $.Values.appServerKeyFileName) | quote }}
+        - name: validation_context
+          validation_context:
+            trusted_ca:
+              filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.platformCaCertMountPath $.Values.platformCaCertMountPath) (default $.Values.instantiationDefaults.platformCaCertFileName $.Values.platformCaCertFileName) | quote }}
       listeners:
         # TLS listener for mTLS endpoint
         - name: listener_https
@@ -49,14 +60,10 @@ data:
                   "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
                   require_client_certificate: true
                   common_tls_context:
-                    tls_certificates:
-                      - certificate_chain:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerCertFileName $.Values.appServerCertFileName) | quote }}
-                        private_key:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerKeyFileName $.Values.appServerKeyFileName) | quote }}
-                    validation_context:
-                      trusted_ca:
-                        filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.platformCaCertMountPath $.Values.platformCaCertMountPath) (default $.Values.instantiationDefaults.platformCaCertFileName $.Values.platformCaCertFileName) | quote }}
+                    tls_certificate_sds_secret_configs:
+                    - name: server_cert
+                    validation_context_sds_secret_config:
+                      name: validation_context
       clusters:
         - name: eric-oss-hello-world-python-app-cluster
           type: STATIC
