@@ -123,10 +123,16 @@ podPriority:
 
 # Defaults if these values are not provided at instantiation
 instantiationDefaults:
-  platformCaCertMountPath: "/etc/tls-ca/platform/"
+  appSecretName: "rapp-mtls-secret"
   appCertMountPath: "/etc/tls/"
-  clientCredsMountPath: "/etc/client-creds/"
+  appKeyFileName: "tls.key"
+  appCertFileName: "tls.crt"
+  appServerSecretName: "rapp-mtls-srv-secret"
   appServerCertMountPath: "/etc/tls-srv/"
+  appServerKeyFileName: "tls-srv.key"
+  appServerCertFileName: "tls-srv.crt"
+  platformCaCertMountPath: "/etc/tls-ca/platform/"
+  clientCredsMountPath: "/etc/client-creds/"
 
 # Below variables values are populated by App Manager automatically
 
