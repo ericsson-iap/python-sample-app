@@ -51,12 +51,12 @@ data:
                   common_tls_context:
                     tls_certificates:
                       - certificate_chain:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyAppCertMountPath $.Values.proxyAppCertMountPath) (default $.Values.instantiationDefaults.appCertFileName $.Values.appCertFileName) | quote }}
+                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerCertFileName $.Values.appServerCertFileName) | quote }}
                         private_key:
-                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyAppCertMountPath $.Values.proxyAppCertMountPath) (default $.Values.instantiationDefaults.appKeyFileName $.Values.appKeyFileName) | quote }}
+                          filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.appServerCertMountPath $.Values.appServerCertMountPath) (default $.Values.instantiationDefaults.appServerKeyFileName $.Values.appServerKeyFileName) | quote }}
                     validation_context:
                       trusted_ca:
-                        filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.proxyCaCertMountPath $.Values.proxyCaCertMountPath) (default $.Values.instantiationDefaults.platformCaCertFileName $.Values.platformCaCertFileName) | quote }}
+                        filename: {{ printf "%s/%s" (default $.Values.instantiationDefaults.platformCaCertMountPath $.Values.platformCaCertMountPath) (default $.Values.instantiationDefaults.platformCaCertFileName $.Values.platformCaCertFileName) | quote }}
       clusters:
         - name: eric-oss-hello-world-python-app-cluster
           type: STATIC

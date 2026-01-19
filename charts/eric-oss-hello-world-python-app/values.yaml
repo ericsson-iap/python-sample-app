@@ -124,10 +124,9 @@ podPriority:
 # Defaults if these values are not provided at instantiation
 instantiationDefaults:
   platformCaCertMountPath: "/etc/tls-ca/platform/"
-  appCertMountPath: "/etc/tls/log/"
+  appCertMountPath: "/etc/tls/"
   clientCredsMountPath: "/etc/client-creds/"
-  proxyCaCertMountPath: "/etc/certs/ca"
-  proxyAppCertMountPath: "/etc/certs/app"
+  appServerCertMountPath: "/etc/tls-srv/"
 
 # Below variables values are populated by App Manager automatically
 
