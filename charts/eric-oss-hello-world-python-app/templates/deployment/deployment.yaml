@@ -70,17 +70,13 @@ spec:
           secret:
             secretName: {{ index .Values "appSecretName" | quote }}
             defaultMode: 420
+        - name: app-server-certs
+          secret:
+            secretName: {{ index .Values "appServerSecretName" | quote }}
+            defaultMode: 420
         - name: client-creds
           secret:
             secretName: {{ include "eric-oss-hello-world-python-app.clientSecret" . | quote }}
-            defaultMode: 420
-        - name: proxy-platform-cacerts
-          secret:
-            secretName: {{ index .Values "platformCaCertSecretName" | quote }}
-            defaultMode: 420
-        - name: proxy-app-certs
-          secret:
-            secretName: {{ index .Values "appSecretName" | quote }}
             defaultMode: 420
       containers:
         - name: eric-oss-hello-world-python-app
@@ -252,11 +248,11 @@ spec:
             - name: envoy-config
               mountPath: /etc/envoy
               readOnly: true
-            - name: proxy-platform-cacerts
-              mountPath: {{ index .Values "proxyCaCertMountPath" | default .Values.instantiationDefaults.proxyCaCertMountPath | quote }}
+            - name: platform-cacerts
+              mountPath: {{ index .Values "platformCaCertMountPath" | default .Values.instantiationDefaults.platformCaCertMountPath | quote }}
               readOnly: true
-            - name: proxy-app-certs
-              mountPath: {{ index .Values "proxyAppCertMountPath" | default .Values.instantiationDefaults.proxyAppCertMountPath | quote }}
+            - name: app-server-certs
+              mountPath: {{ index .Values "appServerCertMountPath" | default .Values.instantiationDefaults.appServerCertMountPath | quote }}
               readOnly: true
       {{- if include "eric-oss-hello-world-python-app.pullSecrets" . }}
       imagePullSecrets:
