@@ -17,3 +17,16 @@ runs:
     - name: "Testing renaming script with valid name"
       run: export APP_NAME="valid-app-name" && ./set_app_name.sh
       shell: bash
+    - name: "Verify environment variable names are not mangled"
+      run: |
+        # APP_NAMESPACE must remain intact in both deployment YAML and config.py
+        if ! grep -q "APP_NAMESPACE" charts/valid-app-name/templates/deployment/deployment.yaml; then
+          echo "FAIL: APP_NAMESPACE was mangled in deployment.yaml"
+          exit 1
+        fi
+        if ! grep -q '"APP_NAMESPACE"' eric-oss-hello-world-python-app/config.py; then
+          echo "FAIL: APP_NAMESPACE was mangled in config.py"
+          exit 1
+        fi
+        echo "PASS: Environment variable names preserved correctly"
+      shell: bash

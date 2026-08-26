@@ -18,7 +18,7 @@ wsl_safe_sed_replace() {
   local tmpfile
   tmpfile=$(mktemp "${file}.XXXXXX") || exit 1
   chmod "$(stat --format=%a $file)" "$tmpfile"
-  sed "$pattern" "$file" > "$tmpfile" && mv -f "$tmpfile" "$file"
+  sed -E "$pattern" "$file" > "$tmpfile" && mv -f "$tmpfile" "$file"
 }
 
 echo -e "\n${ORANGE}=================Executing renaming script=================${DEFAULT}"
@@ -122,7 +122,7 @@ echo -e "${YELLOW}Updating file contents...${DEFAULT}"
 for path in "${INPUT_PATHS[@]}"; do
   grep -rl "$CURRENT_APP_NAME" "$path" | while read -r file; do
     if [[ $(basename "$file") != "$script_file" && $(basename "$file") != docker.tar* ]]; then
-      wsl_safe_sed_replace "s/$CURRENT_APP_NAME/$APP_NAME/g" "$file"
+      wsl_safe_sed_replace "s/(^|[^a-zA-Z0-9_])${CURRENT_APP_NAME}([^a-zA-Z0-9_]|$)/\1${APP_NAME}\2/g" "$file"
     fi
   done
 done
